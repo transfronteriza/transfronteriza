@@ -72,6 +72,17 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .claves b{display:block;font:500 clamp(40px,4vw,62px)/.9 var(--disp);letter-spacing:-.045em;color:var(--oro)}
 .claves p{margin-top:12px;font-size:15px;line-height:1.42;color:var(--t2)}
 .inf .acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:clamp(32px,3.6vw,44px)}
+/* en construcción: informe, papers y Consejo sin contenido real todavía (TF.enConstruccion) */
+.inf.obra .cover{background:var(--capa);transform:rotateY(-12deg) rotate(1deg)}
+.inf.obra .cover::after{display:none}
+.inf.obra .txt > p + p{margin-top:14px;font-size:17px}
+.paper.silueta{pointer-events:none}
+.paper.silueta .banda{margin:0 0 18px;aspect-ratio:16/9;background:var(--capa-2)}
+.paper.silueta .pr{margin-top:auto;font-size:14px;color:var(--t3)}
+.mb.silueta{pointer-events:none}
+.mb.silueta .ft{aspect-ratio:1/1;background:var(--capa)}
+.mb.silueta .ft img{filter:none}
+@media (max-width:620px){.papers li:nth-child(3):has(.silueta){display:none}}
 
 /* ---------- 3 · papers ---------- */
 .filtros{display:flex;gap:8px;flex-wrap:wrap}
@@ -175,7 +186,7 @@ dialog::backdrop{background:rgba(10,8,18,.72);backdrop-filter:blur(4px);-webkit-
 .aviso:not(.on){opacity:0;transform:translateY(10px);pointer-events:none}
 
 /* ---------- transparencia ---------- */
-.docs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(10px,1.4vw,18px)}
+.docs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(10px,1.4vw,18px)}
 .docs a{display:flex;flex-direction:column;gap:14px;height:100%;padding:22px;border-radius:6px;background:var(--capa);transition:background-color .3s,transform .4s var(--ease)}
 .docs a:hover{background:var(--capa-2);transform:translateY(-3px)}
 .docs svg{width:30px;height:30px;color:var(--oro)}
@@ -206,6 +217,7 @@ input[type=text]:focus{outline:0;box-shadow:inset 0 0 0 2px var(--t1)}
 .ok{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--t2)}
 .ok input{margin-top:3px;accent-color:var(--oro);width:17px;height:17px}
 .ok button{text-decoration:underline;text-underline-offset:3px}
+.ok b{color:var(--t1);font-weight:500}
 .err{font-size:14px;color:var(--oro);min-height:1em}
 .gracias h3{font-size:clamp(30px,3vw,44px);line-height:1.02}
 .gracias p{margin-top:12px;color:var(--t2)}
@@ -217,6 +229,21 @@ input[type=text]:focus{outline:0;box-shadow:inset 0 0 0 2px var(--t1)}
 .foot nav{display:flex;gap:28px;flex-wrap:wrap;align-items:center}
 .foot nav a:hover,.foot .leg button:hover{color:var(--papel)}
 .foot .leg{margin-top:36px;font-size:13px;color:rgba(245,238,223,.42);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.foot .carta{max-width:600px;margin:0 0 52px;padding-bottom:48px;border-bottom:1px solid rgba(245,238,223,.12)}
+.foot .carta [hidden]{display:none}
+.foot .carta h3{font-size:clamp(28px,2.8vw,38px);line-height:1.04;letter-spacing:-.03em;color:#F5EEDF}
+.foot .carta p{margin-top:10px;font-size:16.5px;color:rgba(245,238,223,.7);max-width:46ch}
+.foot .carta .campos{margin-top:20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px}
+.foot .carta input[type=email]{min-width:0;width:100%;box-sizing:border-box;padding:15px 20px;border-radius:999px;border:0;background:rgba(245,238,223,.08);color:#F5EEDF;font:inherit;font-size:16px;box-shadow:inset 0 0 0 1px rgba(245,238,223,.22)}
+.foot .carta input[type=email]::placeholder{color:rgba(245,238,223,.45)}
+.foot .carta input[type=email]:focus{outline:0;box-shadow:inset 0 0 0 2px #F2B233}
+.foot .carta .btn{background:#F5EEDF;color:#1F1B2D}
+.foot .carta .ok{margin-top:14px;font-size:13.5px;line-height:1.45;color:rgba(245,238,223,.6)}
+.foot .carta .ok input{margin-top:2px;width:17px;height:17px;flex:none;accent-color:#F2B233}
+.foot .carta .ok button{color:rgba(245,238,223,.85);text-decoration:underline;text-underline-offset:3px}
+.foot .carta .err{margin-top:8px;color:#F2B233}
+.foot .carta .hecho{margin-top:16px;font-size:16.5px;color:#F5EEDF}
+@media (max-width:620px){.foot .carta .campos{grid-template-columns:minmax(0,1fr)}.foot .carta .btn{width:100%;padding:17px}}
 
 @media (max-width:1000px){
   .inf{grid-template-columns:minmax(0,1fr)}
@@ -248,6 +275,9 @@ dialog.entrar .btn{width:100%;padding:17px}
 dialog.entrar .nueva{margin-top:18px;font-size:15px}
 dialog.entrar .nueva a{text-decoration:underline;text-underline-offset:3px;color:#1F1B2D}
 dialog.entrar .err{color:#E2592A;font-size:14px;min-height:1em}
+dialog.entrar .ok{margin:2px 0 0;text-align:left;font-size:13.5px;line-height:1.45;color:rgba(31,27,45,.66)}
+dialog.entrar .ok input{margin-top:2px;width:17px;height:17px;flex:none;accent-color:#1F1B2D}
+dialog.entrar .ok button{color:#1F1B2D;text-decoration:underline;text-underline-offset:3px}
 @media (max-width:1000px){.lf span{display:none}}
 dialog.entrar{border:0;padding:0;border-radius:10px;background:#F5EEDF;color:#1F1B2D;overflow:auto;max-height:90vh;box-shadow:0 30px 90px rgba(0,0,0,.35)}
 dialog.entrar::backdrop{background:rgba(15,12,24,.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
@@ -313,13 +343,22 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 
   <!-- 2 · Informe anual -->
   <section class="sec in" id="informe" data-tf-sec="informe" data-tf-panel="edit.php?post_type=tf_informe" data-tf-panel-t="Editar el informe">
+    <div class="inf obra" data-ec="informe" hidden>
+      <div class="libro"><div class="cover"><img src="<?php tf_img('i1fae3e9ef6', TF_U . '/img/ilustra/informe-portada.svg'); ?>" data-tf-img="i1fae3e9ef6" alt=""><div class="ct"><img src="<?php tf_img('ia8745bc028', TF_U . '/logo/h-oscuro-34.svg'); ?>" data-tf-img="ia8745bc028" alt="Transfronteriza"></div></div></div>
+      <div class="txt">
+        <h2 data-tf="tfa62384e84"><?php tf_t('tfa62384e84'); ?></h2>
+        <p data-tf="t3d9a0eecb6"><?php tf_t('t3d9a0eecb6'); ?></p>
+        <p data-tf="t8dd1d53397"><?php tf_t('t8dd1d53397'); ?></p>
+        <div class="acts"><a class="btn g" href="#hablemos" data-tf="t7420f5b191"><?php tf_t('t7420f5b191'); ?></a><a class="btn l" href="mailto:hola@transfronteriza.net" data-tf="ta0aa22019a"><?php tf_t('ta0aa22019a'); ?></a></div>
+      </div>
+    </div>
     <?php tf_informe_bloque(); ?>
   </section>
 
   <!-- 3 · Papers -->
   <section class="sec in" id="papers" style="padding-top:0" data-tf-sec="papers" data-tf-panel="edit.php?post_type=tf_paper" data-tf-panel-t="Editar los papers">
     <div class="sec-h">
-      <div><h2 data-tf="t0ef101bafe"><?php tf_t('t0ef101bafe'); ?></h2><p data-tf="t8448cf18a5"><?php tf_t('t8448cf18a5'); ?></p></div>
+      <div><h2 data-tf="t0ef101bafe"><?php tf_t('t0ef101bafe'); ?></h2><p data-ec-no="papers" data-tf="t8448cf18a5"><?php tf_t('t8448cf18a5'); ?></p><p data-ec="papers" hidden data-tf="tc50a831aae"><?php tf_t('tc50a831aae'); ?></p></div>
       <?php tf_filtros(); ?>
     </div>
     <ul class="papers" id="papersList"></ul>
@@ -327,13 +366,13 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 
   <!-- 4 · Consejo -->
   <section class="sec in" id="consejo" style="padding-top:0" data-tf-sec="consejo" data-tf-panel="edit.php?post_type=tf_persona" data-tf-panel-t="Editar el Consejo">
-    <div class="sec-h"><div><h2 data-tf="t8fb259eb70"><?php tf_t('t8fb259eb70'); ?></h2><p data-tf="taceccb5a5c"><?php tf_t('taceccb5a5c'); ?></p></div></div>
+    <div class="sec-h"><div><h2 data-tf="t8fb259eb70"><?php tf_t('t8fb259eb70'); ?></h2><p data-ec-no="consejo" data-tf="taceccb5a5c"><?php tf_t('taceccb5a5c'); ?></p><p data-ec="consejo" hidden data-tf="tb4a354c8b8"><?php tf_t('tb4a354c8b8'); ?></p></div></div>
     <ul class="consejo" id="consejoList"></ul>
   </section>
 
   <!-- Transparencia -->
   <section class="sec in" id="transparencia" style="padding-top:0" data-tf-sec="transparencia" data-tf-panel="edit.php?post_type=tf_documento" data-tf-panel-t="Editar los documentos">
-    <div class="sec-h"><div><h2 data-tf="t3fff3b3af0"><?php tf_t('t3fff3b3af0'); ?></h2><p data-tf="t9d34789774"><?php tf_t('t9d34789774'); ?></p></div></div>
+    <div class="sec-h"><div><h2 data-tf="t3fff3b3af0"><?php tf_t('t3fff3b3af0'); ?></h2><p data-tf="t54bc0e2ba7"><?php tf_t('t54bc0e2ba7'); ?></p></div></div>
     <?php tf_documentos(); ?>
     <p class="reg" data-tf="tc6f0ef7565"><?php tf_t('tc6f0ef7565'); ?></p>
   </section>
@@ -354,7 +393,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
             <label><input type="radio" name="tipo"><span>Fundación o financiador</span></label>
             <label><input type="radio" name="tipo"><span>Empresa</span></label>
           </div>
-          <label class="ok"><input type="checkbox" id="h-ok"><span>Acepto la <button type="button" data-legal="privacidad" data-tf="tc8f28f06dd"><?php tf_t('tc8f28f06dd'); ?></button>.</span></label>
+          <label class="ok"><input type="checkbox" id="h-ok"><span>He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>. Usamos tu correo solo para responderte; puedes pedir ver o borrar tus datos en hola@transfronteriza.net.</span></label>
+          <label class="ok"><input type="checkbox" id="h-boletin"><span>Quiero recibir <b>Lo que se mueve</b>: un correo al mes con lo que pasa en Transfronteriza y en Futuros. Baja en un clic.</span></label>
           <div><button class="btn g" type="submit" data-tf="t61b0418ae4"><?php tf_t('t61b0418ae4'); ?></button></div>
         </div>
         <div class="gracias" id="h3s" hidden><h3 id="hT">Gracias.</h3><p data-tf="ta5d4728d2e"><?php tf_t('ta5d4728d2e'); ?></p></div>
@@ -432,7 +472,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const hx = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
   const mix = (a, b, t) => { const A = hx(a), B = hx(b); return '#' + A.map((v, i) => Math.round(v + (B[i] - v) * t).toString(16).padStart(2, '0')).join(''); };
   const rng = a => () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
-  const setup = cv => { const w = cv.clientWidth, h = cv.clientHeight; cv.width = Math.max(1, Math.round(w * DPR)); cv.height = Math.max(1, Math.round(h * DPR)); const g = cv.getContext('2d'); g.setTransform(DPR, 0, 0, DPR, 0, 0); return [g, w, h]; };
+  const setup = (cv, d = DPR) => { const w = cv.clientWidth, h = cv.clientHeight; cv.width = Math.max(1, Math.round(w * d)); cv.height = Math.max(1, Math.round(h * d)); const g = cv.getContext('2d'); g.setTransform(d, 0, 0, d, 0, 0); return [g, w, h]; };
   /* la pepita del manual */
   const seedAt = (g, x, y, rad, a, col, r) => {
     const p = new Path2D(), ca = Math.cos(a), sa = Math.sin(a);
@@ -448,29 +488,51 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const pinta = new Map(), ro = new ResizeObserver(es => es.forEach(e => { if (e.contentRect.width > 0) pinta.get(e.target)?.(); }));
   const vigila = (cv, fn) => { pinta.set(cv, fn); ro.observe(cv); };
   const aviso = (() => { let t; return m => { const a = $('#aviso'); a.textContent = m; a.classList.add('on'); clearTimeout(t); t = setTimeout(() => a.classList.remove('on'), 2200); }; })();
+  /* qué está todavía en construcción: en WordPress lo decide tf_en_construccion(); aquí, estos valores */
+  window.TF = window.TF || {};
+  const EC = Object.assign({ voces: true, informe: true, papers: true, consejo: true }, TF.enConstruccion || {});
+  document.querySelectorAll('[data-ec]').forEach(e => e.hidden = !EC[e.dataset.ec]);
+  document.querySelectorAll('[data-ec-no]').forEach(e => { if (EC[e.dataset.ecNo]) e.remove(); });
+  if (EC.informe) $('.inf:not(.obra)')?.remove();
 
   /* 1 · una corriente casi espacial de pepitas */
   const cvS = $('#semilla'), open = $('.open');
   let S = [], gS, wS, hS;
-  /* la corriente: entra por arriba a la izquierda, cruza, baja por la derecha y se curva de vuelta hasta rozar el título */
-  const corriente = (s, w, h) => { const u = 1 - s, P = w < 760 ? [[-.15, .12], [1.02, -.04], [1.12, .64], [-.06, .7]] : [[-.1, .1], [.66, -.1], [1.06, .66], [.3, .6]]; return [0, 1].map(k => u * u * u * P[0][k] + 3 * u * u * s * P[1][k] + 3 * u * s * s * P[2][k] + s * s * s * P[3][k]).map((v, k) => v * (k ? h : w)); };
+  /* el cauce: entra por arriba a la izquierda, cruza, baja por la derecha y vuelve hasta salir por el pie del bloque, junto al título */
+  let PC = [[0, 0], [0, 0], [0, 0], [0, 0]], INV = new Float32Array(513);
+  const punto = (s, w, h, o) => { const P = PC, u = 1 - s, a = u * u * u, b = 3 * u * u * s, c = 3 * u * s * s, d = s * s * s; o[0] = (a * P[0][0] + b * P[1][0] + c * P[2][0] + d * P[3][0]) * w; o[1] = (a * P[0][1] + b * P[1][1] + c * P[2][1] + d * P[3][1]) * h; return o; };
+  /* el cauce se recorre por longitud, no por parámetro: así las pepitas van igual de juntas y a la misma velocidad de principio a fin */
+  const traza = (w, h) => {
+    const mov = w < 760, rg = document.createRange(), fr = Math.max(...[...open.querySelector('.t').children].map(e => { rg.selectNodeContents(e); return rg.getBoundingClientRect().right; })) / w, fin = Math.min(mov ? .92 : .9, fr + (mov ? .06 : .08));
+    PC = mov ? [[-.12, .04], [.95, -.06], [.85, .55], [Math.max(.82, fin), 1.08]] : [[-.08, .06], [.72, -.14], [1.1, .72], [fin, 1.06]];
+    const n = 240, o = [0, 0], acc = new Float32Array(n + 1); let L = 0, px = 0, py = 0;
+    for (let i = 0; i <= n; i++) { punto(i / n, w, h, o); if (i) L += Math.hypot(o[0] - px, o[1] - py); px = o[0]; py = o[1]; acc[i] = L; }
+    let j = 0; for (let k = 0; k <= 512; k++) { const d = k / 512 * L; while (j < n && acc[j + 1] < d) j++; const a0 = acc[j], a1 = acc[Math.min(n, j + 1)]; INV[k] = (j + (a1 > a0 ? (d - a0) / (a1 - a0) : 0)) / n; }
+  };
+  const sDe = p => INV[Math.min(512, Math.max(0, Math.round(p * 512)))];
   const buildSeeds = () => {
-    [gS, wS, hS] = setup(cvS); const r = rng(55), N = wS < 760 ? 150 : 300; S = [];
+    /* en móvil el lienzo va a 1,5× como mucho: la mitad de píxeles que pintar, sin que se note */
+    const mov = cvS.clientWidth < 760, D = mov ? Math.min(1.5, DPR) : DPR;
+    [gS, wS, hS] = setup(cvS, D); traza(wS, hS); const r = rng(55), N = mov ? 220 : 500; S = [];
     for (let i = 0; i < N; i++) {
-      const capa = r() < .55 ? 0 : r() < .7 ? 1 : 2, rad = [2.2, 4.2, 7.5][capa] * (.7 + r() * .7), t = r();
-      const s2 = Math.ceil(rad * 2.6), sp = document.createElement('canvas'); sp.width = sp.height = Math.ceil(s2 * DPR);
-      const g = sp.getContext('2d'); g.setTransform(DPR, 0, 0, DPR, 0, 0); seedAt(g, s2 / 2, s2 / 2, rad, 0, mix(K.fuegoN, K.oroN, t), r);
+      /* cuatro capas: polvo, pepitas, pepitas grandes y unas pocas muy cerca; un 7 % van en color papel */
+      const z = r(), capa = z < .5 ? 0 : z < .8 ? 1 : z < .95 ? 2 : 3, rad = [2.4, 4.4, 7.5, 11.5][capa] * (mov && capa === 3 ? .8 : 1) * (.75 + r() * .6), t = r();
+      const col = r() < .07 ? K.papel : mix(K.fuegoN, K.oroN, t);
+      const s2 = Math.ceil(rad * 2.6), sp = document.createElement('canvas'); sp.width = sp.height = Math.ceil(s2 * D);
+      const g = sp.getContext('2d'); g.setTransform(D, 0, 0, D, 0, 0); seedAt(g, s2 / 2, s2 / 2, rad, 0, col, r);
       const g1 = (r() + r() + r()) / 3 - .5;
-      S.push({ sp, s: s2, p: r(), v: [.0045, .007, .011][capa] * (.8 + r() * .4), off: g1 * [.5, .38, .3][capa] * Math.min(wS, hS) * 1.1, ph: r() * TAU, rot: r() * TAU, vr: (r() - .5) * .3, al: [.42, .7, .95][capa] });
+      S.push({ sp, s: s2, p: r(), v: [.0055, .0085, .012, .016][capa] * (.8 + r() * .4), off: g1 * [.56, .44, .34, .26][capa] * Math.min(wS, hS) * 1.15, ph: r() * TAU, rot: r() * TAU, vr: (r() - .5) * .3, al: [.5, .78, 1, 1][capa], tw: capa < 2 ? .3 : .12 });
     }
   };
-  vigila(cvS, buildSeeds);
+  vigila(cvS, buildSeeds); document.fonts?.ready.then(() => { if (S.length) traza(wS, hS); });
+  const A0 = [0, 0], A1 = [0, 0];
   const pinta1 = t => {
     gS.clearRect(0, 0, wS, hS);
     for (const q of S) {
-      const [x0, y0] = corriente(q.p, wS, hS), [x1, y1] = corriente(Math.min(1, q.p + .004), wS, hS), an = Math.atan2(y1 - y0, x1 - x0);
-      const o = q.off + Math.sin(t * .00025 + q.ph) * 14, x = x0 - Math.sin(an) * o, y = y0 + Math.cos(an) * o;
-      const a = q.al * Math.min(1, q.p / .08, (1 - q.p) / .1);
+      const s0 = sDe(q.p), [x0, y0] = punto(s0, wS, hS, A0), [x1, y1] = punto(Math.min(1, s0 + .004), wS, hS, A1), an = Math.atan2(y1 - y0, x1 - x0);
+      /* el cauce se ensancha en el centro y se estrecha en los extremos; cada pepita se mece y parpadea a su ritmo */
+      const o = q.off * (.55 + .45 * Math.sin(Math.PI * q.p)) + Math.sin(t * .0003 + q.ph) * 16, x = x0 - Math.sin(an) * o, y = y0 + Math.cos(an) * o;
+      const a = q.al * Math.min(1, q.p / .05, (1 - q.p) / .04) * (1 - q.tw + q.tw * (.5 + .5 * Math.sin(t * .0014 + q.ph * 3)));
       if (a <= .01) continue;
       gS.save(); gS.globalAlpha = a; gS.translate(x, y); gS.rotate(an + q.rot); gS.drawImage(q.sp, -q.s / 2, -q.s / 2, q.s, q.s); gS.restore();
     }
@@ -483,14 +545,17 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const A = TF.autores || {}, P = TF.papers || [], INF = TF.informe || { id: 'informe', informe: true, h: '', d: '', lead: '', html: '', claves: [] };
   const pl = $('#papersList');
   const aid = a => (/^p(\d+)$/.exec(a || '') || [])[1];
-  pl.innerHTML = P.map(p => `<li data-t="${p.t}"${EI(p.pid, 'tf_paper')}><button class="paper" type="button" data-abre="${p.id}"><h3${ED(p.pid, 'titulo')}>${p.h}</h3><div class="banda"${EF(p.pid)}><img src="${p.banda}" alt="" loading="lazy"></div><div class="por"><img src="${(A[p.a] || [])[3] || ''}" alt="" loading="lazy"><div><span${ED(aid(p.a), 'titulo')}>${A[p.a][0]}</span><small${ED(aid(p.a), 'cargo')}>${A[p.a][1]}</small></div></div></button></li>`).join('');
-  $('#filtros').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; document.querySelectorAll('#filtros button').forEach(x => x.setAttribute('aria-pressed', x === b)); pl.querySelectorAll('li').forEach(li => li.hidden = b.dataset.t !== 'todos' && li.dataset.t !== b.dataset.t); });
+  /* en construcción: tres siluetas de paper, sin títulos; si no, los papers con sus filtros */
+  if (EC.papers) pl.innerHTML = [1, 2, 3].map(() => `<li><div class="paper silueta"><div class="banda"><img src="<?php echo TF_U; ?>/img/ilustra/paper-banda.svg" alt="" loading="lazy"></div><p class="pr">En preparación</p></div></li>`).join('');
+  else pl.innerHTML = P.map(p => `<li data-t="${p.t}"${EI(p.pid, 'tf_paper')}><button class="paper" type="button" data-abre="${p.id}"><h3${ED(p.pid, 'titulo')}>${p.h}</h3><div class="banda"${EF(p.pid)}><img src="${p.banda}" alt="" loading="lazy"></div><div class="por"><img src="${(A[p.a] || [])[3] || ''}" alt="" loading="lazy"><div><span${ED(aid(p.a), 'titulo')}>${A[p.a][0]}</span><small${ED(aid(p.a), 'cargo')}>${A[p.a][1]}</small></div></div></button></li>`).join('');
+  $('#filtros')?.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; document.querySelectorAll('#filtros button').forEach(x => x.setAttribute('aria-pressed', x === b)); pl.querySelectorAll('li').forEach(li => li.hidden = b.dataset.t !== 'todos' && li.dataset.t !== b.dataset.t); });
 
   const lector = $('#lector'), art = $('#lArt');
   let fs = 19, antesFoco = null;
   const bloque = ([k, x, y]) => k === 'p' ? `<p>${x}</p>` : k === 'h' ? `<h2>${x}</h2>` : k === 'q' ? `<blockquote>«${x}»</blockquote>` : `<div class="dato"><b>${x}</b><p>${y}</p></div>`;
   const prog = () => { const m = lector.scrollHeight - lector.clientHeight; $('#lProg').style.width = (m > 0 ? lector.scrollTop / m * 100 : 0) + '%'; };
   const abre = id => {
+    if (id === 'informe' ? EC.informe : EC.papers) return;
     const p = id === 'informe' ? INF : P.find(x => x.id === id); if (!p) return;
     if (lector.hidden) antesFoco = document.activeElement;
     const au = p.informe ? null : A[p.a], i = P.indexOf(p), nx = p.informe ? P[0] : P[(i + 1) % P.length];
@@ -514,18 +579,20 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   $('#lModo').addEventListener('click', () => { const papel = lector.dataset.modo !== 'papel'; lector.dataset.modo = papel ? 'papel' : ''; $('#lModo').setAttribute('aria-label', papel ? 'Cambiar a modo oscuro' : 'Cambiar a modo papel'); try { localStorage.setItem('tf-modo', lector.dataset.modo); } catch (e) {} });
   try { if (localStorage.getItem('tf-modo') === 'papel') lector.dataset.modo = 'papel'; } catch (e) {}
   $('#lLink').addEventListener('click', () => { const u = location.href; (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(() => aviso('Enlace copiado')).catch(() => aviso(u)); });
-  const deHash = () => { const h = location.hash.slice(1); if (h === 'leer-informe') abre('informe'); else if (P.some(p => p.id === h)) abre(h); };
+  const deHash = () => { const h = location.hash.slice(1); if (h === 'leer-informe') { if (EC.informe) $('#informe').scrollIntoView(); else abre('informe'); } else if (P.some(p => p.id === h)) abre(h); };
   deHash(); addEventListener('hashchange', deHash);
 
   /* 4 · consejo */
   const C = TF.consejo || [];
   const cl = $('#consejoList');
-  cl.innerHTML = C.map(([f, n, r, b, id], i) => `<li${EI(id, 'tf_persona')}><button class="mb" type="button" data-i="${i}" aria-haspopup="dialog"><div class="ft"${EF(id)}><img src="${f}" alt="${n}" loading="lazy"></div><h3><canvas class="pep" data-s="${i}" aria-hidden="true"></canvas><span${ED(id, 'titulo')}>${n}</span></h3><p${r.includes('. ') ? '' : ED(id, 'cargo')}>${r.split('. ').pop()}</p></button></li>`).join('');
+  /* en construcción: cuatro siluetas, sin nombres ni ventana */
+  if (EC.consejo) cl.innerHTML = [1, 2, 3, 4].map(i => `<li><div class="mb silueta"><div class="ft"><img src="<?php echo TF_U; ?>/img/ilustra/consejo-${i}.svg" alt="" loading="lazy"></div></div></li>`).join('');
+  else cl.innerHTML = C.map(([f, n, r, b, id], i) => `<li${EI(id, 'tf_persona')}><button class="mb" type="button" data-i="${i}" aria-haspopup="dialog"><div class="ft"${EF(id)}><img src="${f}" alt="${n}" loading="lazy"></div><h3><canvas class="pep" data-s="${i}" aria-hidden="true"></canvas><span${ED(id, 'titulo')}>${n}</span></h3><p${r.includes('. ') ? '' : ED(id, 'cargo')}>${r.split('. ').pop()}</p></button></li>`).join('');
   cl.querySelectorAll('.pep').forEach(cv => vigila(cv, () => pepBlanca(cv, +cv.dataset.s)));
   const dlg = $('#perfil'), pPep = $('#pPep');
   let cur = 0;
   const show = i => { cur = (i + C.length) % C.length; const [f, n, r, b] = C[cur]; $('#pFoto').src = f; $('#pFoto').alt = n; $('#pNombre').textContent = n; $('#pRol').textContent = r; $('#pBio').textContent = b; $('#pNum').textContent = `${cur + 1} de ${C.length}`; requestAnimationFrame(() => pepBlanca(pPep, cur)); };
-  cl.addEventListener('click', e => { const b = e.target.closest('.mb'); if (!b) return; show(+b.dataset.i); dlg.showModal(); });
+  cl.addEventListener('click', e => { const b = e.target.closest('.mb[data-i]'); if (!b) return; show(+b.dataset.i); dlg.showModal(); });
   $('#pAnt').addEventListener('click', () => show(cur - 1));
   $('#pSig').addEventListener('click', () => show(cur + 1));
   $('#pX').addEventListener('click', () => dlg.close());
@@ -545,7 +612,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   hf.addEventListener('submit', e => {
     e.preventDefault(); err.textContent = '';
     if (paso === 1) { const c = $('#h-correo').value.trim(); if (!/^\S+@\S+\.\S+$/.test(c)) { err.textContent = 'Escribe un correo válido.'; return; } s1.hidden = true; s2.hidden = false; paso = 2; $('#h-nombre').focus({ preventScroll: true }); return; }
-    if (!$('#h-ok').checked) { err.textContent = 'Necesitamos que aceptes la política de privacidad.'; return; }
+    if (!$('#h-ok').checked) { err.textContent = 'Necesitamos que aceptes la información sobre privacidad.'; return; }
     const n = $('#h-nombre').value.trim();
     hf.style.minHeight = hf.offsetHeight + 'px'; s2.hidden = true; s3.hidden = false;
     $('#hT').textContent = n ? `Gracias, ${n}.` : 'Gracias.';
@@ -553,7 +620,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   });
   const top = $('#top'); const linea = () => top.classList.toggle('baja', scrollY > 8); addEventListener('scroll', linea, { passive: true }); linea();
   /* La Frontera: entrar con un enlace al correo */
-  (() => { const d = document.getElementById('entrar'); if (!d) return; document.addEventListener('click', e => { if (e.target.closest('[data-entrar]')) { e.preventDefault(); document.getElementById('entA').hidden = false; document.getElementById('entB').hidden = true; document.getElementById('entE').textContent = ''; d.showModal(); } if (e.target.closest('[data-cierra-entrar]')) d.close(); if (e.target.closest('#entrar [data-cierra]')) d.close(); }); d.addEventListener('click', e => { if (e.target === d) d.close(); }); document.getElementById('entF').addEventListener('submit', e => { e.preventDefault(); const c = document.getElementById('entC').value.trim(); if (!/^\S+@\S+\.\S+$/.test(c)) { document.getElementById('entE').textContent = 'Escribe un correo válido.'; return; } document.getElementById('entBp').textContent = `Te escribiremos a ${c} en cuanto abramos La Frontera.`; TF.enviar('la-frontera', { correo: c }); document.getElementById('entA').hidden = true; document.getElementById('entB').hidden = false; }); })();
+  (() => { const d = document.getElementById('entrar'); if (!d) return; document.addEventListener('click', e => { if (e.target.closest('[data-entrar]')) { e.preventDefault(); document.getElementById('entA').hidden = false; document.getElementById('entB').hidden = true; document.getElementById('entE').textContent = ''; d.showModal(); } if (e.target.closest('[data-cierra-entrar]')) d.close(); if (e.target.closest('#entrar [data-cierra]')) d.close(); }); d.addEventListener('click', e => { if (e.target === d) d.close(); }); document.getElementById('entF').addEventListener('submit', e => { e.preventDefault(); const c = document.getElementById('entC').value.trim(); if (!/^\S+@\S+\.\S+$/.test(c)) { document.getElementById('entE').textContent = 'Escribe un correo válido.'; return; } document.getElementById('entBp').textContent = `Te escribiremos a ${c} en cuanto abramos La Frontera.`; TF.enviar('la-frontera', TF.leer(document.getElementById('entF'))); document.getElementById('entA').hidden = true; document.getElementById('entB').hidden = false; }); })();
   document.documentElement.dataset.done = 1;
 })();
 </script>

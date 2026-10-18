@@ -70,7 +70,7 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
 .pc:hover .ph img{transform:scale(1.04)}
 .ph::after{content:"";position:absolute;inset:0;background-image:var(--grano);background-size:200px;mix-blend-mode:overlay;opacity:.55;pointer-events:none}
-.cin blockquote{margin:16px 6px 0;font:500 clamp(17px,1.35vw,20px)/1.22 var(--disp);letter-spacing:-.012em}
+.cin blockquote{margin:16px 6px 0;font:500 clamp(17px,1.35vw,20px)/1.22 var(--disp);letter-spacing:-.012em;text-wrap:pretty;overflow-wrap:anywhere}
 .who{margin:12px 6px 0;font-size:14px;color:var(--tinta-2)}
 .who b{color:var(--tinta);font-weight:500}
 .pw{position:absolute;z-index:2;pointer-events:none;transition:transform .5s var(--ease)}
@@ -154,6 +154,8 @@ input[type=text]:focus,input[type=email]:focus{outline:0;box-shadow:inset 0 0 0 
 .chips input:focus-visible + span{outline:2px solid var(--fuego);outline-offset:2px}
 .ok{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:var(--tinta-2)}
 .ok input{margin-top:3px;accent-color:var(--tinta);width:17px;height:17px}
+.ok+.ok{margin-top:12px}
+.ok b{color:var(--tinta);font-weight:500}
 .nav{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:6px}
 .nav .back{font-weight:500;color:var(--tinta-2)}
 .err{font-size:14px;color:var(--fuego);min-height:1em}
@@ -167,6 +169,21 @@ input[type=text]:focus,input[type=email]:focus{outline:0;box-shadow:inset 0 0 0 
 .foot nav{display:flex;gap:28px;flex-wrap:wrap;align-items:center}
 .foot nav a:hover{color:var(--papel)}
 .foot .leg{margin-top:36px;font-size:13px;color:rgba(245,238,223,.42);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.foot .carta{max-width:600px;margin:0 0 52px;padding-bottom:48px;border-bottom:1px solid rgba(245,238,223,.12)}
+.foot .carta [hidden]{display:none}
+.foot .carta h3{font-size:clamp(28px,2.8vw,38px);line-height:1.04;letter-spacing:-.03em;color:#F5EEDF}
+.foot .carta p{margin-top:10px;font-size:16.5px;color:rgba(245,238,223,.7);max-width:46ch}
+.foot .carta .campos{margin-top:20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px}
+.foot .carta input[type=email]{min-width:0;width:100%;box-sizing:border-box;padding:15px 20px;border-radius:999px;border:0;background:rgba(245,238,223,.08);color:#F5EEDF;font:inherit;font-size:16px;box-shadow:inset 0 0 0 1px rgba(245,238,223,.22)}
+.foot .carta input[type=email]::placeholder{color:rgba(245,238,223,.45)}
+.foot .carta input[type=email]:focus{outline:0;box-shadow:inset 0 0 0 2px #F2B233}
+.foot .carta .btn{background:#F5EEDF;color:#1F1B2D}
+.foot .carta .ok{margin-top:14px;font-size:13.5px;line-height:1.45;color:rgba(245,238,223,.6)}
+.foot .carta .ok input{margin-top:2px;width:17px;height:17px;flex:none;accent-color:#F2B233}
+.foot .carta .ok button{color:rgba(245,238,223,.85);text-decoration:underline;text-underline-offset:3px}
+.foot .carta .err{margin-top:8px;color:#F2B233}
+.foot .carta .hecho{margin-top:16px;font-size:16.5px;color:#F5EEDF}
+@media (max-width:620px){.foot .carta .campos{grid-template-columns:minmax(0,1fr)}.foot .carta .btn{width:100%;padding:17px}}
 
 dialog.legal{width:min(820px,92vw);max-height:88vh;background:var(--papel);color:var(--tinta);overflow:auto}
 dialog.legal .marco{position:relative;margin:14px;border:1px solid var(--linea);border-radius:6px;padding:clamp(28px,4vw,52px)}
@@ -225,6 +242,9 @@ dialog.entrar .btn{width:100%;padding:17px}
 dialog.entrar .nueva{margin-top:18px;font-size:15px}
 dialog.entrar .nueva a{text-decoration:underline;text-underline-offset:3px;color:#1F1B2D}
 dialog.entrar .err{color:#E2592A;font-size:14px;min-height:1em}
+dialog.entrar .ok{margin:2px 0 0;text-align:left;font-size:13.5px;line-height:1.45;color:rgba(31,27,45,.66)}
+dialog.entrar .ok input{margin-top:2px;width:17px;height:17px;flex:none;accent-color:#1F1B2D}
+dialog.entrar .ok button{color:#1F1B2D;text-decoration:underline;text-underline-offset:3px}
 @media (max-width:1000px){.lf span{display:none}}
 dialog.entrar{border:0;padding:0;border-radius:10px;background:#F5EEDF;color:#1F1B2D;overflow:auto;max-height:90vh;box-shadow:0 30px 90px rgba(0,0,0,.35)}
 dialog.entrar::backdrop{background:rgba(15,12,24,.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
@@ -255,7 +275,7 @@ video:not([controls])::-webkit-media-controls,video:not([controls])::-webkit-med
   .top .row{gap:10px}
   .top .btn{padding:11px 16px;font-size:14.5px;white-space:nowrap}
 }
-@media (max-width:380px){ .top .logo img{height:25px} .top .btn{padding:10px 13px;font-size:14px} }
+@media (max-width:380px){ .top .logo img{height:25px} .top .btn{padding:10px 13px;font-size:14px} .join h2{font-size:41px} }
 /* ---------- tocar con el dedo ---------- */
 .ok input{flex:none}
 .toggle{position:relative}.toggle::before{content:"";position:absolute;inset:-12px -8px}
@@ -310,7 +330,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <!-- 4 · Comunidad | Futuros -->
   <section class="dos" data-tf-sec="dos">
     <a class="lado com" id="comunidad" href="<?php echo esc_url(tf_pagina('comunidad')); ?>"><img src="<?php tf_img('i408711db45', TF_U . '/img/comunidad.jpg'); ?>" data-tf-img="i408711db45" alt="Dos chicas de la comunidad, de espaldas, miran la montaña al atardecer."><div class="t"><h2 data-tf="t8f69233c0e"><?php tf_t('t8f69233c0e'); ?></h2><p data-tf="t2f4fd33425"><?php tf_t('t2f4fd33425'); ?></p><span class="btn">Conoce la comunidad</span></div></a>
-    <a class="lado fut" id="futuros" href="<?php echo esc_url(tf_pagina('futuros')); ?>"><div class="t"><h2 data-tf="t96b03ea3c7"><?php tf_t('t96b03ea3c7'); ?></h2><p data-tf="tbc6bf077e8"><?php tf_t('tbc6bf077e8'); ?></p><span class="btn" data-ir="<?php echo esc_url(tf_pagina('futuros')); ?>#leer-informe">Leer el informe</span></div><div class="cover"><canvas id="portada" aria-hidden="true"></canvas><div class="ct"><span>Futuros · 2026</span><h4 data-tf="tb63ed5ea90"><?php tf_t('tb63ed5ea90'); ?></h4></div></div></a>
+    <a class="lado fut" id="futuros" href="<?php echo esc_url(tf_pagina('futuros')); ?>"><div class="t"><h2 data-tf="t96b03ea3c7"><?php tf_t('t96b03ea3c7'); ?></h2><p data-tf="tbc6bf077e8"><?php tf_t('tbc6bf077e8'); ?></p><span class="btn">Entra en Futuros</span></div><div class="cover"><canvas id="portada" aria-hidden="true"></canvas><div class="ct"><span>Futuros</span><h4 data-tf="tf386930f83"><?php tf_t('tf386930f83'); ?></h4></div></div></a>
     <div class="emblema" aria-hidden="true"><div class="sway"><canvas id="girasol"></canvas></div></div>
   </section>
 
@@ -346,7 +366,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
             <div class="chips"><label><input type="radio" name="edad"><span>14–17</span></label><label><input type="radio" name="edad"><span>18–24</span></label><label><input type="radio" name="edad"><span>25–29</span></label><label><input type="radio" name="edad"><span>30 o más</span></label></div>
             <p class="q" data-tf="t6daa87c535"><?php tf_t('t6daa87c535'); ?></p>
             <div class="chips"><label><input type="checkbox"><span>Encuentros</span></label><label><input type="checkbox"><span>Mi ciudad</span></label><label><input type="checkbox"><span>Formación</span></label><label><input type="checkbox"><span>Futuros</span></label><label><input type="checkbox"><span>Echar una mano</span></label></div>
-            <label class="ok"><input type="checkbox" id="f-ok"><span>Acepto la <button type="button" data-legal="privacidad" data-tf="tc8f28f06dd"><?php tf_t('tc8f28f06dd'); ?></button>. Usamos tus datos solo para escribirte.</span></label>
+            <label class="ok"><input type="checkbox" id="f-ok"><span>He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>. Transfronteriza usa estos datos solo para escribirte y contarte lo que hacemos; puedes pedir verlos o borrarlos en hola@transfronteriza.net. Si tienes menos de 14 años, rellénalo con tu madre, padre o tutor.</span></label>
+            <label class="ok"><input type="checkbox" id="f-boletin"><span>Quiero recibir <b>Lo que se mueve</b>: un correo al mes con lo que pasa en la comunidad. Te das de baja cuando quieras.</span></label>
           </fieldset>
           <div class="done" id="done" hidden><h3 id="doneT">Gracias.</h3><p data-tf="te4b9f112b2"><?php tf_t('te4b9f112b2'); ?></p></div>
           <p class="err" id="err" role="alert"></p>
@@ -358,6 +379,14 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 </main>
 
 <footer class="foot"><div class="in">
+  <form class="carta" id="carta" novalidate aria-label="Lo que se mueve">
+    <h3 data-tf="t66d206bf3d"><?php tf_t('t66d206bf3d'); ?></h3>
+    <p data-tf="t97bbea0f7d"><?php tf_t('t97bbea0f7d'); ?></p>
+    <div class="campos"><input type="email" id="c-correo" placeholder="Tu correo" autocomplete="email" aria-label="Tu correo"><button class="btn" type="submit" data-tf="tb9147c5d9e"><?php tf_t('tb9147c5d9e'); ?></button></div>
+    <label class="ok"><input type="checkbox" id="c-boletin"><span>Sí, quiero recibirlo. He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>: solo usamos tu correo para esto y te das de baja en cada envío.</span></label>
+    <p class="err" id="cartaE" role="alert"></p>
+    <p class="hecho" id="cartaOk" hidden>Te hemos escrito. Confirma desde tu correo y listo.</p>
+  </form>
   <div class="row"><img class="flogo" src="<?php tf_img('ia8745bc028', TF_U . '/logo/h-oscuro-34.svg'); ?>" data-tf-img="ia8745bc028" alt="Transfronteriza"><nav aria-label="Pie"><a href="<?php echo esc_url(tf_pagina('comunidad')); ?>" data-tf="t38114eb012"><?php tf_t('t38114eb012'); ?></a><a href="<?php echo esc_url(tf_pagina('futuros')); ?>" data-tf="tf6078594dd"><?php tf_t('tf6078594dd'); ?></a><a href="#descubre" data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a><a href="mailto:hola@transfronteriza.net" data-tf="ta0aa22019a"><?php tf_t('ta0aa22019a'); ?></a></nav></div>
   <div class="leg"><span>© 2026 Asociación Juvenil Transfronteriza</span><span><button type="button" data-legal="aviso" data-tf="t2a27eb438d"><?php tf_t('t2a27eb438d'); ?></button> · <button type="button" data-legal="privacidad" data-tf="tcd9bcb9fd2"><?php tf_t('tcd9bcb9fd2'); ?></button> · <button type="button" data-legal="cookies" data-tf="t53614378a5"><?php tf_t('t53614378a5'); ?></button></span></div>
 </div></footer>
@@ -373,7 +402,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 </dialog>
 <dialog id="spot"><button class="x" type="button" id="spotX" aria-label="Cerrar">×</button><video id="spotV" controls playsinline preload="none" poster="<?php echo TF_U; ?>/media/poster.jpg"><source src="<?php tf_img('i05d4cf0dd1', TF_U . '/media/spot.mp4'); ?>" data-tf-vid="i05d4cf0dd1" type="video/mp4"></video></dialog>
 
-<dialog class="entrar" id="entrar" aria-labelledby="entT"><div class="marco"><button class="x" type="button" data-cierra aria-label="Cerrar">×</button><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle class="punto" cx="41" cy="9" r="4.2" fill="#F2B233"/></svg><div id="entA"><h3 id="entT">Entra en La Frontera</h3><p data-tf="t9834a96e12"><?php tf_t('t9834a96e12'); ?></p><form id="entF" novalidate><input type="email" id="entC" placeholder="Tu correo" autocomplete="email" aria-label="Tu correo"><p class="err" id="entE" role="alert"></p><button class="btn p" type="submit" data-tf="t17c8912d40"><?php tf_t('t17c8912d40'); ?></button></form><p class="nueva">¿Aún no eres parte? <a href="<?php echo esc_url(home_url('/')); ?>#descubre" data-cierra-entrar data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a></p></div><div id="entB" hidden><h3 data-tf="tb94238ba26"><?php tf_t('tb94238ba26'); ?></h3><p id="entBp"></p></div></div></dialog>
+<dialog class="entrar" id="entrar" aria-labelledby="entT"><div class="marco"><button class="x" type="button" data-cierra aria-label="Cerrar">×</button><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle class="punto" cx="41" cy="9" r="4.2" fill="#F2B233"/></svg><div id="entA"><h3 id="entT">Entra en La Frontera</h3><p data-tf="t9834a96e12"><?php tf_t('t9834a96e12'); ?></p><form id="entF" novalidate><input type="email" id="ent-correo" placeholder="Tu correo" autocomplete="email" aria-label="Tu correo"><label class="ok"><input type="checkbox" id="ent-ok"><span>He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>. Guardamos tu correo solo para avisarte cuando abra La Frontera.</span></label><p class="err" id="entE" role="alert"></p><button class="btn p" type="submit" data-tf="t17c8912d40"><?php tf_t('t17c8912d40'); ?></button></form><p class="nueva">¿Aún no eres parte? <a href="<?php echo esc_url(home_url('/')); ?>#descubre" data-cierra-entrar data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a></p></div><div id="entB" hidden><h3 data-tf="tb94238ba26"><?php tf_t('tb94238ba26'); ?></h3><p id="entBp"></p></div></div></dialog>
 <?php tf_script_base(tf_datos_home()); ?>
 <script>
 (() => {
@@ -438,7 +467,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   /* 3 · estrellas de la bandera europea */
   (document.querySelector('.stars') || {}).innerHTML = [17, 34, 51].map(y => { const x = 6.5; return `<polygon points="${Array.from({ length: 10 }, (_, j) => { const rr = j % 2 ? 1.75 : 4.3, b = j / 10 * TAU - Math.PI / 2; return `${(x + Math.cos(b) * rr).toFixed(2)},${(y + Math.sin(b) * rr).toFixed(2)}`; }).join(' ')}"/>`; }).join('');
 
-  /* 4 · el girasol en la costura y la portada del informe */
+  /* 4 · el girasol en la costura y la portada de Futuros */
   const drawGirasol = () => { const cv = document.getElementById('girasol'), [g, w] = setup(cv); symbol(g, w / 2, w / 2, w * .47, 200, K.fuego, K.oro, rng(90)); };
   const drawPortada = () => { const cv = document.getElementById('portada'), [g, w, h] = setup(cv); symbol(g, w * 1.05, h * 1.02, Math.max(w, h) * .62, 420, K.fuegoN, K.oroN, rng(55), [0, 0, w, h]); };
 
@@ -488,7 +517,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     e.preventDefault();
     const nombre = document.getElementById('f-nombre').value.trim(), correo = document.getElementById('f-correo').value.trim();
     if (step === 1) { if (!nombre || !/^\S+@\S+\.\S+$/.test(correo)) { err.textContent = 'Escribe tu nombre y un correo válido.'; return; } go(2); return; }
-    if (!document.getElementById('f-ok').checked) { err.textContent = 'Necesitamos que aceptes la política de privacidad.'; return; }
+    if (!document.getElementById('f-ok').checked) { err.textContent = 'Necesitamos que aceptes la información sobre privacidad.'; return; }
     const fb = document.querySelector('.join .form'); fb.style.minHeight = fb.offsetHeight + 'px'; s1.hidden = s2.hidden = true; document.getElementById('nav').hidden = true; fm.querySelector('.steps').hidden = true; err.textContent = '';
     document.getElementById('doneT').textContent = `Gracias, ${nombre}.`; document.getElementById('done').hidden = false;
     TF.enviar('descubre', TF.leer(fm));
@@ -504,8 +533,10 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   });
   document.getElementById('legalX').addEventListener('click', () => lg.close());
   lg.addEventListener('click', e => { if (e.target === lg) lg.close(); });
+  /* Lo que se mueve: el correo mensual, desde el pie */
+  (() => { const f = document.getElementById('carta'); if (!f) return; f.addEventListener('submit', e => { e.preventDefault(); const er = document.getElementById('cartaE'), c = document.getElementById('c-correo').value.trim(); if (!/^\S+@\S+\.\S+$/.test(c)) { er.textContent = 'Escribe un correo válido.'; return; } if (!document.getElementById('c-boletin').checked) { er.textContent = 'Marca la casilla para que podamos escribirte.'; return; } er.textContent = ''; window.TF?.enviar?.('boletin', window.TF?.leer?.(f)); f.querySelector('.campos').hidden = true; f.querySelector('.ok').hidden = true; document.getElementById('cartaOk').hidden = false; }); })();
   /* La Frontera: entrar con un enlace al correo */
-  (() => { const d = document.getElementById('entrar'); if (!d) return; document.addEventListener('click', e => { if (e.target.closest('[data-entrar]')) { e.preventDefault(); document.getElementById('entA').hidden = false; document.getElementById('entB').hidden = true; document.getElementById('entE').textContent = ''; d.showModal(); } if (e.target.closest('[data-cierra-entrar]')) d.close(); if (e.target.closest('#entrar [data-cierra]')) d.close(); }); d.addEventListener('click', e => { if (e.target === d) d.close(); }); document.getElementById('entF').addEventListener('submit', e => { e.preventDefault(); const c = document.getElementById('entC').value.trim(); if (!/^\S+@\S+\.\S+$/.test(c)) { document.getElementById('entE').textContent = 'Escribe un correo válido.'; return; } document.getElementById('entBp').textContent = `Te escribiremos a ${c} en cuanto abramos La Frontera.`; TF.enviar('la-frontera', { correo: c }); document.getElementById('entA').hidden = true; document.getElementById('entB').hidden = false; }); })();
+  (() => { const d = document.getElementById('entrar'); if (!d) return; document.addEventListener('click', e => { if (e.target.closest('[data-entrar]')) { e.preventDefault(); document.getElementById('entA').hidden = false; document.getElementById('entB').hidden = true; document.getElementById('entE').textContent = ''; d.showModal(); } if (e.target.closest('[data-cierra-entrar]')) d.close(); if (e.target.closest('#entrar [data-cierra]')) d.close(); }); d.addEventListener('click', e => { if (e.target === d) d.close(); }); document.getElementById('entF').addEventListener('submit', e => { e.preventDefault(); const c = document.getElementById('ent-correo').value.trim(); if (!/^\S+@\S+\.\S+$/.test(c)) { document.getElementById('entE').textContent = 'Escribe un correo válido.'; return; } if (!document.getElementById('ent-ok').checked) { document.getElementById('entE').textContent = 'Necesitamos que aceptes la información sobre privacidad.'; return; } document.getElementById('entBp').textContent = `Te escribiremos a ${c} en cuanto abramos La Frontera.`; TF.enviar('la-frontera', TF.leer(document.getElementById('entF'))); document.getElementById('entA').hidden = true; document.getElementById('entB').hidden = false; }); })();
   document.documentElement.dataset.done = 1;
 })();
 </script>

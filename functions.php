@@ -24,6 +24,9 @@ remove_action('wp_print_styles', 'print_emoji_styles');
 add_filter('show_admin_bar', function ($s) { return $s && current_user_can('edit_posts'); });
 
 /* ---------- ayudas ---------- */
+/* Secciones que todavía no tienen contenido real: se enseñan «en construcción».
+   Cuando haya contenido de verdad, se pone en false y se publica el tema. */
+function tf_en_construccion() { return ['voces' => true, 'informe' => true, 'papers' => true, 'consejo' => true]; }
 function tf_estados() { return current_user_can('edit_posts') ? ['publish', 'draft', 'pending', 'future'] : ['publish']; }
 function tf_q($tipo, $args = []) {
 	return get_posts(array_merge(['post_type' => $tipo, 'post_status' => tf_estados(), 'numberposts' => -1, 'orderby' => ['menu_order' => 'ASC', 'date' => 'DESC']], $args));
@@ -51,9 +54,12 @@ function tf_enlaces($html) {
 /* ---------- lo que comparten todas las páginas: datos y envío de formularios ---------- */
 function tf_script_base($datos) {
 	$datos['api'] = esc_url_raw(rest_url('tf/v1/formulario'));
+	$datos['enConstruccion'] = tf_en_construccion();
 	echo '<script>window.TF=' . wp_json_encode($datos, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . ';';
-	echo 'TF.enviar=(tipo,datos)=>{try{fetch(TF.api,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tipo,datos})}).catch(()=>{})}catch(e){}};';
-	echo 'TF.leer=f=>{const o={};f.querySelectorAll("input,textarea,select").forEach(i=>{if(/-ok$/.test(i.id)){if(i.checked)o.privacidad="Aceptada"}else if(i.type==="checkbox"||i.type==="radio"){if(i.checked){const k=i.name||"opciones",t=i.value&&i.value!=="on"?i.value:(i.closest("label")?.textContent||"").trim();o[k]=o[k]?o[k]+", "+t:t}}else if(i.value&&i.type!=="hidden")o[(i.id||i.name||"campo").replace(/^[a-z]+-/,"")]=i.value});return o};';
+	/* TF.enviar manda los campos y, aparte, los consentimientos (casilla, texto mostrado) y el origen: es la prueba del art. 7.1 del RGPD.
+	   TF.leer saca de un formulario los campos; las casillas cuyo id acaba en -ok (privacidad) y -boletin (Lo que se mueve) van en __c. */
+	echo 'TF.enviar=(tipo,datos)=>{try{datos=Object.assign({},datos||{});const c=datos.__c||{};delete datos.__c;fetch(TF.api,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tipo,datos,consentimientos:c,origen:{formulario:tipo,pagina:location.pathname+location.hash}})}).catch(()=>{})}catch(e){}};';
+	echo 'TF.leer=f=>{const o={},c={},lt=i=>(i.closest("label")?.textContent||"").replace(/\s+/g," ").trim();f.querySelectorAll("input,textarea,select").forEach(i=>{if(/-ok$/.test(i.id))c.privacidad={si:!!i.checked,texto:lt(i)};else if(/-boletin$/.test(i.id))c.boletin={si:!!i.checked,texto:lt(i)};else if(i.type==="checkbox"||i.type==="radio"){if(i.checked){const k=i.name||"opciones",t=i.value&&i.value!=="on"?i.value:lt(i);o[k]=o[k]?o[k]+", "+t:t}}else if(i.value&&i.type!=="hidden")o[(i.id||i.name||"campo").replace(/^[a-z]+-/,"")]=i.value});o.__c=c;return o};';
 	echo '</script>';
 }
 
@@ -89,27 +95,31 @@ function tf_persona($id) {
 }
 function tf_informe_actual() { $i = tf_q('tf_informe', ['numberposts' => 1, 'orderby' => 'date', 'order' => 'DESC']); return $i[0] ?? null; }
 function tf_datos_futuros() {
+	/* lo que está en construcción no viaja al navegador: la página enseña su estado «en construcción» */
+	$ec = tf_en_construccion();
 	$autores = []; $papers = [];
-	foreach (tf_q('tf_paper', ['orderby' => 'date', 'order' => 'DESC']) as $p) {
+	foreach ($ec['papers'] ? [] : tf_q('tf_paper', ['orderby' => 'date', 'order' => 'DESC']) as $p) {
 		$a = (int) tf_campo('autor', $p->ID); $k = $a ? 'p' . $a : 'anon';
 		if (!isset($autores[$k])) $autores[$k] = tf_persona($a);
 		$temas = wp_get_post_terms($p->ID, 'tf_tema', ['fields' => 'names']);
 		$papers[] = ['pid' => $p->ID, 'id' => $p->post_name ?: 'paper-' . $p->ID, 't' => $temas[0] ?? '', 'h' => get_the_title($p), 'a' => $k, 'd' => date_i18n('F \d\e Y', strtotime($p->post_date)), 'lead' => tf_campo('entradilla', $p->ID), 'html' => apply_filters('the_content', $p->post_content), 'banda' => tf_foto($p->ID, 'full'), 'pdf' => tf_campo('pdf', $p->ID)];
 	}
-	$inf = tf_informe_actual(); $INF = null;
+	$inf = $ec['informe'] ? null : tf_informe_actual(); $INF = null;
 	if ($inf) {
 		$claves = array_map(function ($c) { return [$c['numero'] ?? '', $c['texto'] ?? '']; }, (array) (tf_campo('claves', $inf->ID) ?: []));
 		$INF = ['pid' => $inf->ID, 'id' => 'informe', 'informe' => true, 'h' => get_the_title($inf), 'd' => get_the_date('Y', $inf) ? 'Informe anual ' . get_the_date('Y', $inf) : '', 'lead' => tf_campo('entradilla', $inf->ID), 'html' => apply_filters('the_content', $inf->post_content), 'portada' => tf_foto($inf->ID, 'full'), 'pdf' => tf_campo('pdf', $inf->ID), 'claves' => $claves];
 	}
-	$consejo = array_map(function ($p) { return [tf_foto($p->ID, 'medium_large'), get_the_title($p), tf_campo('cargo', $p->ID), tf_campo('bio', $p->ID), $p->ID]; }, tf_q('tf_persona', ['tax_query' => [['taxonomy' => 'tf_grupo', 'field' => 'slug', 'terms' => 'consejo']]]));
+	$consejo = $ec['consejo'] ? [] : array_map(function ($p) { return [tf_foto($p->ID, 'medium_large'), get_the_title($p), tf_campo('cargo', $p->ID), tf_campo('bio', $p->ID), $p->ID]; }, tf_q('tf_persona', ['tax_query' => [['taxonomy' => 'tf_grupo', 'field' => 'slug', 'terms' => 'consejo']]]));
 	return ['autores' => (object) $autores, 'papers' => $papers, 'informe' => $INF, 'consejo' => $consejo];
 }
 function tf_filtros() {
+	if (tf_en_construccion()['papers']) return; /* en construcción: sin filtros; la plantilla enseña las siluetas */
 	echo '<div class="filtros" id="filtros" role="group" aria-label="Filtrar por tema"><button type="button" data-t="todos" aria-pressed="true">Todos</button>';
 	foreach (get_terms(['taxonomy' => 'tf_tema', 'hide_empty' => false]) as $t) echo '<button type="button" data-t="' . esc_attr($t->name) . '" aria-pressed="false">' . esc_html($t->name) . '</button>';
 	echo '</div>';
 }
 function tf_informe_bloque() {
+	if (tf_en_construccion()['informe']) return; /* en construcción: la plantilla enseña el bloque «en marcha» (data-ec="informe") */
 	$i = tf_informe_actual(); if (!$i) return;
 	$claves = (array) (tf_campo('claves', $i->ID) ?: []); $pdf = tf_campo('pdf', $i->ID);
 	$k = 'p' . $i->ID;
@@ -174,8 +184,8 @@ function tf_datos_comunidad() {
 		'encuentro' => ['fecha' => tf_op('enc_fecha', '2027-09-17T10:00:00')],
 		'mecenas' => [
 			'desgrava' => (bool) tf_op('mec_desgrava', false),
-			'pre' => ['mes' => $lista('mec_mes', [10, 20, 50]), 'ano' => $lista('mec_ano', [60, 120, 240]), 'vez' => $lista('mec_vez', [30, 60, 120])],
-			'logro' => $lin('mec_impacto', ['Pagas un mes de quedadas de la comunidad de una ciudad: el sitio, la merienda y los materiales.', 'Una joven transfronteriza viene al encuentro de Sierra Nevada con todo pagado.', '{n} jóvenes transfronterizas vienen al encuentro con todo pagado y su voz llega a Futuros.']),
+			'pre' => ['mes' => $lista('mec_mes', [3, 6, 9]), 'ano' => $lista('mec_ano', [30, 60, 90]), 'vez' => $lista('mec_vez', [10, 25, 50])],
+			'logro' => $lin('mec_impacto', ['Pagas la merienda y los materiales de una quedada de la comunidad en una ciudad.', 'Pagas el billete de bus de una joven transfronteriza para venir al encuentro de Sierra Nevada.', 'Pagas el viaje y la comida de una joven transfronteriza durante los tres días del encuentro de Sierra Nevada.']),
 		],
 	];
 }
@@ -187,16 +197,16 @@ function tf_encuentro_bloque() {
 function tf_mecenas_intro() {
 	$foto = tf_op('mec_foto', TF_U . '/img/comunidad/mecenas.jpg');
 	echo '<figure class="foto"><img src="' . esc_url($foto) . '" alt="Jóvenes de la comunidad sentados al sol en una calle de pueblo." loading="lazy" data-tf-f="o.mec_foto"></figure>';
-	echo '<h2 data-tf-c="o.mec_titular">' . esc_html(tf_op('mec_titular', 'Talento hay de sobra. Lo que falta es poder llegar.')) . '</h2>';
-	echo '<p class="sub2" data-tf-c="o.mec_texto">' . esc_html(tf_op('mec_texto', 'Muchas jóvenes transfronterizas crecen en hogares humildes, hijas de padres que llegaron con lo justo. Con tu ayuda vienen a los encuentros, hacen comunidad en su ciudad y su voz llega a Futuros.')) . '</p>';
+	echo '<h2 data-tf-c="o.mec_titular">' . esc_html(tf_op('mec_titular', 'Un hogar para ser todo lo que somos.')) . '</h2>';
+	echo '<p class="sub2" data-tf-c="o.mec_texto">' . esc_html(tf_op('mec_texto', 'Transfronteriza nació como red de cuidado entre jóvenes de dos orillas y se sostiene con lo que ponemos entre todas. Tu aportación paga las becas de los encuentros, las quedadas en cada ciudad y la investigación de Futuros, para que ninguna se quede fuera por dinero.')) . '</p>';
 }
 /* los datos que respaldan la donación, plegables y cerrados */
 function tf_mecenas_datos() {
 	$porque = (array) (tf_op('mec_porque', []) ?: []);
 	if ($porque) {
-		echo '<details class="porque plega"><summary><h3>Por qué importa lo que das.</h3></summary><ul>';
+		echo '<details class="porque plega"><summary><h3>Por qué importa lo que das.</h3></summary><div class="cuerpo"><ul>';
 		foreach (array_values($porque) as $n => $d) echo '<li><b data-tf-c="o.mec_porque.' . $n . '.numero">' . esc_html($d['numero']) . '</b><p data-tf-c="o.mec_porque.' . $n . '.texto">' . esc_html($d['texto']) . '</p>' . ($d['fuente'] ? '<small data-tf-c="o.mec_porque.' . $n . '.fuente">' . esc_html($d['fuente']) . '</small>' : '') . '</li>';
-		echo '</ul></details>';
+		echo '</ul><img class="ilu" src="' . esc_url(TF_U . '/img/ilustra/porque.svg') . '" alt="" loading="lazy" onerror="this.classList.add(\'rota\')"></div></details>';
 	}
 	$rep = (array) (tf_op('mec_reparto', []) ?: []); $col = ['fuego' => 'var(--fuego)', 'oro' => 'var(--oro)', 'hoja' => '#5E8F4E', 'tinta' => 'var(--tinta)'];
 	if ($rep) {
