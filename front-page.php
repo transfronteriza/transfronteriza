@@ -110,14 +110,16 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .com::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(245,238,223,.28),rgba(245,238,223,0) 40%)}
 .cover{position:relative;z-index:2;margin:auto 0;align-self:center;width:clamp(200px,19vw,290px);aspect-ratio:3/4;border-radius:4px;overflow:hidden;background:#27223a;box-shadow:0 1px 0 rgba(245,238,223,.06) inset,0 22px 44px rgba(0,0,0,.45);transform:rotate(3deg);transition:transform .6s var(--ease),box-shadow .6s}
 .fut:hover .cover,.fut:focus-visible .cover{transform:rotate(0deg) translateY(-8px);box-shadow:0 1px 0 rgba(245,238,223,.06) inset,0 30px 60px rgba(0,0,0,.55)}
-.cover canvas{position:absolute;inset:0;width:100%;height:100%}
-.cover .ct{position:absolute;inset:0;padding:clamp(16px,1.6vw,22px);display:flex;flex-direction:column;gap:10px;color:var(--papel)}
+.cover > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cover::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(15,12,24,.6),rgba(15,12,24,0) 55%)}
+.cover .ct{position:absolute;inset:0;z-index:2;padding:clamp(16px,1.6vw,22px);display:flex;flex-direction:column;gap:10px;color:var(--papel)}
 .cover .ct span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.7}
-.cover .ct h4{font-size:clamp(22px,2.2vw,32px);line-height:1.02;max-width:9ch}
+.cover .ct h4{font-size:clamp(20px,2vw,28px);line-height:1.04;max-width:11ch}
 .emblema{position:absolute;left:50%;top:50%;z-index:5;width:var(--em);aspect-ratio:1/1;translate:-50% -50%;pointer-events:none;perspective:900px}
 .emblema .sway{width:100%;height:100%;animation:bascula 9s ease-in-out infinite alternate}
 @keyframes bascula{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
-.emblema canvas{width:100%;height:100%;filter:drop-shadow(0 14px 30px rgba(0,0,0,.35));transition:transform 1.3s var(--ease)}
+.emblema::before{content:"";position:absolute;left:8%;right:8%;top:14%;bottom:-2%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.38),rgba(0,0,0,0));filter:blur(12px)}
+.emblema canvas{position:relative;width:100%;height:100%;transition:transform 1.3s var(--ease);will-change:transform;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .dos:has(.com:hover) .emblema canvas,.dos:has(.com:focus-visible) .emblema canvas{transform:translateX(-6%) rotateY(-30deg) rotate(-12deg)}
 .dos:has(.fut:hover) .emblema canvas,.dos:has(.fut:focus-visible) .emblema canvas{transform:translateX(6%) rotateY(30deg) rotate(12deg)}
 
@@ -169,21 +171,25 @@ input[type=text]:focus,input[type=email]:focus{outline:0;box-shadow:inset 0 0 0 
 .foot nav{display:flex;gap:28px;flex-wrap:wrap;align-items:center}
 .foot nav a:hover{color:var(--papel)}
 .foot .leg{margin-top:36px;font-size:13px;color:rgba(245,238,223,.42);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.foot .carta{max-width:600px;margin:0 0 52px;padding-bottom:48px;border-bottom:1px solid rgba(245,238,223,.12)}
+.foot .in{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,400px);grid-template-areas:"row carta" "leg leg";gap:44px clamp(32px,6vw,96px);align-items:start}
+.foot .row{grid-area:row;flex-direction:column;align-items:flex-start;gap:26px}
+.foot .leg{grid-area:leg;margin-top:0}
+.foot .carta{grid-area:carta;max-width:none;margin:0}
 .foot .carta [hidden]{display:none}
-.foot .carta h3{font-size:clamp(28px,2.8vw,38px);line-height:1.04;letter-spacing:-.03em;color:#F5EEDF}
-.foot .carta p{margin-top:10px;font-size:16.5px;color:rgba(245,238,223,.7);max-width:46ch}
-.foot .carta .campos{margin-top:20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px}
-.foot .carta input[type=email]{min-width:0;width:100%;box-sizing:border-box;padding:15px 20px;border-radius:999px;border:0;background:rgba(245,238,223,.08);color:#F5EEDF;font:inherit;font-size:16px;box-shadow:inset 0 0 0 1px rgba(245,238,223,.22)}
+.foot .carta h3{font-size:22px;line-height:1.1;letter-spacing:-.02em;color:#F5EEDF}
+.foot .carta p{margin-top:6px;font-size:14.5px;color:rgba(245,238,223,.62);max-width:40ch}
+.foot .carta .campos{margin-top:14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.foot .carta input[type=email]{min-width:0;width:100%;box-sizing:border-box;padding:12px 16px;border-radius:999px;border:0;background:rgba(245,238,223,.08);color:#F5EEDF;font:inherit;font-size:15px;box-shadow:inset 0 0 0 1px rgba(245,238,223,.22)}
 .foot .carta input[type=email]::placeholder{color:rgba(245,238,223,.45)}
 .foot .carta input[type=email]:focus{outline:0;box-shadow:inset 0 0 0 2px #F2B233}
-.foot .carta .btn{background:#F5EEDF;color:#1F1B2D}
-.foot .carta .ok{margin-top:14px;font-size:13.5px;line-height:1.45;color:rgba(245,238,223,.6)}
-.foot .carta .ok input{margin-top:2px;width:17px;height:17px;flex:none;accent-color:#F2B233}
+.foot .carta .btn{padding:12px 18px;font-size:14.5px;background:#F5EEDF;color:#1F1B2D}
+.foot .carta .ok{margin-top:10px;font-size:12.5px;line-height:1.4;color:rgba(245,238,223,.55)}
+.foot .carta .ok input{margin-top:1px;width:15px;height:15px;flex:none;accent-color:#F2B233}
 .foot .carta .ok button{color:rgba(245,238,223,.85);text-decoration:underline;text-underline-offset:3px}
-.foot .carta .err{margin-top:8px;color:#F2B233}
-.foot .carta .hecho{margin-top:16px;font-size:16.5px;color:#F5EEDF}
-@media (max-width:620px){.foot .carta .campos{grid-template-columns:minmax(0,1fr)}.foot .carta .btn{width:100%;padding:17px}}
+.foot .carta .err{margin-top:6px;font-size:13px;color:#F2B233}
+.foot .carta .hecho{margin-top:12px;font-size:15px;color:#F5EEDF}
+@media (max-width:820px){.foot .in{grid-template-columns:minmax(0,1fr);grid-template-areas:"row" "carta" "leg"}.foot .row{flex-direction:row;align-items:center}}
+@media (max-width:620px){.foot .carta .campos{grid-template-columns:minmax(0,1fr)}.foot .carta .btn{width:100%;padding:14px}}
 
 dialog.legal{width:min(820px,92vw);max-height:88vh;background:var(--papel);color:var(--tinta);overflow:auto}
 dialog.legal .marco{position:relative;margin:14px;border:1px solid var(--linea);border-radius:6px;padding:clamp(28px,4vw,52px)}
@@ -330,7 +336,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <!-- 4 · Comunidad | Futuros -->
   <section class="dos" data-tf-sec="dos">
     <a class="lado com" id="comunidad" href="<?php echo esc_url(tf_pagina('comunidad')); ?>"><img src="<?php tf_img('i408711db45', TF_U . '/img/comunidad.jpg'); ?>" data-tf-img="i408711db45" alt="Dos chicas de la comunidad, de espaldas, miran la montaña al atardecer."><div class="t"><h2 data-tf="t8f69233c0e"><?php tf_t('t8f69233c0e'); ?></h2><p data-tf="t2f4fd33425"><?php tf_t('t2f4fd33425'); ?></p><span class="btn">Conoce la comunidad</span></div></a>
-    <a class="lado fut" id="futuros" href="<?php echo esc_url(tf_pagina('futuros')); ?>"><div class="t"><h2 data-tf="t96b03ea3c7"><?php tf_t('t96b03ea3c7'); ?></h2><p data-tf="tbc6bf077e8"><?php tf_t('tbc6bf077e8'); ?></p><span class="btn">Entra en Futuros</span></div><div class="cover"><canvas id="portada" aria-hidden="true"></canvas><div class="ct"><span>Futuros</span><h4 data-tf="tf386930f83"><?php tf_t('tf386930f83'); ?></h4></div></div></a>
+    <a class="lado fut" id="futuros" href="<?php echo esc_url(tf_pagina('futuros')); ?>"><div class="t"><h2 data-tf="t96b03ea3c7"><?php tf_t('t96b03ea3c7'); ?></h2><p data-tf="tbc6bf077e8"><?php tf_t('tbc6bf077e8'); ?></p><span class="btn">Entra en Futuros</span></div><div class="cover"><img src="<?php tf_img('i1fae3e9ef6', TF_U . '/img/ilustra/informe-portada.svg'); ?>" data-tf-img="i1fae3e9ef6" alt=""><div class="ct"><span>Futuros · Informe anual</span><h4 data-tf="t2d86fba811"><?php tf_t('t2d86fba811'); ?></h4></div></div></a>
     <div class="emblema" aria-hidden="true"><div class="sway"><canvas id="girasol"></canvas></div></div>
   </section>
 
@@ -467,9 +473,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   /* 3 · estrellas de la bandera europea */
   (document.querySelector('.stars') || {}).innerHTML = [17, 34, 51].map(y => { const x = 6.5; return `<polygon points="${Array.from({ length: 10 }, (_, j) => { const rr = j % 2 ? 1.75 : 4.3, b = j / 10 * TAU - Math.PI / 2; return `${(x + Math.cos(b) * rr).toFixed(2)},${(y + Math.sin(b) * rr).toFixed(2)}`; }).join(' ')}"/>`; }).join('');
 
-  /* 4 · el girasol en la costura y la portada de Futuros */
+  /* 4 · el girasol en la costura */
   const drawGirasol = () => { const cv = document.getElementById('girasol'), [g, w] = setup(cv); symbol(g, w / 2, w / 2, w * .47, 200, K.fuego, K.oro, rng(90)); };
-  const drawPortada = () => { const cv = document.getElementById('portada'), [g, w, h] = setup(cv); symbol(g, w * 1.05, h * 1.02, Math.max(w, h) * .62, 420, K.fuegoN, K.oroN, rng(55), [0, 0, w, h]); };
 
   /* 6 · espiral que gira */
   const sp = document.getElementById('espiral');
@@ -477,7 +482,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   /* cada lienzo se dibuja cuando tiene tamaño (también si la página carga oculta) y al cambiar de tamaño */
   const pinta = new Map(), ro = new ResizeObserver(es => es.forEach(e => { if (e.contentRect.width > 0) pinta.get(e.target)?.(); }));
   const vigila = (cv, fn) => { pinta.set(cv, fn); ro.observe(cv); };
-  vigila(document.getElementById('girasol'), drawGirasol); vigila(document.getElementById('portada'), drawPortada); vigila(sp, drawSpiral);
+  vigila(document.getElementById('girasol'), drawGirasol); vigila(sp, drawSpiral);
   document.querySelectorAll('.pw canvas').forEach(cv => vigila(cv, () => drawPepita(cv)));
   /* giro del girasol: ritmo natural y un impulso de alegría al enviar */
   let ang = 0, boost = 0, tS = 0, sOn = false, running = false;

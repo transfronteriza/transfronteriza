@@ -19,6 +19,7 @@ return [
 	't29c14fc02f' => 'Empezar',
 	't2a27eb438d' => 'Aviso legal',
 	't2a6a43053d' => 'Cuenta la tuya',
+	't2d86fba811' => 'El primer informe está en marcha',
 	't2f4fd33425' => 'Aquí nadie tiene que elegir entre sus mundos.',
 	't3158ca410d' => 'Descúbrete',
 	't359555dd0a' => 'Lo que haces posible.',
@@ -61,6 +62,7 @@ return [
 	't8f69233c0e' => 'Comunidad',
 	't8fb259eb70' => 'Consejo',
 	't903ff04bf9' => 'Nos hacen posible.',
+	't927afcef51' => 'Leer el avance',
 	't93b479b511' => 'Entra en La Frontera',
 	't96042621d8' => 'Nos escribes desde…',
 	't96b03ea3c7' => 'Futuros',
@@ -103,7 +105,6 @@ return [
 	'tef1552045d' => 'Una vez al año, en Sierra Nevada, con gente que te entiende sin que tengas que explicarte.',
 	'tf1fc0eda57' => 'Personas que eligen ser todo lo que son.',
 	'tf357aec0c8' => 'Anual',
-	'tf386930f83' => 'En construcción',
 	'tf6078594dd' => 'Futuros',
 	'tfa62384e84' => 'El primer informe está en marcha.',
 	'tfb8b046ee2' => 'Cuéntanos un poco de ti y te contamos lo que hacemos.'

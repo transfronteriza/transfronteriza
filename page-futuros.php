@@ -76,13 +76,8 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .inf.obra .cover{background:var(--capa);transform:rotateY(-12deg) rotate(1deg)}
 .inf.obra .cover::after{display:none}
 .inf.obra .txt > p + p{margin-top:14px;font-size:17px}
-.paper.silueta{pointer-events:none}
-.paper.silueta .banda{margin:0 0 18px;aspect-ratio:16/9;background:var(--capa-2)}
-.paper.silueta .pr{margin-top:auto;font-size:14px;color:var(--t3)}
-.mb.silueta{pointer-events:none}
-.mb.silueta .ft{aspect-ratio:1/1;background:var(--capa)}
-.mb.silueta .ft img{filter:none}
-@media (max-width:620px){.papers li:nth-child(3):has(.silueta){display:none}}
+.paper .por .pep{flex:none;width:38px;height:38px}
+.consejo .obra .ft img,dialog.perfil.obra .ft img{filter:none}
 
 /* ---------- 3 · papers ---------- */
 .filtros{display:flex;gap:8px;flex-wrap:wrap}
@@ -229,21 +224,25 @@ input[type=text]:focus{outline:0;box-shadow:inset 0 0 0 2px var(--t1)}
 .foot nav{display:flex;gap:28px;flex-wrap:wrap;align-items:center}
 .foot nav a:hover,.foot .leg button:hover{color:var(--papel)}
 .foot .leg{margin-top:36px;font-size:13px;color:rgba(245,238,223,.42);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.foot .carta{max-width:600px;margin:0 0 52px;padding-bottom:48px;border-bottom:1px solid rgba(245,238,223,.12)}
+.foot .in{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,400px);grid-template-areas:"row carta" "leg leg";gap:44px clamp(32px,6vw,96px);align-items:start}
+.foot .row{grid-area:row;flex-direction:column;align-items:flex-start;gap:26px}
+.foot .leg{grid-area:leg;margin-top:0}
+.foot .carta{grid-area:carta;max-width:none;margin:0}
 .foot .carta [hidden]{display:none}
-.foot .carta h3{font-size:clamp(28px,2.8vw,38px);line-height:1.04;letter-spacing:-.03em;color:#F5EEDF}
-.foot .carta p{margin-top:10px;font-size:16.5px;color:rgba(245,238,223,.7);max-width:46ch}
-.foot .carta .campos{margin-top:20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px}
-.foot .carta input[type=email]{min-width:0;width:100%;box-sizing:border-box;padding:15px 20px;border-radius:999px;border:0;background:rgba(245,238,223,.08);color:#F5EEDF;font:inherit;font-size:16px;box-shadow:inset 0 0 0 1px rgba(245,238,223,.22)}
+.foot .carta h3{font-size:22px;line-height:1.1;letter-spacing:-.02em;color:#F5EEDF}
+.foot .carta p{margin-top:6px;font-size:14.5px;color:rgba(245,238,223,.62);max-width:40ch}
+.foot .carta .campos{margin-top:14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.foot .carta input[type=email]{min-width:0;width:100%;box-sizing:border-box;padding:12px 16px;border-radius:999px;border:0;background:rgba(245,238,223,.08);color:#F5EEDF;font:inherit;font-size:15px;box-shadow:inset 0 0 0 1px rgba(245,238,223,.22)}
 .foot .carta input[type=email]::placeholder{color:rgba(245,238,223,.45)}
 .foot .carta input[type=email]:focus{outline:0;box-shadow:inset 0 0 0 2px #F2B233}
-.foot .carta .btn{background:#F5EEDF;color:#1F1B2D}
-.foot .carta .ok{margin-top:14px;font-size:13.5px;line-height:1.45;color:rgba(245,238,223,.6)}
-.foot .carta .ok input{margin-top:2px;width:17px;height:17px;flex:none;accent-color:#F2B233}
+.foot .carta .btn{padding:12px 18px;font-size:14.5px;background:#F5EEDF;color:#1F1B2D}
+.foot .carta .ok{margin-top:10px;font-size:12.5px;line-height:1.4;color:rgba(245,238,223,.55)}
+.foot .carta .ok input{margin-top:1px;width:15px;height:15px;flex:none;accent-color:#F2B233}
 .foot .carta .ok button{color:rgba(245,238,223,.85);text-decoration:underline;text-underline-offset:3px}
-.foot .carta .err{margin-top:8px;color:#F2B233}
-.foot .carta .hecho{margin-top:16px;font-size:16.5px;color:#F5EEDF}
-@media (max-width:620px){.foot .carta .campos{grid-template-columns:minmax(0,1fr)}.foot .carta .btn{width:100%;padding:17px}}
+.foot .carta .err{margin-top:6px;font-size:13px;color:#F2B233}
+.foot .carta .hecho{margin-top:12px;font-size:15px;color:#F5EEDF}
+@media (max-width:820px){.foot .in{grid-template-columns:minmax(0,1fr);grid-template-areas:"row" "carta" "leg"}.foot .row{flex-direction:row;align-items:center}}
+@media (max-width:620px){.foot .carta .campos{grid-template-columns:minmax(0,1fr)}.foot .carta .btn{width:100%;padding:14px}}
 
 @media (max-width:1000px){
   .inf{grid-template-columns:minmax(0,1fr)}
@@ -344,12 +343,12 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <!-- 2 · Informe anual -->
   <section class="sec in" id="informe" data-tf-sec="informe" data-tf-panel="edit.php?post_type=tf_informe" data-tf-panel-t="Editar el informe">
     <div class="inf obra" data-ec="informe" hidden>
-      <div class="libro"><div class="cover"><img src="<?php tf_img('i1fae3e9ef6', TF_U . '/img/ilustra/informe-portada.svg'); ?>" data-tf-img="i1fae3e9ef6" alt=""><div class="ct"><img src="<?php tf_img('ia8745bc028', TF_U . '/logo/h-oscuro-34.svg'); ?>" data-tf-img="ia8745bc028" alt="Transfronteriza"></div></div></div>
+      <button class="libro" type="button" data-abre="informe" aria-label="Leer el avance del informe"><div class="cover"><img src="<?php tf_img('i1fae3e9ef6', TF_U . '/img/ilustra/informe-portada.svg'); ?>" data-tf-img="i1fae3e9ef6" alt=""><div class="ct"><img src="<?php tf_img('ia8745bc028', TF_U . '/logo/h-oscuro-34.svg'); ?>" data-tf-img="ia8745bc028" alt="Transfronteriza"></div></div></button>
       <div class="txt">
         <h2 data-tf="tfa62384e84"><?php tf_t('tfa62384e84'); ?></h2>
         <p data-tf="t3d9a0eecb6"><?php tf_t('t3d9a0eecb6'); ?></p>
         <p data-tf="t8dd1d53397"><?php tf_t('t8dd1d53397'); ?></p>
-        <div class="acts"><a class="btn g" href="#hablemos" data-tf="t7420f5b191"><?php tf_t('t7420f5b191'); ?></a><a class="btn l" href="mailto:hola@transfronteriza.net" data-tf="ta0aa22019a"><?php tf_t('ta0aa22019a'); ?></a></div>
+        <div class="acts"><button class="btn g" type="button" data-abre="informe" data-tf="t927afcef51"><?php tf_t('t927afcef51'); ?></button><a class="btn l" href="#hablemos" data-tf="t7420f5b191"><?php tf_t('t7420f5b191'); ?></a></div>
       </div>
     </div>
     <?php tf_informe_bloque(); ?>
@@ -405,6 +404,14 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 </main>
 
 <footer class="foot"><div class="in">
+  <form class="carta" id="carta" novalidate aria-label="Lo que se mueve">
+    <h3 data-tf="t66d206bf3d"><?php tf_t('t66d206bf3d'); ?></h3>
+    <p data-tf="t97bbea0f7d"><?php tf_t('t97bbea0f7d'); ?></p>
+    <div class="campos"><input type="email" id="c-correo" placeholder="Tu correo" autocomplete="email" aria-label="Tu correo"><button class="btn" type="submit" data-tf="tb9147c5d9e"><?php tf_t('tb9147c5d9e'); ?></button></div>
+    <label class="ok"><input type="checkbox" id="c-boletin"><span>Sí, quiero recibirlo. He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>: solo usamos tu correo para esto y te das de baja en cada envío.</span></label>
+    <p class="err" id="cartaE" role="alert"></p>
+    <p class="hecho" id="cartaOk" hidden>Te hemos escrito. Confirma desde tu correo y listo.</p>
+  </form>
   <div class="row"><img class="flogo" src="<?php tf_img('ia8745bc028', TF_U . '/logo/h-oscuro-34.svg'); ?>" data-tf-img="ia8745bc028" alt="Transfronteriza"><nav aria-label="Pie"><a href="<?php echo esc_url(tf_pagina('comunidad')); ?>" data-tf="t38114eb012"><?php tf_t('t38114eb012'); ?></a><a href="<?php echo esc_url(tf_pagina('futuros')); ?>" data-tf="tf6078594dd"><?php tf_t('tf6078594dd'); ?></a><a href="<?php echo esc_url(home_url('/')); ?>#descubre" data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a><a href="mailto:hola@transfronteriza.net" data-tf="ta0aa22019a"><?php tf_t('ta0aa22019a'); ?></a></nav></div>
   <div class="leg"><span>© 2026 Asociación Juvenil Transfronteriza</span><span><button type="button" data-legal="aviso" data-tf="t2a27eb438d"><?php tf_t('t2a27eb438d'); ?></button> · <button type="button" data-legal="privacidad" data-tf="tcd9bcb9fd2"><?php tf_t('tcd9bcb9fd2'); ?></button> · <button type="button" data-legal="cookies" data-tf="t53614378a5"><?php tf_t('t53614378a5'); ?></button></span></div>
 </div></footer>
@@ -422,7 +429,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   </div>
   <article class="art" id="lArt"></article>
 </div>
-<dialog class="entrar" id="entrar" aria-labelledby="entT"><div class="marco"><button class="x" type="button" data-cierra aria-label="Cerrar">×</button><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle class="punto" cx="41" cy="9" r="4.2" fill="#F2B233"/></svg><div id="entA"><h3 id="entT">Entra en La Frontera</h3><p data-tf="t9834a96e12"><?php tf_t('t9834a96e12'); ?></p><form id="entF" novalidate><input type="email" id="entC" placeholder="Tu correo" autocomplete="email" aria-label="Tu correo"><p class="err" id="entE" role="alert"></p><button class="btn p" type="submit" data-tf="t17c8912d40"><?php tf_t('t17c8912d40'); ?></button></form><p class="nueva">¿Aún no eres parte? <a href="<?php echo esc_url(home_url('/')); ?>#descubre" data-cierra-entrar data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a></p></div><div id="entB" hidden><h3 data-tf="tb94238ba26"><?php tf_t('tb94238ba26'); ?></h3><p id="entBp"></p></div></div></dialog>
+<dialog class="entrar" id="entrar" aria-labelledby="entT"><div class="marco"><button class="x" type="button" data-cierra aria-label="Cerrar">×</button><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle class="punto" cx="41" cy="9" r="4.2" fill="#F2B233"/></svg><div id="entA"><h3 id="entT">Entra en La Frontera</h3><p data-tf="t9834a96e12"><?php tf_t('t9834a96e12'); ?></p><form id="entF" novalidate><input type="email" id="ent-correo" placeholder="Tu correo" autocomplete="email" aria-label="Tu correo"><label class="ok"><input type="checkbox" id="ent-ok"><span>He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>. Guardamos tu correo solo para avisarte cuando abra La Frontera.</span></label><p class="err" id="entE" role="alert"></p><button class="btn p" type="submit" data-tf="t17c8912d40"><?php tf_t('t17c8912d40'); ?></button></form><p class="nueva">¿Aún no eres parte? <a href="<?php echo esc_url(home_url('/')); ?>#descubre" data-cierra-entrar data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a></p></div><div id="entB" hidden><h3 data-tf="tb94238ba26"><?php tf_t('tb94238ba26'); ?></h3><p id="entBp"></p></div></div></dialog>
 <div class="aviso" id="aviso" role="status"></div>
 
 <dialog class="perfil" id="perfil" aria-labelledby="pNombre">
@@ -498,41 +505,25 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   /* 1 · una corriente casi espacial de pepitas */
   const cvS = $('#semilla'), open = $('.open');
   let S = [], gS, wS, hS;
-  /* el cauce: entra por arriba a la izquierda, cruza, baja por la derecha y vuelve hasta salir por el pie del bloque, junto al título */
-  let PC = [[0, 0], [0, 0], [0, 0], [0, 0]], INV = new Float32Array(513);
-  const punto = (s, w, h, o) => { const P = PC, u = 1 - s, a = u * u * u, b = 3 * u * u * s, c = 3 * u * s * s, d = s * s * s; o[0] = (a * P[0][0] + b * P[1][0] + c * P[2][0] + d * P[3][0]) * w; o[1] = (a * P[0][1] + b * P[1][1] + c * P[2][1] + d * P[3][1]) * h; return o; };
-  /* el cauce se recorre por longitud, no por parámetro: así las pepitas van igual de juntas y a la misma velocidad de principio a fin */
-  const traza = (w, h) => {
-    const mov = w < 760, rg = document.createRange(), fr = Math.max(...[...open.querySelector('.t').children].map(e => { rg.selectNodeContents(e); return rg.getBoundingClientRect().right; })) / w, fin = Math.min(mov ? .92 : .9, fr + (mov ? .06 : .08));
-    PC = mov ? [[-.12, .04], [.95, -.06], [.85, .55], [Math.max(.82, fin), 1.08]] : [[-.08, .06], [.72, -.14], [1.1, .72], [fin, 1.06]];
-    const n = 240, o = [0, 0], acc = new Float32Array(n + 1); let L = 0, px = 0, py = 0;
-    for (let i = 0; i <= n; i++) { punto(i / n, w, h, o); if (i) L += Math.hypot(o[0] - px, o[1] - py); px = o[0]; py = o[1]; acc[i] = L; }
-    let j = 0; for (let k = 0; k <= 512; k++) { const d = k / 512 * L; while (j < n && acc[j + 1] < d) j++; const a0 = acc[j], a1 = acc[Math.min(n, j + 1)]; INV[k] = (j + (a1 > a0 ? (d - a0) / (a1 - a0) : 0)) / n; }
-  };
-  const sDe = p => INV[Math.min(512, Math.max(0, Math.round(p * 512)))];
+  /* la corriente: entra por arriba a la izquierda, cruza, baja por la derecha y se curva de vuelta hasta rozar el título, donde se disuelve */
+  const corriente = (s, w, h) => { const u = 1 - s, P = w < 760 ? [[-.15, .12], [1.02, -.04], [1.12, .64], [-.06, .7]] : [[-.1, .1], [.7, -.12], [1.16, .7], [.36, .64]]; return [0, 1].map(k => u * u * u * P[0][k] + 3 * u * u * s * P[1][k] + 3 * u * s * s * P[2][k] + s * s * s * P[3][k]).map((v, k) => v * (k ? h : w)); };
   const buildSeeds = () => {
-    /* en móvil el lienzo va a 1,5× como mucho: la mitad de píxeles que pintar, sin que se note */
-    const mov = cvS.clientWidth < 760, D = mov ? Math.min(1.5, DPR) : DPR;
-    [gS, wS, hS] = setup(cvS, D); traza(wS, hS); const r = rng(55), N = mov ? 220 : 500; S = [];
+    [gS, wS, hS] = setup(cvS); const r = rng(55), N = wS < 760 ? 150 : 300; S = [];
     for (let i = 0; i < N; i++) {
-      /* cuatro capas: polvo, pepitas, pepitas grandes y unas pocas muy cerca; un 7 % van en color papel */
-      const z = r(), capa = z < .5 ? 0 : z < .8 ? 1 : z < .95 ? 2 : 3, rad = [2.4, 4.4, 7.5, 11.5][capa] * (mov && capa === 3 ? .8 : 1) * (.75 + r() * .6), t = r();
-      const col = r() < .07 ? K.papel : mix(K.fuegoN, K.oroN, t);
-      const s2 = Math.ceil(rad * 2.6), sp = document.createElement('canvas'); sp.width = sp.height = Math.ceil(s2 * D);
-      const g = sp.getContext('2d'); g.setTransform(D, 0, 0, D, 0, 0); seedAt(g, s2 / 2, s2 / 2, rad, 0, col, r);
+      const capa = r() < .55 ? 0 : r() < .7 ? 1 : 2, rad = [2.2, 4.2, 7.5][capa] * (.7 + r() * .7), t = r();
+      const s2 = Math.ceil(rad * 2.6), sp = document.createElement('canvas'); sp.width = sp.height = Math.ceil(s2 * DPR);
+      const g = sp.getContext('2d'); g.setTransform(DPR, 0, 0, DPR, 0, 0); seedAt(g, s2 / 2, s2 / 2, rad, 0, mix(K.fuegoN, K.oroN, t), r);
       const g1 = (r() + r() + r()) / 3 - .5;
-      S.push({ sp, s: s2, p: r(), v: [.0055, .0085, .012, .016][capa] * (.8 + r() * .4), off: g1 * [.56, .44, .34, .26][capa] * Math.min(wS, hS) * 1.15, ph: r() * TAU, rot: r() * TAU, vr: (r() - .5) * .3, al: [.5, .78, 1, 1][capa], tw: capa < 2 ? .3 : .12 });
+      S.push({ sp, s: s2, p: r(), v: [.0045, .007, .011][capa] * (.8 + r() * .4), off: g1 * [.5, .38, .3][capa] * Math.min(wS, hS) * 1.1, ph: r() * TAU, rot: r() * TAU, vr: (r() - .5) * .3, al: [.42, .7, .95][capa] });
     }
   };
-  vigila(cvS, buildSeeds); document.fonts?.ready.then(() => { if (S.length) traza(wS, hS); });
-  const A0 = [0, 0], A1 = [0, 0];
+  vigila(cvS, buildSeeds);
   const pinta1 = t => {
     gS.clearRect(0, 0, wS, hS);
     for (const q of S) {
-      const s0 = sDe(q.p), [x0, y0] = punto(s0, wS, hS, A0), [x1, y1] = punto(Math.min(1, s0 + .004), wS, hS, A1), an = Math.atan2(y1 - y0, x1 - x0);
-      /* el cauce se ensancha en el centro y se estrecha en los extremos; cada pepita se mece y parpadea a su ritmo */
-      const o = q.off * (.55 + .45 * Math.sin(Math.PI * q.p)) + Math.sin(t * .0003 + q.ph) * 16, x = x0 - Math.sin(an) * o, y = y0 + Math.cos(an) * o;
-      const a = q.al * Math.min(1, q.p / .05, (1 - q.p) / .04) * (1 - q.tw + q.tw * (.5 + .5 * Math.sin(t * .0014 + q.ph * 3)));
+      const [x0, y0] = corriente(q.p, wS, hS), [x1, y1] = corriente(Math.min(1, q.p + .004), wS, hS), an = Math.atan2(y1 - y0, x1 - x0);
+      const o = q.off + Math.sin(t * .00025 + q.ph) * 14, x = x0 - Math.sin(an) * o, y = y0 + Math.cos(an) * o;
+      const a = q.al * Math.min(1, q.p / .08, (1 - q.p) / .32);  /* desemboca: se va apagando en el último tramo */
       if (a <= .01) continue;
       gS.save(); gS.globalAlpha = a; gS.translate(x, y); gS.rotate(an + q.rot); gS.drawImage(q.sp, -q.s / 2, -q.s / 2, q.s, q.s); gS.restore();
     }
@@ -545,9 +536,26 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const A = TF.autores || {}, P = TF.papers || [], INF = TF.informe || { id: 'informe', informe: true, h: '', d: '', lead: '', html: '', claves: [] };
   const pl = $('#papersList');
   const aid = a => (/^p(\d+)$/.exec(a || '') || [])[1];
-  /* en construcción: tres siluetas de paper, sin títulos; si no, los papers con sus filtros */
-  if (EC.papers) pl.innerHTML = [1, 2, 3].map(() => `<li><div class="paper silueta"><div class="banda"><img src="<?php echo TF_U; ?>/img/ilustra/paper-banda.svg" alt="" loading="lazy"></div><p class="pr">En preparación</p></div></li>`).join('');
-  else pl.innerHTML = P.map(p => `<li data-t="${p.t}"${EI(p.pid, 'tf_paper')}><button class="paper" type="button" data-abre="${p.id}"><h3${ED(p.pid, 'titulo')}>${p.h}</h3><div class="banda"${EF(p.pid)}><img src="${p.banda}" alt="" loading="lazy"></div><div class="por"><img src="${(A[p.a] || [])[3] || ''}" alt="" loading="lazy"><div><span${ED(aid(p.a), 'titulo')}>${A[p.a][0]}</span><small${ED(aid(p.a), 'cargo')}>${A[p.a][1]}</small></div></div></button></li>`).join('');
+  /* mientras se escriben: lo que pretendemos, con el mismo lector; las portadas vienen con cada paper */
+  P.forEach(p => { p.banda = p.banda || `<?php echo TF_U; ?>/img/papers/${p.id}.jpg`; }); if (INF) INF.portada = INF.portada || '<?php echo TF_U; ?>/img/papers/informe.jpg';
+  const PO = [
+    { id: 'pre-educacion', obra: 1, t: 'Educación', h: 'Lo que la escuela no ve', d: 'En preparación', banda: '<?php echo TF_U; ?>/img/ilustra/paper-banda.svg',
+      lead: 'Queremos saber qué pasa entre el instituto y la universidad para que lleguen tan pocas jóvenes de familia migrante, y qué hacen los centros que sí lo consiguen.',
+      b: [['h', 'Qué pretendemos'], ['p', 'Comparar los datos oficiales de abandono y acceso con lo que cuentan las propias alumnas: orientación, expectativas del profesorado, idiomas que no puntúan.'], ['d', '28 %', 'de la segunda generación llega a la universidad. Del resto de jóvenes, el 43 %.'], ['h', 'Con quién'], ['p', 'Con docentes de institutos de Andalucía y jóvenes de la comunidad que acaban de pasar por ello. Si eres una de ellas, o de ellos, te queremos en este paper.']] },
+    { id: 'pre-empleo', obra: 1, t: 'Empleo', h: 'Tres idiomas que el currículum no cuenta', d: 'En preparación', banda: '<?php echo TF_U; ?>/img/ilustra/paper-banda.svg',
+      lead: 'Las jóvenes transfronterizas hablan dos, tres o cuatro lenguas. Queremos medir cuántas de esas lenguas aparecen en un contrato y proponer cómo certificarlas.',
+      b: [['h', 'Qué pretendemos'], ['p', 'Una encuesta breve a jóvenes de la comunidad sobre las lenguas que usan en casa y en el trabajo, y entrevistas a empresas que las buscan y no las encuentran.'], ['h', 'Para qué'], ['p', 'Para pedir a las escuelas oficiales de idiomas que certifiquen gratis las lenguas de herencia, y a las empresas que pregunten por ellas.']] },
+    { id: 'pre-estrecho', obra: 1, t: 'Territorio', h: 'Una ciudad en dos orillas', d: 'En preparación', banda: '<?php echo TF_U; ?>/img/ilustra/paper-banda.svg',
+      lead: 'Entre Algeciras y Tánger hay familias, comercios y fiestas que viven a los dos lados. Nadie las cuenta. Queremos empezar a contarlas.',
+      b: [['h', 'Qué pretendemos'], ['p', 'Un primer mapa de la vida transfronteriza del Estrecho: cuántas personas cruzan cada verano, cuántos negocios dependen de ambas orillas, qué pasa con los papeles.'], ['h', 'Con quién'], ['p', 'Con la comunidad de Algeciras y con quien quiera sumarse desde la otra orilla.']] }
+  ];
+  const INFO = { id: 'informe', obra: 1, informe: true, h: 'El primer informe está en marcha', d: 'Informe anual · en preparación', portada: '<?php echo TF_U; ?>/img/ilustra/informe-portada.svg',
+    lead: 'Una de cada tres criaturas que nacen en España tiene una madre nacida en otro país. El primer informe de Futuros contará quiénes son las jóvenes que crecen entre países, idiomas y culturas, y qué esperan de la democracia que viene.',
+    b: [['h', 'Qué vamos a investigar'], ['p', 'Cómo vive, estudia y trabaja la juventud transfronteriza en España: escuela, empleo, vivienda, identidad y participación. Con datos públicos, con las voces de la comunidad y con las personas que ya lo han estudiado.'], ['h', 'Cómo'], ['p', 'Una encuesta a la comunidad, entrevistas en los encuentros y en las ciudades, y un Consejo que vele por el rigor y la independencia del trabajo.'], ['h', 'Cuándo'], ['p', 'Lo presentaremos en 2027. Antes irán saliendo los primeros papers, y en Lo que se mueve contaremos cada paso.'], ['q', 'Hecho con ellas, no sobre ellas.'], ['h', 'Cómo ayudar'], ['p', 'Si tienes datos, una historia, una investigación o ganas de ayudar, escríbenos.']] };
+  const PP = EC.papers ? PO : P, INFX = EC.informe ? INFO : INF;
+  const tarjeta = (p, i) => `<li data-t="${p.t}"${EI(p.pid, 'tf_paper')}><button class="paper" type="button" data-abre="${p.id}"><h3${ED(p.pid, 'titulo')}>${p.h}</h3><div class="banda"${EF(p.pid)}><img src="${p.banda}" alt="" loading="lazy"></div><div class="por">${p.obra ? `<canvas class="pep" data-s="${i + 20}" aria-hidden="true"></canvas>` : `<img src="${(A[p.a] || [])[3] || ''}" alt="" loading="lazy">`}<div><span${ED(aid(p.a), 'titulo')}>${p.obra ? 'En preparación' : A[p.a][0]}</span><small${ED(aid(p.a), 'cargo')}>${p.obra ? p.t : A[p.a][1]}</small></div></div></button></li>`;
+  pl.innerHTML = PP.map(tarjeta).join('');
+  pl.querySelectorAll('.pep').forEach(cv => vigila(cv, () => pepBlanca(cv, +cv.dataset.s)));
   $('#filtros')?.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; document.querySelectorAll('#filtros button').forEach(x => x.setAttribute('aria-pressed', x === b)); pl.querySelectorAll('li').forEach(li => li.hidden = b.dataset.t !== 'todos' && li.dataset.t !== b.dataset.t); });
 
   const lector = $('#lector'), art = $('#lArt');
@@ -555,23 +563,22 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const bloque = ([k, x, y]) => k === 'p' ? `<p>${x}</p>` : k === 'h' ? `<h2>${x}</h2>` : k === 'q' ? `<blockquote>«${x}»</blockquote>` : `<div class="dato"><b>${x}</b><p>${y}</p></div>`;
   const prog = () => { const m = lector.scrollHeight - lector.clientHeight; $('#lProg').style.width = (m > 0 ? lector.scrollTop / m * 100 : 0) + '%'; };
   const abre = id => {
-    if (id === 'informe' ? EC.informe : EC.papers) return;
-    const p = id === 'informe' ? INF : P.find(x => x.id === id); if (!p) return;
+    const p = id === 'informe' ? INFX : PP.find(x => x.id === id); if (!p) return;
     if (lector.hidden) antesFoco = document.activeElement;
-    const au = p.informe ? null : A[p.a], i = P.indexOf(p), nx = p.informe ? P[0] : P[(i + 1) % P.length];
+    const au = p.informe || p.obra ? null : A[p.a], i = PP.indexOf(p), nx = p.informe ? PP[0] : PP[(i + 1) % PP.length];
     art.innerHTML = `<div class="ab${p.informe ? ' informe' : ''}"><img src="${p.informe ? p.portada : p.banda}" alt=""></div>
       <h1 id="lTit">${p.h}</h1>
       <div class="firma">${au ? `<img src="${au[3]}" alt="">` : `<img src="<?php echo TF_U; ?>/logo/transfronteriza-simbolo-color.svg" alt="" style="filter:none;object-fit:contain">`}<div>${au ? au[0] : 'Futuros'}<small>${au ? au[1] + ' · ' : ''}${p.d}</small></div></div>
       <p class="lead">${p.lead}</p>
       <div class="cuerpo">${(p.claves || []).map(c => bloque(['d', c[0], c[1]])).join('')}${p.html || (p.b || []).map(bloque).join('')}</div>
-      ${p.informe ? `<div class="acts"><a class="btn g" href="${INF.pdf || '#'}" download>Descargar el informe completo</a></div>` : `<div class="autora"><img src="${au[3]}" alt="${au[0]}"><div><h3>${au[0]}</h3><p class="r">${au[1]}</p><p class="b">${au[2]}</p></div></div>`}
-      <button class="sig" type="button" data-abre="${nx.id}"><div><small>${p.informe ? 'Primer paper' : 'Siguiente paper'}</small><b>${nx.h}</b></div><i>→</i></button>`;
+      ${p.obra ? `<div class="acts"><a class="btn g" href="#hablemos" data-cierra-lector>${p.informe ? 'Cuéntanoslo' : 'Quiero sumarme a este paper'}</a><a class="btn l" href="mailto:hola@transfronteriza.net">hola@transfronteriza.net</a></div>` : p.informe ? `<div class="acts"><a class="btn g" href="${INF.pdf || '#'}" download>Descargar el informe completo</a></div>` : `<div class="autora"><img src="${au[3]}" alt="${au[0]}"><div><h3>${au[0]}</h3><p class="r">${au[1]}</p><p class="b">${au[2]}</p></div></div>`}
+      ${nx && nx !== p ? `<button class="sig" type="button" data-abre="${nx.id}"><div><small>${p.informe ? 'Primer paper' : 'Siguiente paper'}</small><b>${nx.h}</b></div><i>→</i></button>` : ''}`;
     lector.hidden = false; lector.scrollTop = 0; document.documentElement.style.overflow = 'hidden';
     history.replaceState(null, '', '#' + (p.informe ? 'leer-informe' : p.id)); $('#lX').focus({ preventScroll: true }); prog();
   };
   const cierra = () => { lector.hidden = true; document.documentElement.style.overflow = ''; history.replaceState(null, '', location.pathname + location.search); antesFoco?.focus?.({ preventScroll: true }); antesFoco = null; };
   lector.addEventListener('scroll', prog, { passive: true });
-  document.addEventListener('click', e => { const b = e.target.closest('[data-abre]'); if (b) { e.preventDefault(); abre(b.dataset.abre); } });
+  document.addEventListener('click', e => { const b = e.target.closest('[data-abre]'); if (b) { e.preventDefault(); abre(b.dataset.abre); } if (e.target.closest('[data-cierra-lector]')) cierra(); });
   $('#lX').addEventListener('click', cierra);
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !lector.hidden) cierra(); });
   const setFs = v => { fs = Math.max(16, Math.min(24, v)); lector.style.setProperty('--fs', fs + 'px'); };
@@ -579,19 +586,26 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   $('#lModo').addEventListener('click', () => { const papel = lector.dataset.modo !== 'papel'; lector.dataset.modo = papel ? 'papel' : ''; $('#lModo').setAttribute('aria-label', papel ? 'Cambiar a modo oscuro' : 'Cambiar a modo papel'); try { localStorage.setItem('tf-modo', lector.dataset.modo); } catch (e) {} });
   try { if (localStorage.getItem('tf-modo') === 'papel') lector.dataset.modo = 'papel'; } catch (e) {}
   $('#lLink').addEventListener('click', () => { const u = location.href; (navigator.clipboard ? navigator.clipboard.writeText(u) : Promise.reject()).then(() => aviso('Enlace copiado')).catch(() => aviso(u)); });
-  const deHash = () => { const h = location.hash.slice(1); if (h === 'leer-informe') { if (EC.informe) $('#informe').scrollIntoView(); else abre('informe'); } else if (P.some(p => p.id === h)) abre(h); };
+  const deHash = () => { const h = location.hash.slice(1); if (h === 'leer-informe') abre('informe'); else if (PP.some(p => p.id === h)) abre(h); };
   deHash(); addEventListener('hashchange', deHash);
 
   /* 4 · consejo */
   const C = TF.consejo || [];
   const cl = $('#consejoList');
-  /* en construcción: cuatro siluetas, sin nombres ni ventana */
-  if (EC.consejo) cl.innerHTML = [1, 2, 3, 4].map(i => `<li><div class="mb silueta"><div class="ft"><img src="<?php echo TF_U; ?>/img/ilustra/consejo-${i}.svg" alt="" loading="lazy"></div></div></li>`).join('');
-  else cl.innerHTML = C.map(([f, n, r, b, id], i) => `<li${EI(id, 'tf_persona')}><button class="mb" type="button" data-i="${i}" aria-haspopup="dialog"><div class="ft"${EF(id)}><img src="${f}" alt="${n}" loading="lazy"></div><h3><canvas class="pep" data-s="${i}" aria-hidden="true"></canvas><span${ED(id, 'titulo')}>${n}</span></h3><p${r.includes('. ') ? '' : ED(id, 'cargo')}>${r.split('. ').pop()}</p></button></li>`).join('');
+  /* mientras se convoca: las cuatro plazas, con su tarjeta y su ficha, como tendrán las personas */
+  const CO = [
+    ['<?php echo TF_U; ?>/img/ilustra/consejo-1.svg', 'Una joven transfronteriza', 'Plaza por cubrir', 'Entre 18 y 30 años, de la comunidad. Alguien que haya crecido entre países y quiera velar por que Futuros hable con la voz de su generación, y no sobre ella. Una reunión al trimestre y mucha lectura. Si eres tú, escríbenos a hola@transfronteriza.net.'],
+    ['<?php echo TF_U; ?>/img/ilustra/consejo-2.svg', 'Una investigadora', 'Plaza por cubrir', 'De una universidad o un centro de estudios, en migraciones, educación, empleo, identidad o territorio. Su papel: cuidar el rigor de los datos y de las fuentes del informe y de los papers. Escríbenos a hola@transfronteriza.net.'],
+    ['<?php echo TF_U; ?>/img/ilustra/consejo-3.svg', 'Una persona de la comunidad', 'Plaza por cubrir', 'Una madre, un profesor, alguien de una asociación de barrio: quien conozca la vida transfronteriza desde dentro y pueda decirnos si lo que escribimos se parece a lo que pasa. Escríbenos a hola@transfronteriza.net.'],
+    ['<?php echo TF_U; ?>/img/ilustra/consejo-4.svg', 'Una persona de las instituciones', 'Plaza por cubrir', 'De la administración pública o de una fundación. Para que lo que proponemos llegue a quien decide y vuelva con respuesta. Escríbenos a hola@transfronteriza.net.']
+  ];
+  const CC = EC.consejo ? CO : C, foto = f => f;
+  cl.innerHTML = CC.map(([f, n, r, b, id], i) => `<li${EI(id, 'tf_persona')}${EC.consejo ? ' class="obra"' : ''}><button class="mb" type="button" data-i="${i}" aria-haspopup="dialog"><div class="ft"${EF(id)}><img src="${foto(f)}" alt="${n}" loading="lazy"></div><h3><canvas class="pep" data-s="${i}" aria-hidden="true"></canvas><span${ED(id, 'titulo')}>${n}</span></h3><p${r.includes('. ') ? '' : ED(id, 'cargo')}>${r.split('. ').pop()}</p></button></li>`).join('');
   cl.querySelectorAll('.pep').forEach(cv => vigila(cv, () => pepBlanca(cv, +cv.dataset.s)));
   const dlg = $('#perfil'), pPep = $('#pPep');
   let cur = 0;
-  const show = i => { cur = (i + C.length) % C.length; const [f, n, r, b] = C[cur]; $('#pFoto').src = f; $('#pFoto').alt = n; $('#pNombre').textContent = n; $('#pRol').textContent = r; $('#pBio').textContent = b; $('#pNum').textContent = `${cur + 1} de ${C.length}`; requestAnimationFrame(() => pepBlanca(pPep, cur)); };
+  dlg.classList.toggle('obra', EC.consejo);
+  const show = i => { cur = (i + CC.length) % CC.length; const [f, n, r, b] = CC[cur]; $('#pFoto').src = foto(f); $('#pFoto').alt = n; $('#pNombre').textContent = n; $('#pRol').textContent = r; $('#pBio').textContent = b; $('#pNum').textContent = `${cur + 1} de ${CC.length}`; requestAnimationFrame(() => pepBlanca(pPep, cur)); };
   cl.addEventListener('click', e => { const b = e.target.closest('.mb[data-i]'); if (!b) return; show(+b.dataset.i); dlg.showModal(); });
   $('#pAnt').addEventListener('click', () => show(cur - 1));
   $('#pSig').addEventListener('click', () => show(cur + 1));
@@ -619,8 +633,10 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     TF.enviar('hablemos', TF.leer(hf));
   });
   const top = $('#top'); const linea = () => top.classList.toggle('baja', scrollY > 8); addEventListener('scroll', linea, { passive: true }); linea();
+  /* Lo que se mueve: el correo mensual, desde el pie */
+  (() => { const f = document.getElementById('carta'); if (!f) return; f.addEventListener('submit', e => { e.preventDefault(); const er = document.getElementById('cartaE'), c = document.getElementById('c-correo').value.trim(); if (!/^\S+@\S+\.\S+$/.test(c)) { er.textContent = 'Escribe un correo válido.'; return; } if (!document.getElementById('c-boletin').checked) { er.textContent = 'Marca la casilla para que podamos escribirte.'; return; } er.textContent = ''; window.TF?.enviar?.('boletin', window.TF?.leer?.(f)); f.querySelector('.campos').hidden = true; f.querySelector('.ok').hidden = true; document.getElementById('cartaOk').hidden = false; }); })();
   /* La Frontera: entrar con un enlace al correo */
-  (() => { const d = document.getElementById('entrar'); if (!d) return; document.addEventListener('click', e => { if (e.target.closest('[data-entrar]')) { e.preventDefault(); document.getElementById('entA').hidden = false; document.getElementById('entB').hidden = true; document.getElementById('entE').textContent = ''; d.showModal(); } if (e.target.closest('[data-cierra-entrar]')) d.close(); if (e.target.closest('#entrar [data-cierra]')) d.close(); }); d.addEventListener('click', e => { if (e.target === d) d.close(); }); document.getElementById('entF').addEventListener('submit', e => { e.preventDefault(); const c = document.getElementById('entC').value.trim(); if (!/^\S+@\S+\.\S+$/.test(c)) { document.getElementById('entE').textContent = 'Escribe un correo válido.'; return; } document.getElementById('entBp').textContent = `Te escribiremos a ${c} en cuanto abramos La Frontera.`; TF.enviar('la-frontera', TF.leer(document.getElementById('entF'))); document.getElementById('entA').hidden = true; document.getElementById('entB').hidden = false; }); })();
+  (() => { const d = document.getElementById('entrar'); if (!d) return; document.addEventListener('click', e => { if (e.target.closest('[data-entrar]')) { e.preventDefault(); document.getElementById('entA').hidden = false; document.getElementById('entB').hidden = true; document.getElementById('entE').textContent = ''; d.showModal(); } if (e.target.closest('[data-cierra-entrar]')) d.close(); if (e.target.closest('#entrar [data-cierra]')) d.close(); }); d.addEventListener('click', e => { if (e.target === d) d.close(); }); document.getElementById('entF').addEventListener('submit', e => { e.preventDefault(); const c = document.getElementById('ent-correo').value.trim(); if (!/^\S+@\S+\.\S+$/.test(c)) { document.getElementById('entE').textContent = 'Escribe un correo válido.'; return; } if (!document.getElementById('ent-ok').checked) { document.getElementById('entE').textContent = 'Necesitamos que aceptes la información sobre privacidad.'; return; } document.getElementById('entBp').textContent = `Te escribiremos a ${c} en cuanto abramos La Frontera.`; TF.enviar('la-frontera', TF.leer(document.getElementById('entF'))); document.getElementById('entA').hidden = true; document.getElementById('entB').hidden = false; }); })();
   document.documentElement.dataset.done = 1;
 })();
 </script>

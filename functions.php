@@ -206,7 +206,7 @@ function tf_mecenas_datos() {
 	if ($porque) {
 		echo '<details class="porque plega"><summary><h3>Por qué importa lo que das.</h3></summary><div class="cuerpo"><ul>';
 		foreach (array_values($porque) as $n => $d) echo '<li><b data-tf-c="o.mec_porque.' . $n . '.numero">' . esc_html($d['numero']) . '</b><p data-tf-c="o.mec_porque.' . $n . '.texto">' . esc_html($d['texto']) . '</p>' . ($d['fuente'] ? '<small data-tf-c="o.mec_porque.' . $n . '.fuente">' . esc_html($d['fuente']) . '</small>' : '') . '</li>';
-		echo '</ul><img class="ilu" src="' . esc_url(TF_U . '/img/ilustra/porque.svg') . '" alt="" loading="lazy" onerror="this.classList.add(\'rota\')"></div></details>';
+		echo '</ul></div></details>';
 	}
 	$rep = (array) (tf_op('mec_reparto', []) ?: []); $col = ['fuego' => 'var(--fuego)', 'oro' => 'var(--oro)', 'hoja' => '#5E8F4E', 'tinta' => 'var(--tinta)'];
 	if ($rep) {

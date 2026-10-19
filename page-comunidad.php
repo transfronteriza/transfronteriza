@@ -104,6 +104,7 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .ilu.rota{visibility:hidden}
 
 /* ---------- 4 · encuentro anual ---------- */
+#anual{padding-block:clamp(56px,6vw,96px)}
 .anual{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(28px,5vw,80px);align-items:center}
 .af{border-radius:6px;overflow:hidden;aspect-ratio:16/10}
 .af img{width:100%;height:100%;object-fit:cover}
@@ -217,11 +218,10 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .ht .anillo{position:absolute;z-index:3;inset:0;border-radius:10px;box-shadow:inset 0 0 0 2px transparent;transition:box-shadow .3s}
 .ht:hover .anillo{box-shadow:inset 0 0 0 2px var(--oro)}
 /* en construcción: siluetas en vez de historias */
-.ht.sil{background:var(--teja);cursor:default}
+.ht.sil{background:var(--teja)}
 .ht.sil::after{display:none}
-.ht.sil img{object-fit:cover;transition:none}
-.ht.sil:hover img{transform:none}
-.ht.obra{background:var(--tinta);cursor:default}
+.ht.sil span{right:auto;padding:5px 9px;border-radius:999px;background:rgba(245,238,223,.9);color:var(--tinta);font-size:13px}
+.ht.obra{background:var(--tinta)}
 .ht.obra::after{display:none}
 .ht.obra .tx{flex-direction:column;align-items:flex-start;justify-content:center;gap:10px;padding:18px}
 .ht.obra .tx small{font:500 12px/1 var(--text);letter-spacing:.08em;text-transform:uppercase;color:var(--oro)}
@@ -268,8 +268,8 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 
 /* ---------- 8 · mecenas ---------- */
 .mec{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(24px,4vw,64px);align-items:start}
-.mec .foto{border-radius:6px;overflow:hidden;aspect-ratio:3/2}
-.mec .foto img{width:100%;height:100%;object-fit:cover;object-position:50% 28%}
+.mec .foto{border-radius:6px;overflow:hidden;aspect-ratio:3/2;background:var(--teja)}
+.mec .foto img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 28%;transform:scale(1.12);transform-origin:42% 62%}
 .mec h2{margin-top:clamp(22px,2.6vw,34px);font-size:clamp(38px,4.4vw,68px);line-height:.98;letter-spacing:-.04em;max-width:16ch}
 .mec .sub2{margin-top:16px;color:var(--tinta-2);font-size:clamp(17px,1.35vw,20px);max-width:44ch}
 .tarjeta{position:sticky;top:calc(var(--hh) + 24px);border-radius:10px;background:var(--papel);padding:clamp(24px,3vw,36px);box-shadow:0 1px 2px rgba(31,27,45,.06),0 24px 60px rgba(31,27,45,.1);text-align:center}
@@ -305,8 +305,7 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .plega[open] summary::after{transform:rotate(45deg)}
 @media (max-width:620px){.barraM.on{display:block}.hace li{grid-template-columns:110px 1fr}.hace li img{width:110px}}
 .porque h3,.trans h3{font-size:clamp(30px,3vw,46px);line-height:1.02;letter-spacing:-.035em}
-.porque .cuerpo{margin-top:26px;display:grid;grid-template-columns:minmax(0,1fr) clamp(140px,22%,200px);gap:clamp(14px,2vw,24px);align-items:center}
-.porque .cuerpo > img{aspect-ratio:1/1;width:100%;border-radius:6px;object-fit:cover}
+.porque .cuerpo{margin-top:26px}
 .porque ul{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(14px,2vw,24px)}
 .porque li{display:grid;grid-template-columns:minmax(118px,.38fr) 1fr;column-gap:22px;align-items:baseline;padding:22px;border-radius:6px;background:var(--papel)}
 .porque li b{display:block;font:500 clamp(40px,4vw,56px)/1 var(--disp);letter-spacing:-.045em;font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -390,21 +389,25 @@ dialog.verP::backdrop{background:#0F0C18}
 .foot nav{display:flex;gap:28px;flex-wrap:wrap;align-items:center}
 .foot nav a:hover,.foot .leg button:hover{color:var(--papel)}
 .foot .leg{margin-top:36px;font-size:13px;color:rgba(245,238,223,.42);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.foot .carta{max-width:600px;margin:0 0 52px;padding-bottom:48px;border-bottom:1px solid rgba(245,238,223,.12)}
+.foot .in{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,400px);grid-template-areas:"row carta" "leg leg";gap:44px clamp(32px,6vw,96px);align-items:start}
+.foot .row{grid-area:row;flex-direction:column;align-items:flex-start;gap:26px}
+.foot .leg{grid-area:leg;margin-top:0}
+.foot .carta{grid-area:carta;max-width:none;margin:0}
 .foot .carta [hidden]{display:none}
-.foot .carta h3{font-size:clamp(28px,2.8vw,38px);line-height:1.04;letter-spacing:-.03em;color:#F5EEDF}
-.foot .carta p{margin-top:10px;font-size:16.5px;color:rgba(245,238,223,.7);max-width:46ch}
-.foot .carta .campos{margin-top:20px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px}
-.foot .carta input[type=email]{min-width:0;width:100%;box-sizing:border-box;padding:15px 20px;border-radius:999px;border:0;background:rgba(245,238,223,.08);color:#F5EEDF;font:inherit;font-size:16px;box-shadow:inset 0 0 0 1px rgba(245,238,223,.22)}
+.foot .carta h3{font-size:22px;line-height:1.1;letter-spacing:-.02em;color:#F5EEDF}
+.foot .carta p{margin-top:6px;font-size:14.5px;color:rgba(245,238,223,.62);max-width:40ch}
+.foot .carta .campos{margin-top:14px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+.foot .carta input[type=email]{min-width:0;width:100%;box-sizing:border-box;padding:12px 16px;border-radius:999px;border:0;background:rgba(245,238,223,.08);color:#F5EEDF;font:inherit;font-size:15px;box-shadow:inset 0 0 0 1px rgba(245,238,223,.22)}
 .foot .carta input[type=email]::placeholder{color:rgba(245,238,223,.45)}
 .foot .carta input[type=email]:focus{outline:0;box-shadow:inset 0 0 0 2px #F2B233}
-.foot .carta .btn{background:#F5EEDF;color:#1F1B2D}
-.foot .carta .ok{margin-top:14px;font-size:13.5px;line-height:1.45;color:rgba(245,238,223,.6)}
-.foot .carta .ok input{margin-top:2px;width:17px;height:17px;flex:none;accent-color:#F2B233}
+.foot .carta .btn{padding:12px 18px;font-size:14.5px;background:#F5EEDF;color:#1F1B2D}
+.foot .carta .ok{margin-top:10px;font-size:12.5px;line-height:1.4;color:rgba(245,238,223,.55)}
+.foot .carta .ok input{margin-top:1px;width:15px;height:15px;flex:none;accent-color:#F2B233}
 .foot .carta .ok button{color:rgba(245,238,223,.85);text-decoration:underline;text-underline-offset:3px}
-.foot .carta .err{margin-top:8px;color:#F2B233}
-.foot .carta .hecho{margin-top:16px;font-size:16.5px;color:#F5EEDF}
-@media (max-width:620px){.foot .carta .campos{grid-template-columns:minmax(0,1fr)}.foot .carta .btn{width:100%;padding:17px}}
+.foot .carta .err{margin-top:6px;font-size:13px;color:#F2B233}
+.foot .carta .hecho{margin-top:12px;font-size:15px;color:#F5EEDF}
+@media (max-width:820px){.foot .in{grid-template-columns:minmax(0,1fr);grid-template-areas:"row" "carta" "leg"}.foot .row{flex-direction:row;align-items:center}}
+@media (max-width:620px){.foot .carta .campos{grid-template-columns:minmax(0,1fr)}.foot .carta .btn{width:100%;padding:14px}}
 .aviso{position:fixed;left:50%;bottom:28px;z-index:90;translate:-50% 0;padding:12px 20px;border-radius:999px;background:var(--tinta);color:var(--papel);font-size:15px;transition:opacity .3s,transform .3s}
 .aviso:not(.on){opacity:0;transform:translateY(10px);pointer-events:none}
 
@@ -418,8 +421,6 @@ dialog.verP::backdrop{background:#0F0C18}
   .anual,.donde,.fron,.mec{grid-template-columns:minmax(0,1fr)}
   .porque ul{grid-template-columns:minmax(0,1fr)}
   .trans ul{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .porque .cuerpo{grid-template-columns:minmax(0,1fr)}
-  .porque .cuerpo > img{width:clamp(120px,32%,160px)}
   .top nav a:not(.btn){display:none}
 }
 @media (max-width:620px){
@@ -896,14 +897,18 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 
   /* ===== 7 · Nuestra voz ===== */
   const H = TF.historias || [];
-  /* mientras recogemos las voces: siluetas y un aviso, con el mismo formato de la tira */
+  /* mientras llegan las voces, el reel sigue: un aviso y cuatro siluetas que se abren como historias */
   const enObra = EC.voces || !H.length;
   if (enObra) {
-    const sil = n => `<div class="ht sil" aria-hidden="true"><img class="ilu" src="<?php echo TF_U; ?>/img/ilustra/voz-${n}.svg" alt="" loading="lazy" onerror="this.classList.add('rota')"></div>`;
-    $('#tira').innerHTML = `<div class="ht obra"><p class="tx"><small>En construcción</small>Estamos recogiendo las voces de la comunidad.</p></div>${sil(1)}${sil(2)}${sil(3)}${sil(4)}`;
+    H.splice(0, H.length,
+      { obra: 1, n: '', q: 'Estamos recogiendo las voces de la comunidad. La tuya puede estar aquí.' },
+      { sil: 1, f: '<?php echo TF_U; ?>/img/ilustra/voz-1.svg', n: 'Una voz por llegar', q: 'Aquí irá lo que alguien de la comunidad quiera contar: una historia, una frase, un vídeo.' },
+      { sil: 1, f: '<?php echo TF_U; ?>/img/ilustra/voz-2.svg', n: 'Una voz por llegar', q: 'Lo que no se cuenta en ningún otro sitio. En tu idioma, con tu nombre o sin él.' },
+      { sil: 1, f: '<?php echo TF_U; ?>/img/ilustra/voz-3.svg', n: 'Una voz por llegar', q: 'Fotos, vídeos y frases de la gente que cruza fronteras cada día.' },
+      { sil: 1, f: '<?php echo TF_U; ?>/img/ilustra/voz-4.svg', n: 'Una voz por llegar', q: '¿Quieres que la tuya esté aquí? Cuéntanosla en Descúbrete o escríbenos a hola@transfronteriza.net.' });
     $('.cuentaV span').textContent = '¿Quieres que la tuya esté aquí? Cuéntanosla en Descúbrete o escríbenos a hola@transfronteriza.net.';
-  } else
-  $('#tira').innerHTML = H.map((h, i) => `<button class="ht" type="button" data-i="${i}"${EI(h.id, 'tf_historia')}>${h.v ? `<video src="${h.v}" poster="${h.p}" muted loop playsinline preload="none" aria-hidden="true"></video>` : h.f ? `<img src="${h.f}" alt="" loading="lazy"${h.fx ? ` style="object-position:${h.fx * 100}% 50%"` : ''}${EF(h.id)}>` : `<p class="tx">«<span${ED(h.id, 'frase')}>${h.q}</span>»</p>`}${h.vm ? '<i class="pl">▶</i>' : ''}<span${ED(h.id, 'titulo')}>${h.n}</span><i class="anillo"></i></button>`).join('');
+  }
+  $('#tira').innerHTML = H.map((h, i) => `<button class="ht${h.sil ? ' sil' : ''}${h.obra ? ' obra' : ''}" type="button" data-i="${i}"${EI(h.id, 'tf_historia')}>${h.v ? `<video src="${h.v}" poster="${h.p}" muted loop playsinline preload="none" aria-hidden="true"></video>` : h.f ? `<img src="${h.f}" alt="" loading="lazy"${h.fx ? ` style="object-position:${h.fx * 100}% 50%"` : ''}${EF(h.id)}>` : h.obra ? `<p class="tx"><small>En construcción</small>${h.q}</p>` : `<p class="tx">«<span${ED(h.id, 'frase')}>${h.q}</span>»</p>`}${h.vm ? '<i class="pl">▶</i>' : ''}<span${ED(h.id, 'titulo')}>${h.n}</span><i class="anillo"></i></button>`).join('');
   document.querySelectorAll('.ht video').forEach(v => { const b = v.parentElement; b.addEventListener('mouseenter', () => v.play().catch(() => {})); b.addEventListener('mouseleave', () => v.pause()); });
   const st = $('#story'), cuadroS = $('#sCuadro'), bar = $('#sBar'); let vi = 0, tv = null, t0 = 0, paus = false, resto = 0, foco = null, dur = 6500, media = null, vivoS = null;
   bar.innerHTML = H.map(() => '<i><b></b></i>').join('');
