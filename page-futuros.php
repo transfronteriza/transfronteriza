@@ -62,6 +62,31 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 @keyframes respira{from{transform:translate(0,0) scale(1)}to{transform:translate(-3%,2%) scale(1.08)}}
 .open .t{position:absolute;left:calc(var(--gut) + clamp(24px,4vw,64px));right:calc(var(--gut) + clamp(24px,4vw,64px));bottom:clamp(44px,6vw,90px);padding-bottom:0;width:auto;color:var(--tinta)}
 .open p{color:rgba(31,27,45,.78)}
+
+/* ---------- la luz con grano (manual v3): lo que se dibuja cuando no hay foto ---------- */
+.luz{position:relative;overflow:hidden;border-radius:6px;isolation:isolate;background:#DDD6DF}
+.luz::before{content:"";position:absolute;inset:-14%;background:var(--L);animation:respiraL 20s ease-in-out infinite alternate}
+.luz::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .1 0 0 0 0 .2 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");background-size:300px;mix-blend-mode:multiply;opacity:.7;pointer-events:none}
+.luz.oscura::after{mix-blend-mode:screen;opacity:.35}
+.luz > *{position:relative;z-index:1}
+@keyframes respiraL{from{transform:translate(0,0) scale(1)}to{transform:translate(-3%,2%) scale(1.08)}}
+.luz.amanecer{--L:radial-gradient(70% 70% at 88% 78%,#F2B233 0%,#E2592A 36%,rgba(226,89,42,0) 68%),radial-gradient(60% 60% at 12% 18%,#CDCFE6 0%,rgba(205,207,230,0) 62%),linear-gradient(135deg,#D9D5E2 0%,#E6B79C 50%,#F2B233 100%)}
+.luz.fuego{background:#1F1B2D;--L:radial-gradient(65% 65% at 78% 72%,#F2B233 0%,#E2592A 34%,rgba(226,89,42,0) 66%),radial-gradient(50% 50% at 18% 22%,#6A4C93 0%,rgba(106,76,147,0) 62%),linear-gradient(160deg,#1F1B2D 0%,#3A2A3F 55%,#7A3A2E 100%)}
+.luz.orilla{--L:radial-gradient(70% 70% at 14% 80%,#2F4FA8 0%,#5B6FBF 30%,rgba(91,111,191,0) 66%),radial-gradient(60% 60% at 86% 20%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(120deg,#CDCFE6 0%,#E9D7C8 55%,#F2B233 100%)}
+.luz.noche{background:#1F1B2D;--L:radial-gradient(70% 70% at 20% 80%,#2F4FA8 0%,rgba(47,79,168,0) 66%),radial-gradient(45% 45% at 85% 15%,#CDCFE6 0%,rgba(205,207,230,0) 60%),linear-gradient(160deg,#1F1B2D 0%,#262A4A 60%,#3A4B8F 100%)}
+.luz.orillas{background:#EFE6DA;--L:radial-gradient(55% 90% at -4% 50%,#2F4FA8 0%,#5B6FBF 35%,rgba(91,111,191,0) 72%),radial-gradient(55% 90% at 104% 50%,#E2592A 0%,#F2B233 40%,rgba(242,178,51,0) 72%),#EFE6DA}
+.luz.cruce{background:#F2D8C6;--L:repeating-linear-gradient(104deg,rgba(47,79,168,0) 0px,rgba(47,79,168,.62) 70px,rgba(47,79,168,0) 150px),linear-gradient(135deg,#F2D8C6 0%,#E6B79C 45%,#F2B233 100%)}
+.luz.paso{--L:linear-gradient(90deg,#2F4FA8 0%,#7B6FB5 38%,#E7A87E 66%,#F2B233 100%)}
+.luz.calma{--L:radial-gradient(70% 80% at 10% 20%,#E6B79C 0%,rgba(230,183,156,0) 66%),radial-gradient(60% 60% at 30% 100%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(135deg,#D9D5E2 0%,#E3CFC8 55%,#CDCFE6 100%)}
+.silL{position:relative;overflow:hidden;background:#1F1B2D;isolation:isolate}
+.silL i{position:absolute;left:50%;bottom:-4%;width:78%;aspect-ratio:1/1;translate:-50% 0;background:var(--L);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 4c13 0 21 9 21 22 0 9-4 16-10 20 20 5 33 22 35 54H4c2-32 15-49 35-54-6-4-10-11-10-20C29 13 37 4 50 4z'/%3E%3C/svg%3E") center bottom/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 4c13 0 21 9 21 22 0 9-4 16-10 20 20 5 33 22 35 54H4c2-32 15-49 35-54-6-4-10-11-10-20C29 13 37 4 50 4z'/%3E%3C/svg%3E") center bottom/100% 100% no-repeat;animation:respiraL 24s ease-in-out infinite alternate}
+.silL.alta i{width:96%;bottom:-6%}
+.silL::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .1 0 0 0 0 .2 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");background-size:300px;mix-blend-mode:screen;opacity:.45;pointer-events:none}
+.silL.fuego{--L:radial-gradient(65% 65% at 78% 72%,#F2B233 0%,#E2592A 34%,rgba(226,89,42,0) 66%),radial-gradient(50% 50% at 18% 22%,#6A4C93 0%,rgba(106,76,147,0) 62%),linear-gradient(160deg,#3A2A3F 0%,#7A3A2E 100%)}
+.silL.orilla{--L:radial-gradient(70% 70% at 14% 80%,#2F4FA8 0%,#5B6FBF 30%,rgba(91,111,191,0) 66%),radial-gradient(60% 60% at 86% 20%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(120deg,#CDCFE6 0%,#E9D7C8 55%,#F2B233 100%)}
+.silL.noche{--L:radial-gradient(60% 60% at 50% 30%,#CDCFE6 0%,#7B6FB5 45%,#2F4FA8 100%)}
+.silL.amanecer{--L:radial-gradient(70% 70% at 88% 78%,#F2B233 0%,#E2592A 36%,rgba(226,89,42,0) 68%),linear-gradient(135deg,#D9D5E2 0%,#E6B79C 50%,#F2B233 100%)}
+@media (prefers-reduced-motion:reduce){.luz::before,.silL i{animation:none}}
 @media (prefers-reduced-motion:reduce){.open .lamina::before{animation:none}}
 /* ---------- 2 · informe anual ---------- */
 .inf{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(40px,7vw,120px);align-items:center}
@@ -84,6 +109,11 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .inf.obra .cover{background:var(--capa);transform:rotateY(-12deg) rotate(1deg)}
 .inf.obra .libro:hover .cover,.inf.obra .libro:focus-visible .cover{transform:rotateY(-3deg) rotate(0deg)}
 .inf.obra .cover::after{display:none}
+.cover > .luz{position:absolute;inset:0;border-radius:0}
+.cover .girC{position:absolute;inset:0;width:100%;height:100%}
+.paper .banda .luz{width:100%;height:100%;border-radius:0}
+.mb .ft .silL,.marco .ft .silL{position:absolute;inset:0}
+.art .ab .luz{width:100%;height:100%;border-radius:0}
 .inf.obra .txt > p + p{margin-top:14px;font-size:17px}
 .paper .por .pep{flex:none;width:38px;height:38px}
 .consejo .obra .ft img,dialog.perfil.obra .ft img{filter:none}
@@ -120,6 +150,7 @@ dialog.perfil,dialog.legal{border:0;padding:0;width:min(980px,92vw);max-height:9
 dialog::backdrop{background:rgba(10,8,18,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
 .marco{position:relative;margin:clamp(10px,1.4vw,16px);border:1px solid rgba(245,238,223,.18);border-radius:6px;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);min-height:min(560px,76vh)}
 .marco .ft{position:relative;overflow:hidden;border-radius:5px 0 0 5px}
+.marco .ft [hidden]{display:none}
 .marco .ft img{width:100%;height:100%;object-fit:cover;filter:grayscale(1)}
 .marco .tx{position:relative;padding:clamp(28px,4vw,56px);display:flex;flex-direction:column}
 .marco .tx canvas{width:36px;height:36px}
@@ -360,7 +391,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <!-- 2 · Informe anual -->
   <section class="sec in" id="informe" data-tf-sec="informe" data-tf-panel="edit.php?post_type=tf_informe" data-tf-panel-t="Editar el informe">
     <div class="inf obra" data-ec="informe" hidden>
-      <button class="libro" type="button" data-abre="informe" aria-label="Leer el avance del informe"><div class="cover"><img src="<?php tf_img('i1fae3e9ef6', TF_U . '/img/ilustra/informe-portada.svg'); ?>" data-tf-img="i1fae3e9ef6" alt=""><div class="ct"><img src="<?php tf_img('ia8745bc028', TF_U . '/logo/h-oscuro-34.svg'); ?>" data-tf-img="ia8745bc028" alt="Transfronteriza"></div></div></button>
+      <button class="libro" type="button" data-abre="informe" aria-label="Leer el avance del informe"><div class="cover"><div class="luz fuego oscura" aria-hidden="true"><canvas class="girC"></canvas></div><div class="ct"><img src="<?php tf_img('ia8745bc028', TF_U . '/logo/h-oscuro-34.svg'); ?>" data-tf-img="ia8745bc028" alt="Transfronteriza"></div></div></button>
       <div class="txt">
         <h2 data-tf="tfa62384e84"><?php tf_t('tfa62384e84'); ?></h2>
         <p data-tf="t3d9a0eecb6"><?php tf_t('t3d9a0eecb6'); ?></p>
@@ -452,7 +483,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 
 <dialog class="perfil" id="perfil" aria-labelledby="pNombre">
   <div class="marco">
-    <div class="ft"><img id="pFoto" src="" alt=""></div>
+    <div class="ft"><img id="pFoto" src="" alt=""><div id="pLuz" class="silL" hidden><i></i></div></div>
     <div class="tx">
       <canvas id="pPep" aria-hidden="true"></canvas>
       <h3 id="pNombre"></h3>
@@ -522,6 +553,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   document.querySelectorAll('[data-ec-no]').forEach(e => { if (EC[e.dataset.ecNo]) e.remove(); });
   if (EC.informe) $('.inf:not(.obra)')?.remove();
 
+  /* la portada del informe en marcha: el girasol blanco sobre la luz de fuego */
+  (() => { const cv = $('.cover .girC'); if (!cv) return; vigila(cv, () => { const [g, w, h] = setup(cv); symbol(g, w * .78, h * .86, Math.max(w, h) * .3, 200, '#FFFBF2', K.papel, rng(90), [0, 0, w, h]); }); })();
   /* 1 · la lámina: el girasol grande, de papel, cortado por la esquina */
   (() => { const cv = $('#girasolF'); if (!cv) return; vigila(cv, () => { const [g, w, h] = setup(cv); const R = Math.max(w, h) * .34; symbol(g, w * .86, h * .80, R, 420, '#FFFBF2', K.papel, rng(90), [0, 0, w, h]); }); })();
 
@@ -532,21 +565,21 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   /* mientras se escriben: lo que pretendemos, con el mismo lector; las portadas vienen con cada paper */
   P.forEach(p => { p.banda = p.banda || `<?php echo TF_U; ?>/img/papers/${p.id}.jpg`; }); if (INF) INF.portada = INF.portada || '<?php echo TF_U; ?>/img/papers/informe.jpg';
   const PO = [
-    { id: 'pre-educacion', obra: 1, t: 'Educación', h: 'Lo que la escuela no ve', d: 'En preparación', banda: '<?php echo TF_U; ?>/img/ilustra/paper-banda-1.svg',
+    { id: 'pre-educacion', obra: 1, t: 'Educación', h: 'Lo que la escuela no ve', d: 'En preparación', luz: 'cruce', banda: '',
       lead: 'Queremos saber qué pasa entre el instituto y la universidad para que lleguen tan pocas jóvenes de familia migrante, y qué hacen los centros que sí lo consiguen.',
       b: [['h', 'Qué pretendemos'], ['p', 'Comparar los datos oficiales de abandono y acceso con lo que cuentan las propias alumnas: orientación, expectativas del profesorado, idiomas que no puntúan.'], ['d', '28 %', 'de la segunda generación llega a la universidad. Del resto de jóvenes, el 43 %.'], ['h', 'Con quién'], ['p', 'Con docentes de institutos de Andalucía y jóvenes de la comunidad que acaban de pasar por ello. Si eres una de ellas, o de ellos, te queremos en este paper.']] },
-    { id: 'pre-empleo', obra: 1, t: 'Empleo', h: 'Tres idiomas que el currículum no cuenta', d: 'En preparación', banda: '<?php echo TF_U; ?>/img/ilustra/paper-banda-2.svg',
+    { id: 'pre-empleo', obra: 1, t: 'Empleo', h: 'Tres idiomas que el currículum no cuenta', d: 'En preparación', luz: 'paso', banda: '',
       lead: 'Las jóvenes transfronterizas hablan dos, tres o cuatro lenguas. Queremos medir cuántas de esas lenguas aparecen en un contrato y proponer cómo certificarlas.',
       b: [['h', 'Qué pretendemos'], ['p', 'Una encuesta breve a jóvenes de la comunidad sobre las lenguas que usan en casa y en el trabajo, y entrevistas a empresas que las buscan y no las encuentran.'], ['h', 'Para qué'], ['p', 'Para pedir a las escuelas oficiales de idiomas que certifiquen gratis las lenguas de herencia, y a las empresas que pregunten por ellas.']] },
-    { id: 'pre-estrecho', obra: 1, t: 'Territorio', h: 'Una ciudad en dos orillas', d: 'En preparación', banda: '<?php echo TF_U; ?>/img/ilustra/paper-banda-3.svg',
+    { id: 'pre-estrecho', obra: 1, t: 'Territorio', h: 'Una ciudad en dos orillas', d: 'En preparación', luz: 'orillas', banda: '',
       lead: 'Entre Algeciras y Tánger hay familias, comercios y fiestas que viven a los dos lados. Nadie las cuenta. Queremos empezar a contarlas.',
       b: [['h', 'Qué pretendemos'], ['p', 'Un primer mapa de la vida transfronteriza del Estrecho: cuántas personas cruzan cada verano, cuántos negocios dependen de ambas orillas, qué pasa con los papeles.'], ['h', 'Con quién'], ['p', 'Con la comunidad de Algeciras y con quien quiera sumarse desde la otra orilla.']] }
   ];
-  const INFO = { id: 'informe', obra: 1, informe: true, h: 'El primer informe está en marcha', d: 'Informe anual · en preparación', portada: '<?php echo TF_U; ?>/img/ilustra/informe-portada.svg',
+  const INFO = { id: 'informe', obra: 1, informe: true, h: 'El primer informe está en marcha', d: 'Informe anual · en preparación', luz: 'fuego oscura', portada: '',
     lead: 'Una de cada tres criaturas que nacen en España tiene una madre nacida en otro país. El primer informe de Futuros contará quiénes son las jóvenes que crecen entre países, idiomas y culturas, y qué esperan de la democracia que viene.',
     b: [['h', 'Qué vamos a investigar'], ['p', 'Cómo vive, estudia y trabaja la juventud transfronteriza en España: escuela, empleo, vivienda, identidad y participación. Con datos públicos, con las voces de la comunidad y con las personas que ya lo han estudiado.'], ['h', 'Cómo'], ['p', 'Una encuesta a la comunidad, entrevistas en los encuentros y en las ciudades, y un Consejo que vele por el rigor y la independencia del trabajo.'], ['h', 'Cuándo'], ['p', 'Lo presentaremos en 2027. Antes irán saliendo los primeros papers, y en Lo que se mueve contaremos cada paso.'], ['q', 'Hecho con ellas, no sobre ellas.'], ['h', 'Cómo ayudar'], ['p', 'Si tienes datos, una historia, una investigación o ganas de ayudar, escríbenos.']] };
   const PP = EC.papers ? PO : P, INFX = EC.informe ? INFO : INF;
-  const tarjeta = (p, i) => `<li data-t="${p.t}"${EI(p.pid, 'tf_paper')}><button class="paper" type="button" data-abre="${p.id}"><h3${ED(p.pid, 'titulo')}>${p.h}</h3><div class="banda"${EF(p.pid)}><img src="${p.banda}" alt="" loading="lazy"></div><div class="por">${p.obra ? `<canvas class="pep" data-s="${i + 20}" aria-hidden="true"></canvas>` : `<img src="${(A[p.a] || [])[3] || ''}" alt="" loading="lazy">`}<div><span${ED(aid(p.a), 'titulo')}>${p.obra ? 'En preparación' : A[p.a][0]}</span><small${ED(aid(p.a), 'cargo')}>${p.obra ? p.t : A[p.a][1]}</small></div></div></button></li>`;
+  const tarjeta = (p, i) => `<li data-t="${p.t}"${EI(p.pid, 'tf_paper')}><button class="paper" type="button" data-abre="${p.id}"><h3${ED(p.pid, 'titulo')}>${p.h}</h3><div class="banda"${EF(p.pid)}>${p.luz ? `<div class="luz ${p.luz}" aria-hidden="true"></div>` : `<img src="${p.banda}" alt="" loading="lazy">`}</div><div class="por">${p.obra ? `<canvas class="pep" data-s="${i + 20}" aria-hidden="true"></canvas>` : `<img src="${(A[p.a] || [])[3] || ''}" alt="" loading="lazy">`}<div><span${ED(aid(p.a), 'titulo')}>${p.obra ? 'En preparación' : A[p.a][0]}</span><small${ED(aid(p.a), 'cargo')}>${p.obra ? p.t : A[p.a][1]}</small></div></div></button></li>`;
   pl.innerHTML = PP.map(tarjeta).join('');
   pl.querySelectorAll('.pep').forEach(cv => vigila(cv, () => pepBlanca(cv, +cv.dataset.s)));
   $('#filtros')?.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; document.querySelectorAll('#filtros button').forEach(x => x.setAttribute('aria-pressed', x === b)); pl.querySelectorAll('li').forEach(li => li.hidden = b.dataset.t !== 'todos' && li.dataset.t !== b.dataset.t); });
@@ -559,7 +592,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     const p = id === 'informe' ? INFX : PP.find(x => x.id === id); if (!p) return;
     if (lector.hidden) { antesFoco = document.activeElement; antesY = scrollY; }
     const au = p.informe || p.obra ? null : A[p.a], i = PP.indexOf(p), nx = p.informe ? PP[0] : PP[(i + 1) % PP.length];
-    art.innerHTML = `<div class="ab${p.informe ? ' informe' : ''}"><img src="${p.informe ? p.portada : p.banda}" alt=""></div>
+    art.innerHTML = `<div class="ab${p.informe ? ' informe' : ''}">${p.luz ? `<div class="luz ${p.luz}" aria-hidden="true"></div>` : `<img src="${p.informe ? p.portada : p.banda}" alt="">`}</div>
       <h1 id="lTit">${p.h}</h1>
       <div class="firma">${au ? `<img src="${au[3]}" alt="">` : `<img src="<?php echo TF_U; ?>/logo/transfronteriza-simbolo-color.svg" alt="" style="filter:none;object-fit:contain">`}<div>${au ? au[0] : 'Futuros'}<small>${au ? au[1] + ' · ' : ''}${p.d}</small></div></div>
       <p class="lead">${p.lead}</p>
@@ -587,18 +620,18 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const cl = $('#consejoList');
   /* mientras se convoca: las cuatro plazas, con su tarjeta y su ficha, como tendrán las personas */
   const CO = [
-    ['<?php echo TF_U; ?>/img/ilustra/consejo-1.svg', 'Una joven transfronteriza', 'Plaza por cubrir', 'Entre 18 y 30 años, de la comunidad. Alguien que haya crecido entre países y quiera velar por que Futuros hable con la voz de su generación, y no sobre ella. Una reunión al trimestre y mucha lectura. Si eres tú, escríbenos a hola@transfronteriza.net.'],
-    ['<?php echo TF_U; ?>/img/ilustra/consejo-2.svg', 'Una investigadora', 'Plaza por cubrir', 'De una universidad o un centro de estudios, en migraciones, educación, empleo, identidad o territorio. Su papel: cuidar el rigor de los datos y de las fuentes del informe y de los papers. Escríbenos a hola@transfronteriza.net.'],
-    ['<?php echo TF_U; ?>/img/ilustra/consejo-3.svg', 'Una persona de la comunidad', 'Plaza por cubrir', 'Una madre, un profesor, alguien de una asociación de barrio: quien conozca la vida transfronteriza desde dentro y pueda decirnos si lo que escribimos se parece a lo que pasa. Escríbenos a hola@transfronteriza.net.'],
-    ['<?php echo TF_U; ?>/img/ilustra/consejo-4.svg', 'Una persona de las instituciones', 'Plaza por cubrir', 'De la administración pública o de una fundación. Para que lo que proponemos llegue a quien decide y vuelva con respuesta. Escríbenos a hola@transfronteriza.net.']
+    ['luz:fuego', 'Una joven transfronteriza', 'Plaza por cubrir', 'Entre 18 y 30 años, de la comunidad. Alguien que haya crecido entre países y quiera velar por que Futuros hable con la voz de su generación, y no sobre ella. Una reunión al trimestre y mucha lectura. Si eres tú, escríbenos a hola@transfronteriza.net.'],
+    ['luz:orilla', 'Una investigadora', 'Plaza por cubrir', 'De una universidad o un centro de estudios, en migraciones, educación, empleo, identidad o territorio. Su papel: cuidar el rigor de los datos y de las fuentes del informe y de los papers. Escríbenos a hola@transfronteriza.net.'],
+    ['luz:noche', 'Una persona de la comunidad', 'Plaza por cubrir', 'Una madre, un profesor, alguien de una asociación de barrio: quien conozca la vida transfronteriza desde dentro y pueda decirnos si lo que escribimos se parece a lo que pasa. Escríbenos a hola@transfronteriza.net.'],
+    ['luz:amanecer', 'Una persona de las instituciones', 'Plaza por cubrir', 'De la administración pública o de una fundación. Para que lo que proponemos llegue a quien decide y vuelva con respuesta. Escríbenos a hola@transfronteriza.net.']
   ];
   const CC = EC.consejo ? CO : C, foto = f => f;
-  cl.innerHTML = CC.map(([f, n, r, b, id], i) => `<li${EI(id, 'tf_persona')}${EC.consejo ? ' class="obra"' : ''}><button class="mb" type="button" data-i="${i}" aria-haspopup="dialog"><div class="ft"${EF(id)}><img src="${foto(f)}" alt="${n}" loading="lazy"></div><h3><canvas class="pep" data-s="${i}" aria-hidden="true"></canvas><span${ED(id, 'titulo')}>${n}</span></h3><p${r.includes('. ') ? '' : ED(id, 'cargo')}>${r.split('. ').pop()}</p></button></li>`).join('');
+  cl.innerHTML = CC.map(([f, n, r, b, id], i) => `<li${EI(id, 'tf_persona')}${EC.consejo ? ' class="obra"' : ''}><button class="mb" type="button" data-i="${i}" aria-haspopup="dialog"><div class="ft"${EF(id)}>${f.startsWith('luz:') ? `<div class="silL ${f.slice(4)}" aria-hidden="true"><i></i></div>` : `<img src="${foto(f)}" alt="${n}" loading="lazy">`}</div><h3><canvas class="pep" data-s="${i}" aria-hidden="true"></canvas><span${ED(id, 'titulo')}>${n}</span></h3><p${r.includes('. ') ? '' : ED(id, 'cargo')}>${r.split('. ').pop()}</p></button></li>`).join('');
   cl.querySelectorAll('.pep').forEach(cv => vigila(cv, () => pepBlanca(cv, +cv.dataset.s)));
   const dlg = $('#perfil'), pPep = $('#pPep');
   let cur = 0;
   dlg.classList.toggle('obra', EC.consejo);
-  const show = i => { cur = (i + CC.length) % CC.length; const [f, n, r, b] = CC[cur]; $('#pFoto').src = foto(f); $('#pFoto').alt = n; $('#pNombre').textContent = n; $('#pRol').textContent = r; $('#pBio').textContent = b; $('#pNum').textContent = `${cur + 1} de ${CC.length}`; requestAnimationFrame(() => pepBlanca(pPep, cur)); };
+  const show = i => { cur = (i + CC.length) % CC.length; const [f, n, r, b] = CC[cur]; const lz = f.startsWith('luz:'); $('#pFoto').hidden = lz; $('#pLuz').hidden = !lz; if (lz) $('#pLuz').className = 'silL ' + f.slice(4); else { $('#pFoto').src = foto(f); $('#pFoto').alt = n; } $('#pNombre').textContent = n; $('#pRol').textContent = r; $('#pBio').textContent = b; $('#pNum').textContent = `${cur + 1} de ${CC.length}`; requestAnimationFrame(() => pepBlanca(pPep, cur)); };
   cl.addEventListener('click', e => { const b = e.target.closest('.mb[data-i]'); if (!b) return; show(+b.dataset.i); dlg.showModal(); });
   $('#pAnt').addEventListener('click', () => show(cur - 1));
   $('#pSig').addEventListener('click', () => show(cur + 1));

@@ -102,12 +102,13 @@ dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;borde
 .ir:hover{transform:translateY(-4px);box-shadow:0 20px 44px rgba(31,27,45,.12)}
 .ir .ft{aspect-ratio:4/3;overflow:hidden;background:var(--teja)}
 .ir .ft img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.ir .ft .luz{width:100%;height:100%;border-radius:0}
 .ir:hover .ft img{transform:scale(1.03)}
 .ir .tx{padding:clamp(20px,2.4vw,30px)}
 .ir h3{font-size:clamp(28px,2.6vw,40px);line-height:1;letter-spacing:-.035em}
 .ir p{margin-top:12px;color:var(--tinta-2);font-size:16.5px}
 /* ilustraciones: si el archivo aún no existe, queda el fondo liso */
-.ilu{background:var(--teja)}
+.ilu:not(.luz){background:var(--teja)}
 .ilu.rota{visibility:hidden}
 
 /* ---------- 4 · encuentro anual ---------- */
@@ -237,9 +238,11 @@ dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;borde
 .ht .anillo{position:absolute;z-index:3;inset:0;border-radius:10px;box-shadow:inset 0 0 0 2px transparent;transition:box-shadow .3s}
 .ht:hover .anillo{box-shadow:inset 0 0 0 2px var(--oro)}
 /* en construcción: siluetas en vez de historias */
-.ht.sil{background:var(--teja)}
+.ht.sil{background:var(--tinta)}
+.ht .silL{position:absolute;inset:0}
+.story .cuadro > .silL{position:absolute;inset:0}
 .ht.sil::after{display:none}
-.ht.sil span{right:auto;padding:5px 9px;border-radius:999px;background:rgba(245,238,223,.9);color:var(--tinta);font-size:13px}
+.ht.sil span{right:auto;padding:5px 9px;border-radius:999px;background:rgba(31,27,45,.55);color:var(--papel);font-size:13px}
 .ht.obra{background:var(--tinta)}
 .ht.obra::after{display:none}
 .ht.obra .tx{flex-direction:column;align-items:flex-start;justify-content:center;gap:10px;padding:18px}
@@ -312,7 +315,7 @@ dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;borde
 .hace h3{font-size:clamp(30px,3vw,46px);line-height:1.02;letter-spacing:-.035em}
 .hace ul{margin-top:24px;display:grid;gap:14px}
 .hace li{display:grid;grid-template-columns:160px 1fr;grid-template-rows:auto 1fr;column-gap:20px;align-items:start;padding:14px;border-radius:6px;background:var(--papel)}
-.hace li img{grid-row:1/3;width:160px;aspect-ratio:4/3;object-fit:cover;border-radius:4px;background:var(--teja)}
+.hace li img,.hace li .luz{grid-row:1/3;width:160px;aspect-ratio:4/3;object-fit:cover;border-radius:4px}
 .hace li b{margin-top:6px;font:500 21px/1.15 var(--disp)}
 .hace li span{margin-top:6px;color:var(--tinta-2);font-size:15.5px}
 /* la puerta: una sola invitación por página, discreta, que aparece cuando ya has leído la mitad y se cierra para siempre */
@@ -330,7 +333,7 @@ dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;borde
 .plega summary::-webkit-details-marker{display:none}
 .plega summary::after{content:"+";flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1px var(--linea);font:400 22px/1 var(--text);transition:transform .3s var(--ease)}
 .plega[open] summary::after{transform:rotate(45deg)}
-@media (max-width:620px){.barraM.on{display:block}.hace li{grid-template-columns:110px 1fr}.hace li img{width:110px}}
+@media (max-width:620px){.barraM.on{display:block}.hace li{grid-template-columns:110px 1fr}.hace li img,.hace li .luz{width:110px}}
 .porque h3,.trans h3{font-size:clamp(30px,3vw,46px);line-height:1.02;letter-spacing:-.035em}
 .porque .cuerpo{margin-top:26px}
 .porque ul{display:grid;grid-template-columns:minmax(0,1fr);gap:clamp(14px,2vw,24px)}
@@ -459,6 +462,31 @@ dialog.verP::backdrop{background:#0F0C18}
   .tarjeta{position:static}
   .trans li{padding:16px}.trans li b{font-size:40px;gap:8px;white-space:nowrap}
 }
+
+/* ---------- la luz con grano (manual v3): lo que se dibuja cuando no hay foto ---------- */
+.luz{position:relative;overflow:hidden;border-radius:6px;isolation:isolate;background:#DDD6DF}
+.luz::before{content:"";position:absolute;inset:-14%;background:var(--L);animation:respiraL 20s ease-in-out infinite alternate}
+.luz::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .1 0 0 0 0 .2 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");background-size:300px;mix-blend-mode:multiply;opacity:.7;pointer-events:none}
+.luz.oscura::after{mix-blend-mode:screen;opacity:.35}
+.luz > *{position:relative;z-index:1}
+@keyframes respiraL{from{transform:translate(0,0) scale(1)}to{transform:translate(-3%,2%) scale(1.08)}}
+.luz.amanecer{--L:radial-gradient(70% 70% at 88% 78%,#F2B233 0%,#E2592A 36%,rgba(226,89,42,0) 68%),radial-gradient(60% 60% at 12% 18%,#CDCFE6 0%,rgba(205,207,230,0) 62%),linear-gradient(135deg,#D9D5E2 0%,#E6B79C 50%,#F2B233 100%)}
+.luz.fuego{background:#1F1B2D;--L:radial-gradient(65% 65% at 78% 72%,#F2B233 0%,#E2592A 34%,rgba(226,89,42,0) 66%),radial-gradient(50% 50% at 18% 22%,#6A4C93 0%,rgba(106,76,147,0) 62%),linear-gradient(160deg,#1F1B2D 0%,#3A2A3F 55%,#7A3A2E 100%)}
+.luz.orilla{--L:radial-gradient(70% 70% at 14% 80%,#2F4FA8 0%,#5B6FBF 30%,rgba(91,111,191,0) 66%),radial-gradient(60% 60% at 86% 20%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(120deg,#CDCFE6 0%,#E9D7C8 55%,#F2B233 100%)}
+.luz.noche{background:#1F1B2D;--L:radial-gradient(70% 70% at 20% 80%,#2F4FA8 0%,rgba(47,79,168,0) 66%),radial-gradient(45% 45% at 85% 15%,#CDCFE6 0%,rgba(205,207,230,0) 60%),linear-gradient(160deg,#1F1B2D 0%,#262A4A 60%,#3A4B8F 100%)}
+.luz.orillas{background:#EFE6DA;--L:radial-gradient(55% 90% at -4% 50%,#2F4FA8 0%,#5B6FBF 35%,rgba(91,111,191,0) 72%),radial-gradient(55% 90% at 104% 50%,#E2592A 0%,#F2B233 40%,rgba(242,178,51,0) 72%),#EFE6DA}
+.luz.cruce{background:#F2D8C6;--L:repeating-linear-gradient(104deg,rgba(47,79,168,0) 0px,rgba(47,79,168,.62) 70px,rgba(47,79,168,0) 150px),linear-gradient(135deg,#F2D8C6 0%,#E6B79C 45%,#F2B233 100%)}
+.luz.paso{--L:linear-gradient(90deg,#2F4FA8 0%,#7B6FB5 38%,#E7A87E 66%,#F2B233 100%)}
+.luz.calma{--L:radial-gradient(70% 80% at 10% 20%,#E6B79C 0%,rgba(230,183,156,0) 66%),radial-gradient(60% 60% at 30% 100%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(135deg,#D9D5E2 0%,#E3CFC8 55%,#CDCFE6 100%)}
+.silL{position:relative;overflow:hidden;background:#1F1B2D;isolation:isolate}
+.silL i{position:absolute;left:50%;bottom:-4%;width:78%;aspect-ratio:1/1;translate:-50% 0;background:var(--L);-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 4c13 0 21 9 21 22 0 9-4 16-10 20 20 5 33 22 35 54H4c2-32 15-49 35-54-6-4-10-11-10-20C29 13 37 4 50 4z'/%3E%3C/svg%3E") center bottom/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 4c13 0 21 9 21 22 0 9-4 16-10 20 20 5 33 22 35 54H4c2-32 15-49 35-54-6-4-10-11-10-20C29 13 37 4 50 4z'/%3E%3C/svg%3E") center bottom/100% 100% no-repeat;animation:respiraL 24s ease-in-out infinite alternate}
+.silL.alta i{width:96%;bottom:-6%}
+.silL::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .1 0 0 0 0 .2 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");background-size:300px;mix-blend-mode:screen;opacity:.45;pointer-events:none}
+.silL.fuego{--L:radial-gradient(65% 65% at 78% 72%,#F2B233 0%,#E2592A 34%,rgba(226,89,42,0) 66%),radial-gradient(50% 50% at 18% 22%,#6A4C93 0%,rgba(106,76,147,0) 62%),linear-gradient(160deg,#3A2A3F 0%,#7A3A2E 100%)}
+.silL.orilla{--L:radial-gradient(70% 70% at 14% 80%,#2F4FA8 0%,#5B6FBF 30%,rgba(91,111,191,0) 66%),radial-gradient(60% 60% at 86% 20%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(120deg,#CDCFE6 0%,#E9D7C8 55%,#F2B233 100%)}
+.silL.noche{--L:radial-gradient(60% 60% at 50% 30%,#CDCFE6 0%,#7B6FB5 45%,#2F4FA8 100%)}
+.silL.amanecer{--L:radial-gradient(70% 70% at 88% 78%,#F2B233 0%,#E2592A 36%,rgba(226,89,42,0) 68%),linear-gradient(135deg,#D9D5E2 0%,#E6B79C 50%,#F2B233 100%)}
+@media (prefers-reduced-motion:reduce){.luz::before,.silL i{animation:none}}
 @media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important} .comp .st{position:relative;height:auto;padding-block:120px} .comp li h3{opacity:1} .comp li p{max-height:none;opacity:1;margin-top:12px} .comp .firma{opacity:1;pointer-events:auto} }
 .lf{display:inline-grid;place-items:center;width:42px;height:42px;margin-left:-14px;border-radius:50%;color:var(--lfc,#1F1B2D);transition:background-color .2s,transform .3s}
 .lf:hover{background:rgba(127,127,127,.12);transform:translateY(-1px)}
@@ -553,9 +581,9 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <section class="sec in" id="encuentrate" style="padding-top:0" data-tf-sec="encuentrate">
     <div class="sec-h"><h2 data-tf="t77e400e1ea"><?php tf_t('t77e400e1ea'); ?></h2></div>
     <div class="enc">
-      <a class="ir" href="#ciudad"><div class="ft"><img class="ilu" src="<?php tf_img('i71b4f385bb', TF_U . '/img/ilustra/encuentrate-ciudad.svg'); ?>" data-tf-img="i71b4f385bb" alt="" loading="lazy" onerror="this.classList.add('rota')"></div><div class="tx"><h3 data-tf="t1d32738558"><?php tf_t('t1d32738558'); ?></h3><p data-tf="te06400a63f"><?php tf_t('te06400a63f'); ?></p></div></a>
-      <a class="ir" href="#anual"><div class="ft"><img class="ilu" src="<?php tf_img('i26715ef58e', TF_U . '/img/ilustra/encuentrate-encuentro.svg'); ?>" data-tf-img="i26715ef58e" alt="" loading="lazy" onerror="this.classList.add('rota')"></div><div class="tx"><h3 data-tf="t5339a3fd5d"><?php tf_t('t5339a3fd5d'); ?></h3><p data-tf="tef1552045d"><?php tf_t('tef1552045d'); ?></p></div></a>
-      <a class="ir" href="#frontera"><div class="ft"><img class="ilu" src="<?php tf_img('i4dfb29105e', TF_U . '/img/ilustra/encuentrate-foro.svg'); ?>" data-tf-img="i4dfb29105e" alt="" loading="lazy" onerror="this.classList.add('rota')"></div><div class="tx"><h3 data-tf="tc7871d1ef2"><?php tf_t('tc7871d1ef2'); ?></h3><p data-tf="t7678dae477"><?php tf_t('t7678dae477'); ?></p></div></a>
+      <a class="ir" href="#ciudad"><div class="ft"><div class="luz cruce" aria-hidden="true"></div></div><div class="tx"><h3 data-tf="t1d32738558"><?php tf_t('t1d32738558'); ?></h3><p data-tf="te06400a63f"><?php tf_t('te06400a63f'); ?></p></div></a>
+      <a class="ir" href="#anual"><div class="ft"><div class="luz amanecer" aria-hidden="true"></div></div><div class="tx"><h3 data-tf="t5339a3fd5d"><?php tf_t('t5339a3fd5d'); ?></h3><p data-tf="tef1552045d"><?php tf_t('tef1552045d'); ?></p></div></a>
+      <a class="ir" href="#frontera"><div class="ft"><div class="luz orillas" aria-hidden="true"></div></div><div class="tx"><h3 data-tf="tc7871d1ef2"><?php tf_t('tc7871d1ef2'); ?></h3><p data-tf="t7678dae477"><?php tf_t('t7678dae477'); ?></p></div></a>
     </div>
   </section>
 
@@ -607,9 +635,9 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     <div class="hace">
       <h3 data-tf="t359555dd0a"><?php tf_t('t359555dd0a'); ?></h3>
       <ul>
-        <li><img class="ilu" src="<?php tf_img('ia3da7ecf73', TF_U . '/img/ilustra/posible-encuentro.svg'); ?>" data-tf-img="ia3da7ecf73" alt="" loading="lazy" onerror="this.classList.add('rota')"><b>Que vengan al encuentro</b><span>Viaje, comida y cama para quien no puede pagarlo. Sin preguntas incómodas.</span></li>
-        <li><img class="ilu" src="<?php tf_img('i4f93ef299c', TF_U . '/img/ilustra/posible-ciudad.svg'); ?>" data-tf-img="i4f93ef299c" alt="" loading="lazy" onerror="this.classList.add('rota')"><b>Que haya comunidad en su ciudad</b><span>Un sitio donde quedar cada mes y alguien que acompaña.</span></li>
-        <li><img class="ilu" src="<?php tf_img('ia8c3a5cc1b', TF_U . '/img/ilustra/posible-futuros.svg'); ?>" data-tf-img="ia8c3a5cc1b" alt="" loading="lazy" onerror="this.classList.add('rota')"><b>Que su voz llegue a quien decide</b><span>La investigación de Futuros, hecha con ellas y no sobre ellas.</span></li>
+        <li><div class="luz ilu amanecer" aria-hidden="true"></div><b>Que vengan al encuentro</b><span>Viaje, comida y cama para quien no puede pagarlo. Sin preguntas incómodas.</span></li>
+        <li><div class="luz ilu cruce" aria-hidden="true"></div><b>Que haya comunidad en su ciudad</b><span>Un sitio donde quedar cada mes y alguien que acompaña.</span></li>
+        <li><div class="luz ilu fuego oscura" aria-hidden="true"></div><b>Que su voz llegue a quien decide</b><span>La investigación de Futuros, hecha con ellas y no sobre ellas.</span></li>
       </ul>
     </div>
     <?php tf_mecenas_datos(); ?>
@@ -935,13 +963,13 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   if (enObra) {
     H.splice(0, H.length,
       { obra: 1, n: '', q: 'Estamos recogiendo las voces de la comunidad. La tuya puede estar aquí.' },
-      { sil: 1, f: '<?php echo TF_U; ?>/img/ilustra/voz-1.svg', n: 'Una voz por llegar', q: 'Aquí irá lo que alguien de la comunidad quiera contar: una historia, una frase, un vídeo.' },
-      { sil: 1, f: '<?php echo TF_U; ?>/img/ilustra/voz-2.svg', n: 'Una voz por llegar', q: 'Lo que no se cuenta en ningún otro sitio. En tu idioma, con tu nombre o sin él.' },
-      { sil: 1, f: '<?php echo TF_U; ?>/img/ilustra/voz-3.svg', n: 'Una voz por llegar', q: 'Fotos, vídeos y frases de la gente que cruza fronteras cada día.' },
-      { sil: 1, f: '<?php echo TF_U; ?>/img/ilustra/voz-4.svg', n: 'Una voz por llegar', q: '¿Quieres que la tuya esté aquí? Cuéntanosla en Descúbrete o escríbenos a hola@transfronteriza.net.' });
+      { sil: 1, luz: 'fuego', n: 'Una voz por llegar', q: 'Aquí irá lo que alguien de la comunidad quiera contar: una historia, una frase, un vídeo.' },
+      { sil: 1, luz: 'orilla', n: 'Una voz por llegar', q: 'Lo que no se cuenta en ningún otro sitio. En tu idioma, con tu nombre o sin él.' },
+      { sil: 1, luz: 'noche', n: 'Una voz por llegar', q: 'Fotos, vídeos y frases de la gente que cruza fronteras cada día.' },
+      { sil: 1, luz: 'amanecer', n: 'Una voz por llegar', q: '¿Quieres que la tuya esté aquí? Cuéntanosla en Descúbrete o escríbenos a hola@transfronteriza.net.' });
     $('.cuentaV span').textContent = '¿Quieres que la tuya esté aquí? Cuéntanosla en Descúbrete o escríbenos a hola@transfronteriza.net.';
   }
-  $('#tira').innerHTML = H.map((h, i) => `<button class="ht${h.sil ? ' sil' : ''}${h.obra ? ' obra' : ''}" type="button" data-i="${i}"${EI(h.id, 'tf_historia')}>${h.v ? `<video src="${h.v}" poster="${h.p}" muted loop playsinline preload="none" aria-hidden="true"></video>` : h.f ? `<img src="${h.f}" alt="" loading="lazy"${h.fx ? ` style="object-position:${h.fx * 100}% 50%"` : ''}${EF(h.id)}>` : h.obra ? `<p class="tx"><small>En construcción</small>${h.q}</p>` : `<p class="tx">«<span${ED(h.id, 'frase')}>${h.q}</span>»</p>`}${h.vm ? '<i class="pl">▶</i>' : ''}<span${ED(h.id, 'titulo')}>${h.n}</span><i class="anillo"></i></button>`).join('');
+  $('#tira').innerHTML = H.map((h, i) => `<button class="ht${h.sil ? ' sil' : ''}${h.obra ? ' obra' : ''}" type="button" data-i="${i}"${EI(h.id, 'tf_historia')}>${h.luz ? `<div class="silL alta ${h.luz}" aria-hidden="true"><i></i></div>` : h.v ? `<video src="${h.v}" poster="${h.p}" muted loop playsinline preload="none" aria-hidden="true"></video>` : h.f ? `<img src="${h.f}" alt="" loading="lazy"${h.fx ? ` style="object-position:${h.fx * 100}% 50%"` : ''}${EF(h.id)}>` : h.obra ? `<p class="tx"><small>En construcción</small>${h.q}</p>` : `<p class="tx">«<span${ED(h.id, 'frase')}>${h.q}</span>»</p>`}${h.vm ? '<i class="pl">▶</i>' : ''}<span${ED(h.id, 'titulo')}>${h.n}</span><i class="anillo"></i></button>`).join('');
   document.querySelectorAll('.ht video').forEach(v => { const b = v.parentElement; b.addEventListener('mouseenter', () => v.play().catch(() => {})); b.addEventListener('mouseleave', () => v.pause()); });
   const st = $('#story'), cuadroS = $('#sCuadro'), bar = $('#sBar'); let vi = 0, tv = null, t0 = 0, paus = false, resto = 0, foco = null, dur = 6500, media = null, vivoS = null;
   bar.innerHTML = H.map(() => '<i><b></b></i>').join('');
@@ -951,11 +979,12 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     vi = Math.max(0, Math.min(H.length - 1, i)); const h = H[vi];
     media?.remove(); media = null; vivoS?.quita(); vivoS = null;
     if (h.vm) vivoS = vimeo(cuadroS, h, { avance: pintaBar, fin: () => vi < H.length - 1 ? muestra(vi + 1) : cierraS() });
+    else if (h.luz) { media = document.createElement('div'); media.className = 'silL alta ' + h.luz; media.innerHTML = '<i></i>'; dur = 7000; }
     else if (!h.f && !h.v) { media = document.createElement('p'); media.className = 'tx'; media.textContent = `«${h.q}»`; dur = 7000; }
     else media = document.createElement(h.v ? 'video' : 'img');
-    if (h.vm || !media || media.className === 'tx') {} else if (h.v) { media.src = h.v; media.poster = h.p; media.muted = true; media.playsInline = true; media.loop = true; media.autoplay = true; dur = 5000; } else { media.src = h.f; media.alt = h.n; dur = h.q ? 7000 : 4000; }
+    if (h.vm || !media || media.className === 'tx' || h.luz) {} else if (h.v) { media.src = h.v; media.poster = h.p; media.muted = true; media.playsInline = true; media.loop = true; media.autoplay = true; dur = 5000; } else { media.src = h.f; media.alt = h.n; dur = h.q ? 7000 : 4000; }
     if (media) cuadroS.prepend(media); if (h.v) media.play().catch(() => {});
-    $('#sQuien').textContent = h.n; $('#sCita').textContent = h.q && h.f && !h.vm ? `«${h.q}»` : '';
+    $('#sQuien').textContent = h.n; $('#sCita').textContent = h.q && (h.f || h.luz) && !h.vm ? `«${h.q}»` : '';
     t0 = performance.now(); pintaBar(0); cancelAnimationFrame(tv); if (!reduce) tv = requestAnimationFrame(tick);
   };
   const abreS = i => { foco = document.activeElement; st.hidden = false; document.documentElement.style.overflow = 'hidden'; muestra(i); $('#sX').focus({ preventScroll: true }); };
