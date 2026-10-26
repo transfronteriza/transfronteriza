@@ -54,7 +54,15 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .open .t{position:relative;z-index:2;padding-bottom:clamp(48px,7vw,110px);width:100%;pointer-events:none}
 .open h1{font-size:clamp(72px,9.5vw,150px);line-height:.84;letter-spacing:-.055em}
 .open p{margin-top:clamp(20px,2.4vw,32px);font-size:clamp(20px,1.9vw,28px);line-height:1.3;color:var(--t2);max-width:22ch}
-.open canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+/* la lámina de Futuros: papel con grano y una luz cálida que respira, dentro del fondo de tinta */
+.open .lamina{position:absolute;left:var(--gut);right:var(--gut);top:calc(var(--hh) + 14px);bottom:14px;z-index:1;border-radius:8px;overflow:hidden;background:#DDD6DF;isolation:isolate}
+.open .lamina::before{content:"";position:absolute;inset:-12%;background:radial-gradient(70% 70% at 88% 78%,#F2B233 0%,#E2592A 36%,rgba(226,89,42,0) 68%),radial-gradient(60% 60% at 12% 18%,#CDCFE6 0%,rgba(205,207,230,0) 62%),linear-gradient(135deg,#D9D5E2 0%,#E6B79C 50%,#F2B233 100%);animation:respira 18s ease-in-out infinite alternate}
+.open .lamina::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .1 0 0 0 0 .2 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");background-size:300px;mix-blend-mode:multiply;opacity:.7}
+.open .lamina canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+@keyframes respira{from{transform:translate(0,0) scale(1)}to{transform:translate(-3%,2%) scale(1.08)}}
+.open .t{position:absolute;left:calc(var(--gut) + clamp(24px,4vw,64px));right:calc(var(--gut) + clamp(24px,4vw,64px));bottom:clamp(44px,6vw,90px);padding-bottom:0;width:auto;color:var(--tinta)}
+.open p{color:rgba(31,27,45,.78)}
+@media (prefers-reduced-motion:reduce){.open .lamina::before{animation:none}}
 /* ---------- 2 · informe anual ---------- */
 .inf{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(40px,7vw,120px);align-items:center}
 .libro{justify-self:center;perspective:1400px}
@@ -74,6 +82,7 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .inf .acts{display:flex;gap:12px;flex-wrap:wrap;margin-top:clamp(32px,3.6vw,44px)}
 /* en construcción: informe, papers y Consejo sin contenido real todavía (TF.enConstruccion) */
 .inf.obra .cover{background:var(--capa);transform:rotateY(-12deg) rotate(1deg)}
+.inf.obra .libro:hover .cover,.inf.obra .libro:focus-visible .cover{transform:rotateY(-3deg) rotate(0deg)}
 .inf.obra .cover::after{display:none}
 .inf.obra .txt > p + p{margin-top:14px;font-size:17px}
 .paper .por .pep{flex:none;width:38px;height:38px}
@@ -177,6 +186,14 @@ dialog::backdrop{background:rgba(10,8,18,.72);backdrop-filter:blur(4px);-webkit-
 .sig small{display:block;font-size:14px;opacity:.6}
 .sig b{display:block;margin-top:4px;font:500 22px/1.15 var(--disp);letter-spacing:-.02em}
 .sig i{font-style:normal;font-size:22px}
+/* la puerta: una sola invitación por página, discreta, que aparece cuando ya has leído la mitad y se cierra para siempre */
+.puerta{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:45;translate:-50% 0;display:flex;align-items:center;gap:14px;max-width:calc(100vw - 24px);padding:10px 10px 10px 20px;border-radius:999px;background:var(--tinta);color:var(--papel);box-shadow:0 18px 44px rgba(31,27,45,.3);transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.puerta:not(.on){opacity:0;transform:translateY(18px);pointer-events:none}
+.puerta p{margin:0;font-size:15px;white-space:nowrap}
+.puerta .btn{padding:11px 18px;font-size:14.5px;background:var(--oro);color:var(--tinta)}
+.puerta .cx{width:34px;height:34px;border-radius:50%;color:rgba(245,238,223,.7);font-size:18px}
+.puerta .cx:hover{color:var(--papel)}
+@media (max-width:620px){.puerta{left:12px;right:12px;translate:0;max-width:none;padding-left:16px}.puerta p{white-space:normal;font-size:14px}}
 .aviso{position:fixed;left:50%;bottom:28px;z-index:80;translate:-50% 0;padding:12px 20px;border-radius:999px;background:var(--papel);color:var(--tinta);font-size:15px;box-shadow:0 10px 30px rgba(0,0,0,.3);transition:opacity .3s,transform .3s}
 .aviso:not(.on){opacity:0;transform:translateY(10px);pointer-events:none}
 
@@ -333,8 +350,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 <main>
   <!-- 1 · Apertura -->
   <section class="open" data-tf-sec="open">
-    <canvas id="semilla" aria-hidden="true"></canvas>
-    <div class="t in">
+    <div class="lamina" aria-hidden="true"><canvas id="girasolF"></canvas></div>
+    <div class="t">
       <h1 data-tf="t7dd57907b5"><?php tf_t('t7dd57907b5'); ?></h1>
       <p data-tf="tbc6bf077e8"><?php tf_t('tbc6bf077e8'); ?></p>
     </div>
@@ -430,6 +447,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <article class="art" id="lArt"></article>
 </div>
 <dialog class="entrar" id="entrar" aria-labelledby="entT"><div class="marco"><button class="x" type="button" data-cierra aria-label="Cerrar">×</button><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle class="punto" cx="41" cy="9" r="4.2" fill="#F2B233"/></svg><div id="entA"><h3 id="entT">Entra en La Frontera</h3><p data-tf="t9834a96e12"><?php tf_t('t9834a96e12'); ?></p><form id="entF" novalidate><input type="email" id="ent-correo" placeholder="Tu correo" autocomplete="email" aria-label="Tu correo"><label class="ok"><input type="checkbox" id="ent-ok"><span>He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>. Guardamos tu correo solo para avisarte cuando abra La Frontera.</span></label><p class="err" id="entE" role="alert"></p><button class="btn p" type="submit" data-tf="t17c8912d40"><?php tf_t('t17c8912d40'); ?></button></form><p class="nueva">¿Aún no eres parte? <a href="<?php echo esc_url(home_url('/')); ?>#descubre" data-cierra-entrar data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a></p></div><div id="entB" hidden><h3 data-tf="tb94238ba26"><?php tf_t('tb94238ba26'); ?></h3><p id="entBp"></p></div></div></dialog>
+<div class="puerta" id="puerta" role="complementary" aria-label="Súmate"><p data-tf="t580999d1d1"><?php tf_t('t580999d1d1'); ?></p><a class="btn" href="<?php echo esc_url(home_url('/')); ?>#descubre" data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a><button class="cx" type="button" aria-label="Cerrar">×</button></div>
 <div class="aviso" id="aviso" role="status"></div>
 
 <dialog class="perfil" id="perfil" aria-labelledby="pNombre">
@@ -491,6 +509,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     if (rad > 10) for (let k = 0; k < rad * 2; k++) { g.fillStyle = r() < .5 ? '#fff4d6' : '#5a2a0a'; g.globalAlpha = .08 + r() * .1; g.fillRect(x + (r() - .5) * rad * 2, y + (r() - .5) * rad * 2, 1, 1); }
     g.restore(); g.globalAlpha = 1;
   };
+  /* el girasol de la ilustración, en papel, asomando por la esquina de la lámina */
+  const symbol = (g, cx, cy, R, N, cA, cB, r, clip) => { const c = R / Math.sqrt(N), vw = clip || [-1e9, -1e9, 1e9, 1e9]; for (let i = 1; i <= N; i++) { const a = i * GA, d = c * Math.sqrt(i), x = cx + Math.cos(a) * d, y = cy + Math.sin(a) * d, t = i / N, rad = c * (.56 + .16 * t); if (x + rad < vw[0] || y + rad < vw[1] || x - rad > vw[2] || y - rad > vw[3]) { r(); continue; } seedAt(g, x, y, rad, a, mix(cA, cB, Math.pow(t, .6)), r); } };
   const pepBlanca = (cv, s) => { const [g, w] = setup(cv), r = rng(s * 131 + 7); seedAt(g, w / 2, w / 2, w * .32, r() * TAU, K.papel, r); };
   const pinta = new Map(), ro = new ResizeObserver(es => es.forEach(e => { if (e.contentRect.width > 0) pinta.get(e.target)?.(); }));
   const vigila = (cv, fn) => { pinta.set(cv, fn); ro.observe(cv); };
@@ -502,35 +522,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   document.querySelectorAll('[data-ec-no]').forEach(e => { if (EC[e.dataset.ecNo]) e.remove(); });
   if (EC.informe) $('.inf:not(.obra)')?.remove();
 
-  /* 1 · una corriente casi espacial de pepitas */
-  const cvS = $('#semilla'), open = $('.open');
-  let S = [], gS, wS, hS;
-  /* la corriente: entra por arriba a la izquierda, cruza, baja por la derecha y se curva de vuelta hasta rozar el título, donde se disuelve */
-  const corriente = (s, w, h) => { const u = 1 - s, P = w < 760 ? [[-.15, .12], [1.02, -.04], [1.12, .64], [-.06, .7]] : [[-.1, .1], [.7, -.12], [1.16, .7], [.36, .64]]; return [0, 1].map(k => u * u * u * P[0][k] + 3 * u * u * s * P[1][k] + 3 * u * s * s * P[2][k] + s * s * s * P[3][k]).map((v, k) => v * (k ? h : w)); };
-  const buildSeeds = () => {
-    [gS, wS, hS] = setup(cvS); const r = rng(55), N = wS < 760 ? 150 : 300; S = [];
-    for (let i = 0; i < N; i++) {
-      const capa = r() < .55 ? 0 : r() < .7 ? 1 : 2, rad = [2.2, 4.2, 7.5][capa] * (.7 + r() * .7), t = r();
-      const s2 = Math.ceil(rad * 2.6), sp = document.createElement('canvas'); sp.width = sp.height = Math.ceil(s2 * DPR);
-      const g = sp.getContext('2d'); g.setTransform(DPR, 0, 0, DPR, 0, 0); seedAt(g, s2 / 2, s2 / 2, rad, 0, mix(K.fuegoN, K.oroN, t), r);
-      const g1 = (r() + r() + r()) / 3 - .5;
-      S.push({ sp, s: s2, p: r(), v: [.0045, .007, .011][capa] * (.8 + r() * .4), off: g1 * [.5, .38, .3][capa] * Math.min(wS, hS) * 1.1, ph: r() * TAU, rot: r() * TAU, vr: (r() - .5) * .3, al: [.42, .7, .95][capa] });
-    }
-  };
-  vigila(cvS, buildSeeds);
-  const pinta1 = t => {
-    gS.clearRect(0, 0, wS, hS);
-    for (const q of S) {
-      const [x0, y0] = corriente(q.p, wS, hS), [x1, y1] = corriente(Math.min(1, q.p + .004), wS, hS), an = Math.atan2(y1 - y0, x1 - x0);
-      const o = q.off + Math.sin(t * .00025 + q.ph) * 14, x = x0 - Math.sin(an) * o, y = y0 + Math.cos(an) * o;
-      const a = q.al * Math.min(1, q.p / .08, (1 - q.p) / .32);  /* desemboca: se va apagando en el último tramo */
-      if (a <= .01) continue;
-      gS.save(); gS.globalAlpha = a; gS.translate(x, y); gS.rotate(an + q.rot); gS.drawImage(q.sp, -q.s / 2, -q.s / 2, q.s, q.s); gS.restore();
-    }
-  };
-  let tP = 0, vivo = true;
-  const loop = t => { const dt = Math.min(64, t - (tP || t)) / 1000; tP = t; if (vivo && S.length) { for (const q of S) { q.p += q.v * dt; if (q.p > 1) q.p -= 1; q.rot += q.vr * dt; } pinta1(t); } requestAnimationFrame(loop); };
-  if (reduce) { const once = () => S.length ? pinta1(0) : requestAnimationFrame(once); once(); } else { requestAnimationFrame(loop); new IntersectionObserver(e => { vivo = e[0].isIntersecting; }).observe(open); }
+  /* 1 · la lámina: el girasol grande, de papel, cortado por la esquina */
+  (() => { const cv = $('#girasolF'); if (!cv) return; vigila(cv, () => { const [g, w, h] = setup(cv); const R = Math.max(w, h) * .34; symbol(g, w * .86, h * .80, R, 420, '#FFFBF2', K.papel, rng(90), [0, 0, w, h]); }); })();
 
   /* 2 · informe y 3 · papers, con su lector */
   const A = TF.autores || {}, P = TF.papers || [], INF = TF.informe || { id: 'informe', informe: true, h: '', d: '', lead: '', html: '', claves: [] };
@@ -539,13 +532,13 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   /* mientras se escriben: lo que pretendemos, con el mismo lector; las portadas vienen con cada paper */
   P.forEach(p => { p.banda = p.banda || `<?php echo TF_U; ?>/img/papers/${p.id}.jpg`; }); if (INF) INF.portada = INF.portada || '<?php echo TF_U; ?>/img/papers/informe.jpg';
   const PO = [
-    { id: 'pre-educacion', obra: 1, t: 'Educación', h: 'Lo que la escuela no ve', d: 'En preparación', banda: '<?php echo TF_U; ?>/img/ilustra/paper-banda.svg',
+    { id: 'pre-educacion', obra: 1, t: 'Educación', h: 'Lo que la escuela no ve', d: 'En preparación', banda: '<?php echo TF_U; ?>/img/ilustra/paper-banda-1.svg',
       lead: 'Queremos saber qué pasa entre el instituto y la universidad para que lleguen tan pocas jóvenes de familia migrante, y qué hacen los centros que sí lo consiguen.',
       b: [['h', 'Qué pretendemos'], ['p', 'Comparar los datos oficiales de abandono y acceso con lo que cuentan las propias alumnas: orientación, expectativas del profesorado, idiomas que no puntúan.'], ['d', '28 %', 'de la segunda generación llega a la universidad. Del resto de jóvenes, el 43 %.'], ['h', 'Con quién'], ['p', 'Con docentes de institutos de Andalucía y jóvenes de la comunidad que acaban de pasar por ello. Si eres una de ellas, o de ellos, te queremos en este paper.']] },
-    { id: 'pre-empleo', obra: 1, t: 'Empleo', h: 'Tres idiomas que el currículum no cuenta', d: 'En preparación', banda: '<?php echo TF_U; ?>/img/ilustra/paper-banda.svg',
+    { id: 'pre-empleo', obra: 1, t: 'Empleo', h: 'Tres idiomas que el currículum no cuenta', d: 'En preparación', banda: '<?php echo TF_U; ?>/img/ilustra/paper-banda-2.svg',
       lead: 'Las jóvenes transfronterizas hablan dos, tres o cuatro lenguas. Queremos medir cuántas de esas lenguas aparecen en un contrato y proponer cómo certificarlas.',
       b: [['h', 'Qué pretendemos'], ['p', 'Una encuesta breve a jóvenes de la comunidad sobre las lenguas que usan en casa y en el trabajo, y entrevistas a empresas que las buscan y no las encuentran.'], ['h', 'Para qué'], ['p', 'Para pedir a las escuelas oficiales de idiomas que certifiquen gratis las lenguas de herencia, y a las empresas que pregunten por ellas.']] },
-    { id: 'pre-estrecho', obra: 1, t: 'Territorio', h: 'Una ciudad en dos orillas', d: 'En preparación', banda: '<?php echo TF_U; ?>/img/ilustra/paper-banda.svg',
+    { id: 'pre-estrecho', obra: 1, t: 'Territorio', h: 'Una ciudad en dos orillas', d: 'En preparación', banda: '<?php echo TF_U; ?>/img/ilustra/paper-banda-3.svg',
       lead: 'Entre Algeciras y Tánger hay familias, comercios y fiestas que viven a los dos lados. Nadie las cuenta. Queremos empezar a contarlas.',
       b: [['h', 'Qué pretendemos'], ['p', 'Un primer mapa de la vida transfronteriza del Estrecho: cuántas personas cruzan cada verano, cuántos negocios dependen de ambas orillas, qué pasa con los papeles.'], ['h', 'Con quién'], ['p', 'Con la comunidad de Algeciras y con quien quiera sumarse desde la otra orilla.']] }
   ];
@@ -559,12 +552,12 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   $('#filtros')?.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; document.querySelectorAll('#filtros button').forEach(x => x.setAttribute('aria-pressed', x === b)); pl.querySelectorAll('li').forEach(li => li.hidden = b.dataset.t !== 'todos' && li.dataset.t !== b.dataset.t); });
 
   const lector = $('#lector'), art = $('#lArt');
-  let fs = 19, antesFoco = null;
+  let fs = 19, antesFoco = null, antesY = 0;
   const bloque = ([k, x, y]) => k === 'p' ? `<p>${x}</p>` : k === 'h' ? `<h2>${x}</h2>` : k === 'q' ? `<blockquote>«${x}»</blockquote>` : `<div class="dato"><b>${x}</b><p>${y}</p></div>`;
   const prog = () => { const m = lector.scrollHeight - lector.clientHeight; $('#lProg').style.width = (m > 0 ? lector.scrollTop / m * 100 : 0) + '%'; };
   const abre = id => {
     const p = id === 'informe' ? INFX : PP.find(x => x.id === id); if (!p) return;
-    if (lector.hidden) antesFoco = document.activeElement;
+    if (lector.hidden) { antesFoco = document.activeElement; antesY = scrollY; }
     const au = p.informe || p.obra ? null : A[p.a], i = PP.indexOf(p), nx = p.informe ? PP[0] : PP[(i + 1) % PP.length];
     art.innerHTML = `<div class="ab${p.informe ? ' informe' : ''}"><img src="${p.informe ? p.portada : p.banda}" alt=""></div>
       <h1 id="lTit">${p.h}</h1>
@@ -576,7 +569,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     lector.hidden = false; lector.scrollTop = 0; document.documentElement.style.overflow = 'hidden';
     history.replaceState(null, '', '#' + (p.informe ? 'leer-informe' : p.id)); $('#lX').focus({ preventScroll: true }); prog();
   };
-  const cierra = () => { lector.hidden = true; document.documentElement.style.overflow = ''; history.replaceState(null, '', location.pathname + location.search); antesFoco?.focus?.({ preventScroll: true }); antesFoco = null; };
+  const cierra = () => { lector.hidden = true; document.documentElement.style.overflow = ''; history.replaceState(null, '', location.pathname + location.search); scrollTo(0, antesY); antesFoco?.focus?.({ preventScroll: true }); antesFoco = null; };
   lector.addEventListener('scroll', prog, { passive: true });
   document.addEventListener('click', e => { const b = e.target.closest('[data-abre]'); if (b) { e.preventDefault(); abre(b.dataset.abre); } if (e.target.closest('[data-cierra-lector]')) cierra(); });
   $('#lX').addEventListener('click', cierra);
@@ -633,6 +626,16 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     TF.enviar('hablemos', TF.leer(hf));
   });
   const top = $('#top'); const linea = () => top.classList.toggle('baja', scrollY > 8); addEventListener('scroll', linea, { passive: true }); linea();
+  /* la puerta: aparece pasada la mitad de la página, una vez por visita, y nunca si ya has entrado por algún formulario */
+  (() => { const p = document.getElementById('puerta'); if (!p) return; let fuera = false; try { fuera = sessionStorage.getItem('tf-puerta') === '1'; } catch (e) {}
+    if (fuera) return; let abierta = false;
+    const mira = () => { if (abierta || document.querySelector('dialog[open]') || !document.getElementById('paso')?.hidden && document.getElementById('paso')) { p.classList.remove('on'); return; } const h = document.documentElement.scrollHeight - innerHeight, y = scrollY / Math.max(1, h); p.classList.toggle('on', y > .42 && y < .96 && !document.getElementById('barraM')?.classList?.contains('on')); };
+    addEventListener('scroll', mira, { passive: true }); setTimeout(mira, 600);
+    const cierra = () => { abierta = true; p.classList.remove('on'); try { sessionStorage.setItem('tf-puerta', '1'); } catch (e) {} };
+    p.querySelector('.cx').addEventListener('click', cierra);
+    p.querySelector('.btn').addEventListener('click', e => { cierra(); if (p.dataset.flujo) { e.preventDefault(); null; } });
+    document.addEventListener('submit', cierra, true); document.addEventListener('click', e => { if (e.target.closest('[data-flujo]')) cierra(); }, true);
+  })();
   /* Lo que se mueve: el correo mensual, desde el pie */
   (() => { const f = document.getElementById('carta'); if (!f) return; f.addEventListener('submit', e => { e.preventDefault(); const er = document.getElementById('cartaE'), c = document.getElementById('c-correo').value.trim(); if (!/^\S+@\S+\.\S+$/.test(c)) { er.textContent = 'Escribe un correo válido.'; return; } if (!document.getElementById('c-boletin').checked) { er.textContent = 'Marca la casilla para que podamos escribirte.'; return; } er.textContent = ''; window.TF?.enviar?.('boletin', window.TF?.leer?.(f)); f.querySelector('.campos').hidden = true; f.querySelector('.ok').hidden = true; document.getElementById('cartaOk').hidden = false; }); })();
   /* La Frontera: entrar con un enlace al correo */

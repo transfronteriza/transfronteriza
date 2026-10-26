@@ -82,8 +82,8 @@ function tf_apoyos() {
 	echo '<ul class="logos">';
 	foreach (tf_q('tf_apoyo') as $p) {
 		$img = '<img src="' . esc_url(tf_foto($p->ID, 'medium_large')) . '" alt="' . esc_attr(get_the_title($p)) . '" style="height:' . (int) (tf_campo('altura', $p->ID) ?: 44) . 'px" data-tf-f="p' . $p->ID . '">';
-		$u = tf_campo('enlace', $p->ID);
-		echo '<li data-tf-item="' . $p->ID . '" data-tf-tipo="tf_apoyo">' . ($u ? '<a href="' . esc_url($u) . '" target="_blank" rel="noopener">' . $img . '</a>' : $img) . '</li>';
+		/* sin enlace: los logos no sacan a nadie de la web */
+		echo '<li data-tf-item="' . $p->ID . '" data-tf-tipo="tf_apoyo">' . $img . '</li>';
 	}
 	echo '</ul>';
 }

@@ -162,6 +162,8 @@ input[type=text]:focus,input[type=email]:focus{outline:0;box-shadow:inset 0 0 0 
 .nav .back{font-weight:500;color:var(--tinta-2)}
 .err{font-size:14px;color:var(--fuego);min-height:1em}
 .done h3{font-size:clamp(30px,3vw,44px);line-height:1.02}
+.done .sig{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap}
+.done .btn.l{box-shadow:inset 0 0 0 1.5px var(--tinta)}
 .done p{margin-top:14px;color:var(--tinta-2);max-width:40ch;font-size:17px}
 
 /* ---------- pie ---------- */
@@ -336,7 +338,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <!-- 4 · Comunidad | Futuros -->
   <section class="dos" data-tf-sec="dos">
     <a class="lado com" id="comunidad" href="<?php echo esc_url(tf_pagina('comunidad')); ?>"><img src="<?php tf_img('i408711db45', TF_U . '/img/comunidad.jpg'); ?>" data-tf-img="i408711db45" alt="Dos chicas de la comunidad, de espaldas, miran la montaña al atardecer."><div class="t"><h2 data-tf="t8f69233c0e"><?php tf_t('t8f69233c0e'); ?></h2><p data-tf="t2f4fd33425"><?php tf_t('t2f4fd33425'); ?></p><span class="btn">Conoce la comunidad</span></div></a>
-    <a class="lado fut" id="futuros" href="<?php echo esc_url(tf_pagina('futuros')); ?>"><div class="t"><h2 data-tf="t96b03ea3c7"><?php tf_t('t96b03ea3c7'); ?></h2><p data-tf="tbc6bf077e8"><?php tf_t('tbc6bf077e8'); ?></p><span class="btn">Entra en Futuros</span></div><div class="cover"><img src="<?php tf_img('i1fae3e9ef6', TF_U . '/img/ilustra/informe-portada.svg'); ?>" data-tf-img="i1fae3e9ef6" alt=""><div class="ct"><span>Futuros · Informe anual</span><h4 data-tf="t2d86fba811"><?php tf_t('t2d86fba811'); ?></h4></div></div></a>
+    <a class="lado fut" id="futuros" href="<?php echo esc_url(tf_pagina('futuros')); ?>"><div class="t"><h2 data-tf="t96b03ea3c7"><?php tf_t('t96b03ea3c7'); ?></h2><p data-tf="tbc6bf077e8"><?php tf_t('tbc6bf077e8'); ?></p><span class="btn">Entra en Futuros</span></div><div class="cover"><img src="<?php tf_img('i1fae3e9ef6', TF_U . '/img/ilustra/informe-portada.svg'); ?>" data-tf-img="i1fae3e9ef6" alt=""><div class="ct"><h4 data-tf="t2d86fba811"><?php tf_t('t2d86fba811'); ?></h4></div></div></a>
     <div class="emblema" aria-hidden="true"><div class="sway"><canvas id="girasol"></canvas></div></div>
   </section>
 
@@ -375,7 +377,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
             <label class="ok"><input type="checkbox" id="f-ok"><span>He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>. Transfronteriza usa estos datos solo para escribirte y contarte lo que hacemos; puedes pedir verlos o borrarlos en hola@transfronteriza.net. Si tienes menos de 14 años, rellénalo con tu madre, padre o tutor.</span></label>
             <label class="ok"><input type="checkbox" id="f-boletin"><span>Quiero recibir <b>Lo que se mueve</b>: un correo al mes con lo que pasa en la comunidad. Te das de baja cuando quieras.</span></label>
           </fieldset>
-          <div class="done" id="done" hidden><h3 id="doneT">Gracias.</h3><p data-tf="te4b9f112b2"><?php tf_t('te4b9f112b2'); ?></p></div>
+          <div class="done" id="done" hidden><h3 id="doneT">Gracias.</h3><p data-tf="te4b9f112b2"><?php tf_t('te4b9f112b2'); ?></p><div class="sig"><a class="btn p" href="comunidad.html#ciudad" data-tf="tffa488ce79"><?php tf_t('tffa488ce79'); ?></a><a class="btn l" href="comunidad.html#anual" data-tf="t200e445361"><?php tf_t('t200e445361'); ?></a></div></div>
           <p class="err" id="err" role="alert"></p>
           <div class="nav" id="nav"><button class="btn p" type="submit" id="next">Seguir</button><button class="back" type="button" id="back" hidden>Atrás</button></div>
         </form>

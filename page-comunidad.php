@@ -58,6 +58,13 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .open .t{position:absolute;z-index:2;left:clamp(24px,4vw,64px);right:clamp(24px,4vw,64px);bottom:clamp(28px,5vw,64px);color:var(--papel)}
 .open h1{font-size:clamp(60px,9vw,150px);line-height:.84;letter-spacing:-.055em}
 .open p{margin-top:18px;font-size:clamp(19px,1.8vw,26px);line-height:1.3;max-width:24ch;opacity:.92}
+.play{display:inline-flex;align-items:center;gap:14px;margin-top:30px;font:500 16px/1 var(--text);color:var(--papel)}
+.play .pcir{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;box-shadow:inset 0 0 0 1.5px rgba(245,238,223,.85);background:rgba(245,238,223,.08);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:background-color .3s,color .3s}
+.play:hover .pcir{background:var(--papel);color:var(--tinta)}
+dialog.video{width:min(1100px,94vw);max-width:none;background:#0F0C18;overflow:visible}
+dialog.video .cuadroV{aspect-ratio:16/9;width:100%;border-radius:10px;overflow:hidden;background:#000}
+dialog.video iframe{display:block;width:100%;height:100%;border:0}
+dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;border-radius:50%;color:var(--papel);box-shadow:inset 0 0 0 1px rgba(245,238,223,.5);font-size:22px}
 
 /* ---------- 2 · tres perfiles ---------- */
 .tres{position:relative;display:flex;gap:6px;height:min(76vh,700px);border-radius:6px;overflow:hidden;background:var(--tinta)}
@@ -126,6 +133,18 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 #ciudad .abre,#ciudad .ciuM{position:relative;z-index:1}
 #ciudad .abre{box-shadow:0 30px 60px rgba(31,27,45,.25)}
 @keyframes deriva{from{transform:translate(0,0) rotate(0deg)}to{transform:translate(2.5%,-1.5%) rotate(3deg)}}
+/* la lupa: acerca el mapa a Andalucía para que Granada y Jérez se puedan pinchar */
+.globo.cerca{animation:none;transform:scale(2.2);transform-origin:52% 41%;transition:transform .7s var(--ease)}
+.globo.cerca .pun{font-size:7.5px;text-shadow:0 0 2px var(--papel),0 0 2px var(--papel),0 0 3px var(--papel)}
+.globo.cerca .pun canvas{width:12px;height:12px}
+.globo.cerca .pun.sede canvas{width:15px;height:15px}
+.globo.cerca .pun span{left:calc(100% + 3px)}
+.globo.cerca .pun.izq span{left:auto;right:calc(100% + 3px)}
+.globo.cerca .pun.arr span{right:calc(50% - 4px);bottom:calc(100% - 2px)}
+.lupa{position:absolute;z-index:3;left:clamp(8px,2vw,24px);bottom:clamp(8px,2vw,24px);display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:var(--papel);color:var(--tinta);font-size:14px;box-shadow:0 10px 24px rgba(31,27,45,.18)}
+.lupa svg{width:16px;height:16px}
+#ciudad .donde{position:relative}
+@media (max-width:1000px){.lupa{display:none}}
 @media (max-width:1000px){#ciudad .donde{grid-template-columns:minmax(0,1fr)}#ciudad .globo{max-width:none;width:124%;margin:0 -12% -26%}}
 .globo{position:relative;aspect-ratio:1/1;max-width:640px;width:100%;justify-self:center}
 .globo > img,.globo > .mar{position:absolute;inset:0;width:100%;height:100%}
@@ -296,6 +315,14 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .hace li img{grid-row:1/3;width:160px;aspect-ratio:4/3;object-fit:cover;border-radius:4px;background:var(--teja)}
 .hace li b{margin-top:6px;font:500 21px/1.15 var(--disp)}
 .hace li span{margin-top:6px;color:var(--tinta-2);font-size:15.5px}
+/* la puerta: una sola invitación por página, discreta, que aparece cuando ya has leído la mitad y se cierra para siempre */
+.puerta{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:45;translate:-50% 0;display:flex;align-items:center;gap:14px;max-width:calc(100vw - 24px);padding:10px 10px 10px 20px;border-radius:999px;background:var(--tinta);color:var(--papel);box-shadow:0 18px 44px rgba(31,27,45,.3);transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.puerta:not(.on){opacity:0;transform:translateY(18px);pointer-events:none}
+.puerta p{margin:0;font-size:15px;white-space:nowrap}
+.puerta .btn{padding:11px 18px;font-size:14.5px;background:var(--oro);color:var(--tinta)}
+.puerta .cx{width:34px;height:34px;border-radius:50%;color:rgba(245,238,223,.7);font-size:18px}
+.puerta .cx:hover{color:var(--papel)}
+@media (max-width:620px){.puerta{left:12px;right:12px;translate:0;max-width:none;padding-left:16px}.puerta p{white-space:normal;font-size:14px}}
 .barraM{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:40;display:none}
 @media (max-width:620px){.enl{display:inline-block;padding-block:11px}}
 .barraM .btn{width:100%;padding:18px;font-size:16.5px;box-shadow:0 12px 30px rgba(31,27,45,.25)}
@@ -512,7 +539,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <section class="open" data-tf-sec="open">
     <div class="fr">
       <video autoplay muted loop playsinline preload="auto" poster="<?php echo TF_U; ?>/media/com/poster.jpg" aria-hidden="true"><source src="<?php tf_img('i21c20def39', TF_U . '/media/com/loop.mp4'); ?>" data-tf-vid="i21c20def39" type="video/mp4"></video>
-      <div class="t"><h1 data-tf="teab953326c"><?php tf_t('teab953326c'); ?></h1><p data-tf="tf1fc0eda57"><?php tf_t('tf1fc0eda57'); ?></p></div>
+      <div class="t"><h1 data-tf="teab953326c"><?php tf_t('teab953326c'); ?></h1><p data-tf="tf1fc0eda57"><?php tf_t('tf1fc0eda57'); ?></p><button class="play" type="button" id="verV"><span class="pcir"><svg width="16" height="18" viewBox="0 0 14 16" aria-hidden="true"><path d="M1 1.6v12.8a.8.8 0 0 0 1.2.7l10.6-6.4a.8.8 0 0 0 0-1.4L2.2.9A.8.8 0 0 0 1 1.6z" fill="currentColor"/></svg></span>Ver vídeo</button></div>
     </div>
   </section>
 
@@ -528,7 +555,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     <div class="enc">
       <a class="ir" href="#ciudad"><div class="ft"><img class="ilu" src="<?php tf_img('i71b4f385bb', TF_U . '/img/ilustra/encuentrate-ciudad.svg'); ?>" data-tf-img="i71b4f385bb" alt="" loading="lazy" onerror="this.classList.add('rota')"></div><div class="tx"><h3 data-tf="t1d32738558"><?php tf_t('t1d32738558'); ?></h3><p data-tf="te06400a63f"><?php tf_t('te06400a63f'); ?></p></div></a>
       <a class="ir" href="#anual"><div class="ft"><img class="ilu" src="<?php tf_img('i26715ef58e', TF_U . '/img/ilustra/encuentrate-encuentro.svg'); ?>" data-tf-img="i26715ef58e" alt="" loading="lazy" onerror="this.classList.add('rota')"></div><div class="tx"><h3 data-tf="t5339a3fd5d"><?php tf_t('t5339a3fd5d'); ?></h3><p data-tf="tef1552045d"><?php tf_t('tef1552045d'); ?></p></div></a>
-      <a class="ir" href="#frontera"><div class="ft"><img class="ilu" src="<?php tf_img('i4dfb29105e', TF_U . '/img/ilustra/encuentrate-foro.svg'); ?>" data-tf-img="i4dfb29105e" alt="" loading="lazy" onerror="this.classList.add('rota')"></div><div class="tx"><h3 data-tf="tc7871d1ef2"><?php tf_t('tc7871d1ef2'); ?></h3><p data-tf="tb1ba90c2e8"><?php tf_t('tb1ba90c2e8'); ?></p></div></a>
+      <a class="ir" href="#frontera"><div class="ft"><img class="ilu" src="<?php tf_img('i4dfb29105e', TF_U . '/img/ilustra/encuentrate-foro.svg'); ?>" data-tf-img="i4dfb29105e" alt="" loading="lazy" onerror="this.classList.add('rota')"></div><div class="tx"><h3 data-tf="tc7871d1ef2"><?php tf_t('tc7871d1ef2'); ?></h3><p data-tf="t7678dae477"><?php tf_t('t7678dae477'); ?></p></div></a>
     </div>
   </section>
 
@@ -543,8 +570,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     <div class="donde">
       <div class="globo" id="mapa"><canvas class="mar" id="mar" aria-hidden="true"></canvas><img src="<?php tf_img('ie346a3a2be', TF_U . '/img/globo.svg'); ?>" data-tf-img="ie346a3a2be" alt="Globo terráqueo del revés, con España y el norte de Marruecos a los dos lados del Estrecho."></div>
       <div class="panel" id="panel" aria-live="polite"></div>
+      <button class="lupa" type="button" id="lupa" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21M10.5 7.5v6M7.5 10.5h6"/></svg><span>Acercar</span></button>
     </div>
-    <div class="abre"><div><h3 data-tf="te076ee9ab2"><?php tf_t('te076ee9ab2'); ?></h3><p data-tf="t7174103a32"><?php tf_t('t7174103a32'); ?></p></div><button class="btn g" type="button" data-flujo="abrir" data-tf="t03f61a4195"><?php tf_t('t03f61a4195'); ?></button></div>
   </section>
 
   <!-- 6 · La Frontera -->
@@ -553,7 +580,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
       <div>
         <svg class="fsim" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle cx="41" cy="9" r="4.2" fill="#F2B233"/></svg>
         <h2 data-tf="t4d20f5ee80"><?php tf_t('t4d20f5ee80'); ?></h2>
-        <div class="frases"><p data-tf="tb39ee0fd33"><?php tf_t('tb39ee0fd33'); ?></p><p data-tf="t87765b2a56"><?php tf_t('t87765b2a56'); ?></p><p data-tf="t0871782f28"><?php tf_t('t0871782f28'); ?></p></div>
+        <div class="frases"><p data-tf="tb39ee0fd33"><?php tf_t('tb39ee0fd33'); ?></p><p data-tf="t87765b2a56"><?php tf_t('t87765b2a56'); ?></p></div>
         <p class="desc" data-tf="t657d9dca65"><?php tf_t('t657d9dca65'); ?></p>
         <div class="acts"><a class="btn p" href="#" data-entrar data-tf="t93b479b511"><?php tf_t('t93b479b511'); ?></a></div>
       </div>
@@ -665,6 +692,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <button class="fl s" type="button" id="sSig" aria-label="Siguiente">→</button>
 </div>
 <dialog class="entrar" id="entrar" aria-labelledby="entT"><div class="marco"><button class="x" type="button" data-cierra aria-label="Cerrar">×</button><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle class="punto" cx="41" cy="9" r="4.2" fill="#F2B233"/></svg><div id="entA"><h3 id="entT">Entra en La Frontera</h3><p data-tf="t9834a96e12"><?php tf_t('t9834a96e12'); ?></p><form id="entF" novalidate><input type="email" id="ent-correo" placeholder="Tu correo" autocomplete="email" aria-label="Tu correo"><label class="ok"><input type="checkbox" id="ent-ok"><span>He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>. Guardamos tu correo solo para avisarte cuando abra La Frontera.</span></label><p class="err" id="entE" role="alert"></p><button class="btn p" type="submit" data-tf="t17c8912d40"><?php tf_t('t17c8912d40'); ?></button></form><p class="nueva">¿Aún no eres parte? <a href="<?php echo esc_url(home_url('/')); ?>#descubre" data-cierra-entrar data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a></p></div><div id="entB" hidden><h3 data-tf="tb94238ba26"><?php tf_t('tb94238ba26'); ?></h3><p id="entBp"></p></div></div></dialog>
+<dialog class="video" id="videoD" aria-label="Vídeo de Transfronteriza"><button class="x" type="button" id="videoX" aria-label="Cerrar">×</button><div class="cuadroV"><iframe id="videoF" src="" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Vídeo de Transfronteriza"></iframe></div></dialog>
+<div class="puerta" id="puerta" data-flujo="descubre" role="complementary" aria-label="Súmate"><p data-tf="t580999d1d1"><?php tf_t('t580999d1d1'); ?></p><button class="btn" type="button" data-tf="td0bb103607"><?php tf_t('td0bb103607'); ?></button><button class="cx" type="button" aria-label="Cerrar">×</button></div>
 <div class="barraM" id="barraM"><button class="btn g" type="button" id="donarM"></button></div>
 <div class="aviso" id="aviso" role="status"></div>
 
@@ -756,6 +785,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     anual: { enviar: 'Guardadme sitio', capa: 'Usamos tus datos para organizar tu plaza y los viajes al encuentro; puedes pedir verlos o borrarlos en hola@transfronteriza.net.', pasos: [NOMBRE, CORREO(), { tipo: 'ciudad', t: '¿Desde dónde vendrías?', ay: 'Así organizamos los viajes compartidos.' }, { tipo: 'chips', clave: 'beca', t: '¿Te vendría bien una beca para venir?', ay: 'Las becas cubren viaje, comida y alojamiento. Sin preguntas incómodas.', op: ['Sí', 'Quizá', 'No, gracias'], consent: true }],
       fin: d => ({ foto: '<?php echo TF_U; ?>/img/comunidad/encuentros.jpg', t: `¡Te guardamos sitio, ${d.nombre}!`, p: 'Te escribimos en cuanto abran las plazas del encuentro de septiembre de 2027 en Jérez del Marquesado.' }) },
     aviso: { enviar: 'Avísame', capa: 'Guardamos tu correo solo para avisarte cuando abran las plazas.', pasos: [NOMBRE, CORREO(true)], fin: d => ({ foto: '<?php echo TF_U; ?>/img/comunidad/charla.jpg', t: `Hecho, ${d.nombre}.`, p: 'Serás de las primeras en saber cuándo abren las plazas del encuentro.' }) },
+    descubre: { enviar: 'Quiero formar parte', capa: 'Usamos tus datos solo para escribirte y contarte lo que hacemos; puedes pedir verlos o borrarlos en hola@transfronteriza.net.', pasos: [NOMBRE, CORREO(), { tipo: 'ciudad', t: d => `¿Dónde vives, ${d.nombre}?`, ay: 'Así te presentamos a la comunidad más cercana.' }, { tipo: 'chips', multi: true, clave: 'interes', t: '¿Qué te apetece?', ay: 'Marca todo lo que quieras.', op: ['Encuentros', 'Mi ciudad', 'Formación', 'Futuros', 'Echar una mano'], consent: true }],
+      fin: d => ({ foto: '<?php echo TF_U; ?>/img/comunidad/encuentros.jpg', t: `¡Bienvenida, ${d.nombre}!`, p: `Te escribimos en unos días para presentarte a la comunidad${d.ciudad ? ' de ' + d.ciudad : ''} y contarte lo que se mueve.` }) },
     ciudad: { enviar: 'Quiero ir', capa: 'Usamos tus datos para presentarte a la comunidad de tu ciudad y avisarte de la próxima quedada.', pasos: [NOMBRE, CORREO(), { tipo: 'chips', multi: true, clave: 'plan', t: d => `¿Qué te apetece hacer con la comunidad de ${d.ciudad}?`, ay: 'Marca todo lo que quieras.', op: ['Tomar algo', 'Pasear', 'Cocinar juntas', 'Hablar de lo nuestro', 'Hacer deporte'], consent: true }],
       fin: d => ({ foto: d.foto, t: `¡Te esperamos en ${d.ciudad}, ${d.nombre}!`, p: 'Te escribimos para presentarte a la comunidad y decirte cuándo es la próxima quedada.' }) },
     abrir: { enviar: 'Quiero abrirla', capa: 'Usamos tus datos para acompañarte a abrir comunidad en tu ciudad.', pasos: [NOMBRE, CORREO(), { tipo: 'ciudad', t: '¿En qué ciudad quieres abrirla?' }, { tipo: 'chips', clave: 'gente', t: '¿Cuánta gente conoces allí?', op: ['De momento, solo yo', 'Dos o tres personas', 'Un grupo'], consent: true }],
@@ -870,6 +901,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   mapa.insertAdjacentHTML('afterend', `<div class="ciuM" role="group" aria-label="Elige una ciudad">${Object.entries(CIU).map(([k, c]) => `<button type="button" data-c="${k}">${esc(c.n)}</button>`).join('')}</div>`);
   const ciuM = mapa.nextElementSibling; ciuM.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { elige(b.dataset.c); if (innerWidth <= 1000) panel.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' }); } });
   if (Object.keys(CIU).length) elige(Object.keys(CIU)[0]);
+  /* la lupa: acercar y alejar el mapa; también con doble clic */
+  (() => { const l = $('#lupa'); if (!l) return; const pon = v => { mapa.classList.toggle('cerca', v); l.setAttribute('aria-pressed', v); l.querySelector('span').textContent = v ? 'Alejar' : 'Acercar'; }; l.addEventListener('click', () => pon(!mapa.classList.contains('cerca'))); mapa.addEventListener('dblclick', e => { if (!e.target.closest('.pun')) pon(!mapa.classList.contains('cerca')); }); })();
 
   /* ===== 6 · La Frontera ===== */
   const HILOS = [
@@ -1039,6 +1072,18 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const tab = t => { lg.querySelectorAll('[data-tab]').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t)); lg.querySelectorAll('[data-pan]').forEach(p => p.hidden = p.dataset.pan !== t); };
   document.addEventListener('click', e => { const b = e.target.closest('[data-legal]'); if (b) { e.preventDefault(); tab(b.dataset.legal); if (!lg.open) lg.showModal(); } const t = e.target.closest('[data-tab]'); if (t) tab(t.dataset.tab); });
 
+  /* la puerta: aparece pasada la mitad de la página, una vez por visita, y nunca si ya has entrado por algún formulario */
+  (() => { const p = document.getElementById('puerta'); if (!p) return; let fuera = false; try { fuera = sessionStorage.getItem('tf-puerta') === '1'; } catch (e) {}
+    if (fuera) return; let abierta = false;
+    const mira = () => { if (abierta || document.querySelector('dialog[open]') || !document.getElementById('paso')?.hidden && document.getElementById('paso')) { p.classList.remove('on'); return; } const h = document.documentElement.scrollHeight - innerHeight, y = scrollY / Math.max(1, h); p.classList.toggle('on', y > .42 && y < .96 && !document.getElementById('barraM')?.classList?.contains('on')); };
+    addEventListener('scroll', mira, { passive: true }); setTimeout(mira, 600);
+    const cierra = () => { abierta = true; p.classList.remove('on'); try { sessionStorage.setItem('tf-puerta', '1'); } catch (e) {} };
+    p.querySelector('.cx').addEventListener('click', cierra);
+    p.querySelector('.btn').addEventListener('click', e => { cierra(); if (p.dataset.flujo) { e.preventDefault(); abrePaso(p.dataset.flujo); } });
+    document.addEventListener('submit', cierra, true); document.addEventListener('click', e => { if (e.target.closest('[data-flujo]')) cierra(); }, true);
+  })();
+  /* el vídeo de la comunidad (Vimeo), desde la portada */
+  (() => { const d = $('#videoD'), f = $('#videoF'); if (!d) return; const cierra = () => { d.close(); f.src = ''; }; $('#verV')?.addEventListener('click', () => { f.src = 'https://player.vimeo.com/video/507989553?autoplay=1&dnt=1&color=F2B233'; d.showModal(); }); $('#videoX').addEventListener('click', cierra); d.addEventListener('click', e => { if (e.target === d) cierra(); }); d.addEventListener('cancel', () => { f.src = ''; }); })();
   /* Lo que se mueve: el correo mensual, desde el pie */
   (() => { const f = document.getElementById('carta'); if (!f) return; f.addEventListener('submit', e => { e.preventDefault(); const er = document.getElementById('cartaE'), c = document.getElementById('c-correo').value.trim(); if (!/^\S+@\S+\.\S+$/.test(c)) { er.textContent = 'Escribe un correo válido.'; return; } if (!document.getElementById('c-boletin').checked) { er.textContent = 'Marca la casilla para que podamos escribirte.'; return; } er.textContent = ''; window.TF?.enviar?.('boletin', window.TF?.leer?.(f)); f.querySelector('.campos').hidden = true; f.querySelector('.ok').hidden = true; document.getElementById('cartaOk').hidden = false; }); })();
   /* La Frontera: entrar con un enlace al correo */
