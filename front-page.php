@@ -512,7 +512,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const pinta = new Map(), ro = new ResizeObserver(es => es.forEach(e => { if (e.contentRect.width > 0) pinta.get(e.target)?.(); }));
   const vigila = (cv, fn) => { pinta.set(cv, fn); ro.observe(cv); };
   vigila(document.getElementById('girasol'), drawGirasol); vigila(sp, drawSpiral);
-  { const cv = document.getElementById('girH'); if (cv) vigila(cv, () => { const [g, w, h] = setup(cv); symbol(g, w * .8, h * .88, Math.max(w, h) * .3, 200, '#FFFBF2', '#F5EEDF', rng(90), [0, 0, w, h]); }); }
+  { const cv = document.getElementById('girH'); if (cv) vigila(cv, () => { const [g, w, h] = setup(cv); symbol(g, w * .78, h * .72, Math.max(w, h) * .27, 200, '#FFFBF2', '#F5EEDF', rng(90), [0, 0, w, h]); }); }
   document.querySelectorAll('.pw canvas').forEach(cv => vigila(cv, () => drawPepita(cv)));
   /* giro del girasol: ritmo natural y un impulso de alegría al enviar */
   let ang = 0, boost = 0, tS = 0, sOn = false, running = false;

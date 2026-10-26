@@ -69,7 +69,8 @@ dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;borde
 /* ---------- 2 · tres perfiles ---------- */
 .tres{position:relative;display:flex;gap:6px;height:min(76vh,700px);border-radius:6px;overflow:hidden;background:var(--tinta)}
 .perfil{position:relative;flex:1;min-width:0;overflow:hidden;text-align:left;transition:flex .8s var(--ease),height .8s var(--ease)}
-.perfil img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
+.perfil img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%;transition:transform 1.4s var(--ease)}
+.perfil .luz.fondo{position:absolute;inset:0;border-radius:0}
 .tres:not(.abierto) .perfil:hover{flex:1.35}
 .tres:not(.abierto) .perfil:hover img{transform:scale(1.04)}
 .perfil::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,12,24,0) 45%,rgba(15,12,24,.75))}
@@ -103,6 +104,8 @@ dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;borde
 .ir .ft{aspect-ratio:4/3;overflow:hidden;background:var(--teja)}
 .ir .ft img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
 .ir .ft .luz{width:100%;height:100%;border-radius:0}
+.ir .ft .glifo{position:absolute;right:7%;bottom:8%;width:24%;height:auto;color:#FFFBF2;opacity:.96;filter:drop-shadow(0 6px 16px rgba(31,27,45,.18));transition:transform .6s var(--ease)}
+.ir:hover .ft .glifo{transform:translateY(-4px)}
 .ir:hover .ft img{transform:scale(1.03)}
 .ir .tx{padding:clamp(20px,2.4vw,30px)}
 .ir h3{font-size:clamp(28px,2.6vw,40px);line-height:1;letter-spacing:-.035em}
@@ -134,16 +137,15 @@ dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;borde
 #ciudad .abre,#ciudad .ciuM{position:relative;z-index:1}
 #ciudad .abre{box-shadow:0 30px 60px rgba(31,27,45,.25)}
 @keyframes deriva{from{transform:translate(0,0) rotate(0deg)}to{transform:translate(2.5%,-1.5%) rotate(3deg)}}
-/* la lupa: acerca el mapa a Andalucía para que Granada y Jérez se puedan pinchar */
-.globo.cerca{animation:none;transform:scale(2.2);transform-origin:52% 41%;transition:transform .7s var(--ease)}
-.globo.cerca .pun{font-size:7.5px;text-shadow:0 0 2px var(--papel),0 0 2px var(--papel),0 0 3px var(--papel)}
-.globo.cerca .pun canvas{width:12px;height:12px}
-.globo.cerca .pun.sede canvas{width:15px;height:15px}
-.globo.cerca .pun span{left:calc(100% + 3px)}
-.globo.cerca .pun.izq span{left:auto;right:calc(100% + 3px)}
-.globo.cerca .pun.arr span{right:calc(50% - 4px);bottom:calc(100% - 2px)}
-.lupa{position:absolute;z-index:3;left:clamp(8px,2vw,24px);bottom:clamp(8px,2vw,24px);display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:var(--papel);color:var(--tinta);font-size:14px;box-shadow:0 10px 24px rgba(31,27,45,.18)}
-.lupa svg{width:16px;height:16px}
+/* el mapa: se acerca con la rueda, los botones o doble clic, y se arrastra; las ciudades no cambian de tamaño */
+.globo{--z:1;--tx:0px;--ty:0px;touch-action:none}
+.globo.cerca{animation:none;transform:translate(var(--tx),var(--ty)) scale(var(--z));transform-origin:50% 50%;cursor:grab}
+.globo.cerca.arrastra{cursor:grabbing;transition:none}
+.globo.cerca .pun{scale:calc(1 / var(--z))}
+.globo.cerca .pun canvas{transition:none}
+.lupa{position:absolute;z-index:3;left:clamp(8px,2vw,24px);bottom:clamp(8px,2vw,24px);display:flex;gap:6px}
+.lupa button{width:40px;height:40px;border-radius:50%;background:var(--papel);color:var(--tinta);font:500 20px/1 var(--text);box-shadow:0 10px 24px rgba(31,27,45,.18)}
+.lupa button:disabled{opacity:.4}
 #ciudad .donde{position:relative}
 @media (max-width:1000px){.lupa{display:none}}
 @media (max-width:1000px){#ciudad .donde{grid-template-columns:minmax(0,1fr)}#ciudad .globo{max-width:none;width:124%;margin:0 -12% -26%}}
@@ -486,6 +488,12 @@ dialog.verP::backdrop{background:#0F0C18}
 .silL.orilla{--L:radial-gradient(70% 70% at 14% 80%,#2F4FA8 0%,#5B6FBF 30%,rgba(91,111,191,0) 66%),radial-gradient(60% 60% at 86% 20%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(120deg,#CDCFE6 0%,#E9D7C8 55%,#F2B233 100%)}
 .silL.noche{--L:radial-gradient(60% 60% at 50% 30%,#CDCFE6 0%,#7B6FB5 45%,#2F4FA8 100%)}
 .silL.amanecer{--L:radial-gradient(70% 70% at 88% 78%,#F2B233 0%,#E2592A 36%,rgba(226,89,42,0) 68%),linear-gradient(135deg,#D9D5E2 0%,#E6B79C 50%,#F2B233 100%)}
+.silL.tarde{--L:radial-gradient(60% 60% at 70% 30%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(160deg,#6A4C93 0%,#A86A7C 55%,#E6B79C 100%)}
+.silL.mar{--L:radial-gradient(60% 60% at 30% 30%,#CDCFE6 0%,rgba(205,207,230,0) 60%),linear-gradient(160deg,#2F4FA8 0%,#5B6FBF 55%,#CDCFE6 100%)}
+.silL.brasa{--L:radial-gradient(60% 60% at 50% 20%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(170deg,#8E2238 0%,#E2592A 60%,#F2B233 100%)}
+.silL.trigo{--L:radial-gradient(60% 60% at 40% 30%,#FFFBF2 0%,rgba(255,251,242,0) 55%),linear-gradient(160deg,#F2B233 0%,#E6B79C 55%,#CDCFE6 100%)}
+.luz.tarde{--L:radial-gradient(60% 60% at 80% 20%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(160deg,#6A4C93 0%,#A86A7C 55%,#E6B79C 100%)}
+.luz.brasa{background:#8E2238;--L:radial-gradient(60% 60% at 70% 30%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(170deg,#8E2238 0%,#E2592A 60%,#F2B233 100%)}
 @media (prefers-reduced-motion:reduce){.luz::before,.silL i{animation:none}}
 @media (prefers-reduced-motion:reduce){ *{transition:none!important;animation:none!important} .comp .st{position:relative;height:auto;padding-block:120px} .comp li h3{opacity:1} .comp li p{max-height:none;opacity:1;margin-top:12px} .comp .firma{opacity:1;pointer-events:auto} }
 .lf{display:inline-grid;place-items:center;width:42px;height:42px;margin-left:-14px;border-radius:50%;color:var(--lfc,#1F1B2D);transition:background-color .2s,transform .3s}
@@ -581,9 +589,9 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <section class="sec in" id="encuentrate" style="padding-top:0" data-tf-sec="encuentrate">
     <div class="sec-h"><h2 data-tf="t77e400e1ea"><?php tf_t('t77e400e1ea'); ?></h2></div>
     <div class="enc">
-      <a class="ir" href="#ciudad"><div class="ft"><div class="luz cruce" aria-hidden="true"></div></div><div class="tx"><h3 data-tf="t1d32738558"><?php tf_t('t1d32738558'); ?></h3><p data-tf="te06400a63f"><?php tf_t('te06400a63f'); ?></p></div></a>
-      <a class="ir" href="#anual"><div class="ft"><div class="luz amanecer" aria-hidden="true"></div></div><div class="tx"><h3 data-tf="t5339a3fd5d"><?php tf_t('t5339a3fd5d'); ?></h3><p data-tf="tef1552045d"><?php tf_t('tef1552045d'); ?></p></div></a>
-      <a class="ir" href="#frontera"><div class="ft"><div class="luz orillas" aria-hidden="true"></div></div><div class="tx"><h3 data-tf="tc7871d1ef2"><?php tf_t('tc7871d1ef2'); ?></h3><p data-tf="t7678dae477"><?php tf_t('t7678dae477'); ?></p></div></a>
+      <a class="ir" href="#ciudad"><div class="ft"><div class="luz cruce" aria-hidden="true"><svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 44c-7-9-14-16-14-24a14 14 0 0 1 28 0c0 8-7 15-14 24z" fill="currentColor"/><circle cx="24" cy="20" r="5.5" fill="#1F1B2D" opacity=".28"/></svg></div></div><div class="tx"><h3 data-tf="t1d32738558"><?php tf_t('t1d32738558'); ?></h3><p data-tf="te06400a63f"><?php tf_t('te06400a63f'); ?></p></div></a>
+      <a class="ir" href="#anual"><div class="ft"><div class="luz amanecer" aria-hidden="true"><svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 42S6 30 6 17a9.5 9.5 0 0 1 18-4 9.5 9.5 0 0 1 18 4c0 13-18 25-18 25z" fill="currentColor"/></svg></div></div><div class="tx"><h3 data-tf="t5339a3fd5d"><?php tf_t('t5339a3fd5d'); ?></h3><p data-tf="tef1552045d"><?php tf_t('tef1552045d'); ?></p></div></a>
+      <a class="ir" href="#frontera"><div class="ft"><div class="luz orillas" aria-hidden="true"><svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="currentColor" opacity=".55"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="currentColor"/></svg></div></div><div class="tx"><h3 data-tf="tc7871d1ef2"><?php tf_t('tc7871d1ef2'); ?></h3><p data-tf="t7678dae477"><?php tf_t('t7678dae477'); ?></p></div></a>
     </div>
   </section>
 
@@ -598,7 +606,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     <div class="donde">
       <div class="globo" id="mapa"><canvas class="mar" id="mar" aria-hidden="true"></canvas><img src="<?php tf_img('ie346a3a2be', TF_U . '/img/globo.svg'); ?>" data-tf-img="ie346a3a2be" alt="Globo terráqueo del revés, con España y el norte de Marruecos a los dos lados del Estrecho."></div>
       <div class="panel" id="panel" aria-live="polite"></div>
-      <button class="lupa" type="button" id="lupa" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21M10.5 7.5v6M7.5 10.5h6"/></svg><span>Acercar</span></button>
+      <div class="lupa" id="lupa" role="group" aria-label="Zoom del mapa"><button type="button" data-z="1" aria-label="Acercar">+</button><button type="button" data-z="-1" aria-label="Alejar">−</button></div>
     </div>
   </section>
 
@@ -635,9 +643,9 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     <div class="hace">
       <h3 data-tf="t359555dd0a"><?php tf_t('t359555dd0a'); ?></h3>
       <ul>
-        <li><div class="luz ilu amanecer" aria-hidden="true"></div><b>Que vengan al encuentro</b><span>Viaje, comida y cama para quien no puede pagarlo. Sin preguntas incómodas.</span></li>
-        <li><div class="luz ilu cruce" aria-hidden="true"></div><b>Que haya comunidad en su ciudad</b><span>Un sitio donde quedar cada mes y alguien que acompaña.</span></li>
-        <li><div class="luz ilu fuego oscura" aria-hidden="true"></div><b>Que su voz llegue a quien decide</b><span>La investigación de Futuros, hecha con ellas y no sobre ellas.</span></li>
+        <li><div class="luz ilu tarde" aria-hidden="true"></div><b>Que vengan al encuentro</b><span>Viaje, comida y cama para quien no puede pagarlo. Sin preguntas incómodas.</span></li>
+        <li><div class="luz ilu paso" aria-hidden="true"></div><b>Que haya comunidad en su ciudad</b><span>Un sitio donde quedar cada mes y alguien que acompaña.</span></li>
+        <li><div class="luz ilu noche oscura" aria-hidden="true"></div><b>Que su voz llegue a quien decide</b><span>La investigación de Futuros, hecha con ellas y no sobre ellas.</span></li>
       </ul>
     </div>
     <?php tf_mecenas_datos(); ?>
@@ -721,7 +729,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 </div>
 <dialog class="entrar" id="entrar" aria-labelledby="entT"><div class="marco"><button class="x" type="button" data-cierra aria-label="Cerrar">×</button><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle class="punto" cx="41" cy="9" r="4.2" fill="#F2B233"/></svg><div id="entA"><h3 id="entT">Entra en La Frontera</h3><p data-tf="t9834a96e12"><?php tf_t('t9834a96e12'); ?></p><form id="entF" novalidate><input type="email" id="ent-correo" placeholder="Tu correo" autocomplete="email" aria-label="Tu correo"><label class="ok"><input type="checkbox" id="ent-ok"><span>He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>. Guardamos tu correo solo para avisarte cuando abra La Frontera.</span></label><p class="err" id="entE" role="alert"></p><button class="btn p" type="submit" data-tf="t17c8912d40"><?php tf_t('t17c8912d40'); ?></button></form><p class="nueva">¿Aún no eres parte? <a href="<?php echo esc_url(home_url('/')); ?>#descubre" data-cierra-entrar data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a></p></div><div id="entB" hidden><h3 data-tf="tb94238ba26"><?php tf_t('tb94238ba26'); ?></h3><p id="entBp"></p></div></div></dialog>
 <dialog class="video" id="videoD" aria-label="Vídeo de Transfronteriza"><button class="x" type="button" id="videoX" aria-label="Cerrar">×</button><div class="cuadroV"><iframe id="videoF" src="" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Vídeo de Transfronteriza"></iframe></div></dialog>
-<div class="puerta" id="puerta" data-flujo="descubre" role="complementary" aria-label="Súmate"><p data-tf="t580999d1d1"><?php tf_t('t580999d1d1'); ?></p><button class="btn" type="button" data-tf="td0bb103607"><?php tf_t('td0bb103607'); ?></button><button class="cx" type="button" aria-label="Cerrar">×</button></div>
+<div class="puerta" id="puerta" data-flujo="descubre" role="complementary" aria-label="Súmate"><p data-tf="tb24422f947"><?php tf_t('tb24422f947'); ?></p><button class="btn" type="button" data-tf="td0bb103607"><?php tf_t('td0bb103607'); ?></button><button class="cx" type="button" aria-label="Cerrar">×</button></div>
 <div class="barraM" id="barraM"><button class="btn g" type="button" id="donarM"></button></div>
 <div class="aviso" id="aviso" role="status"></div>
 
@@ -840,7 +848,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   /* ===== 2 · tres perfiles: con vídeo si lo hay; si no, retrato con su frase ===== */
   const PERF = TF.perfiles || [];
   const tres = $('#tres');
-  tres.insertAdjacentHTML('afterbegin', PERF.map((p, i) => `<button class="perfil" type="button" data-i="${i}" aria-label="Escuchar a ${p.n}"${EI(p.id, 'tf_perfil')}><img src="${p.f}" alt="${p.n}"${EF(p.id)}><p class="sub">${p.q.split(' ').map(w => `<span>${w}</span>`).join(' ')}</p><span class="nom"><span><b${ED(p.id, 'titulo')}>${p.n}</b><small${ED(p.id, 'rol')}>${p.r}</small></span><i>▶</i></span></button>`).join(''));
+  tres.insertAdjacentHTML('afterbegin', PERF.map((p, i) => `<button class="perfil" type="button" data-i="${i}" aria-label="Escuchar a ${p.n}"${EI(p.id, 'tf_perfil')}>${p.luz ? `<div class="luz ${p.luz} fondo" aria-hidden="true"></div>` : ''}<img src="${p.f}" alt="${p.n}"${EF(p.id)}><p class="sub">${p.q.split(' ').map(w => `<span>${w}</span>`).join(' ')}</p><span class="nom"><span><b${ED(p.id, 'titulo')}>${p.n}</b><small${ED(p.id, 'rol')}>${p.r}</small></span><i>▶</i></span></button>`).join(''));
   tres.insertAdjacentHTML('beforeend', '<div class="barraP"><b id="barraP"></b></div>');
   let tP = null, vivoP = null;
   const cierraP = () => { cancelAnimationFrame(tP); vivoP?.quita(); vivoP = null; tres.querySelectorAll('.vid').forEach(v => { v.pause(); v.remove(); }); tres.classList.remove('abierto'); tres.querySelectorAll('.perfil').forEach(p => { p.classList.remove('on'); p.querySelectorAll('.sub span').forEach(s => s.classList.remove('v')); }); $('#barraP').style.width = 0; };
@@ -929,8 +937,20 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   mapa.insertAdjacentHTML('afterend', `<div class="ciuM" role="group" aria-label="Elige una ciudad">${Object.entries(CIU).map(([k, c]) => `<button type="button" data-c="${k}">${esc(c.n)}</button>`).join('')}</div>`);
   const ciuM = mapa.nextElementSibling; ciuM.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { elige(b.dataset.c); if (innerWidth <= 1000) panel.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' }); } });
   if (Object.keys(CIU).length) elige(Object.keys(CIU)[0]);
-  /* la lupa: acercar y alejar el mapa; también con doble clic */
-  (() => { const l = $('#lupa'); if (!l) return; const pon = v => { mapa.classList.toggle('cerca', v); l.setAttribute('aria-pressed', v); l.querySelector('span').textContent = v ? 'Alejar' : 'Acercar'; }; l.addEventListener('click', () => pon(!mapa.classList.contains('cerca'))); mapa.addEventListener('dblclick', e => { if (!e.target.closest('.pun')) pon(!mapa.classList.contains('cerca')); }); })();
+  /* el mapa se maneja como un mapa: rueda o botones para acercar, arrastrar para moverse, doble clic para acercar ahí */
+  (() => { const l = $('#lupa'); if (!l) return; let z = 1, tx = 0, ty = 0, drag = null, movio = false;
+    const pinta = () => { mapa.classList.toggle('cerca', z > 1.001); mapa.style.setProperty('--z', z); mapa.style.setProperty('--tx', tx + 'px'); mapa.style.setProperty('--ty', ty + 'px'); l.querySelector('[data-z="1"]').disabled = z >= 4; l.querySelector('[data-z="-1"]').disabled = z <= 1; };
+    const limita = () => { const r = mapa.getBoundingClientRect(), w = r.width / z, h = r.height / z, mx = w * (z - 1) / 2, my = h * (z - 1) / 2; tx = Math.max(-mx, Math.min(mx, tx)); ty = Math.max(-my, Math.min(my, ty)); };
+    const zoomEn = (f, px, py) => { const r = mapa.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2, nz = Math.max(1, Math.min(4, z * f)), k = nz / z; tx = (tx - (px - cx)) * k + (px - cx); ty = (ty - (py - cy)) * k + (py - cy); z = nz; if (z <= 1.001) { z = 1; tx = ty = 0; } limita(); pinta(); };
+    l.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const r = mapa.getBoundingClientRect(); zoomEn(b.dataset.z === '1' ? 1.6 : 1 / 1.6, r.left + r.width / 2, r.top + r.height / 2); });
+    mapa.addEventListener('wheel', e => { e.preventDefault(); zoomEn(e.deltaY < 0 ? 1.18 : 1 / 1.18, e.clientX, e.clientY); }, { passive: false });
+    mapa.addEventListener('dblclick', e => { if (!e.target.closest('.pun')) zoomEn(z >= 4 ? 1 / 4 : 1.8, e.clientX, e.clientY); });
+    mapa.addEventListener('pointerdown', e => { if (z <= 1 || e.button) return; drag = [e.clientX - tx, e.clientY - ty]; movio = false; mapa.setPointerCapture(e.pointerId); mapa.classList.add('arrastra'); });
+    mapa.addEventListener('pointermove', e => { if (!drag) return; const nx = e.clientX - drag[0], ny = e.clientY - drag[1]; if (Math.abs(nx - tx) + Math.abs(ny - ty) > 2) movio = true; tx = nx; ty = ny; limita(); pinta(); });
+    const suelta = () => { drag = null; mapa.classList.remove('arrastra'); };
+    mapa.addEventListener('pointerup', suelta); mapa.addEventListener('pointercancel', suelta);
+    mapa.addEventListener('click', e => { if (movio) { e.stopPropagation(); e.preventDefault(); movio = false; } }, true);
+    pinta(); })();
 
   /* ===== 6 · La Frontera ===== */
   const HILOS = [
@@ -1037,7 +1057,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     /* cada pepita se dibuja una vez, en gris y en color, y luego solo se mueve */
     const sprite = (col, rad, sem) => { const s = Math.ceil(rad * 2.8), c = document.createElement('canvas'); c.width = c.height = Math.max(1, Math.ceil(s * DPR)); const x = c.getContext('2d'); x.setTransform(DPR, 0, 0, DPR, 0, 0); seedAt(x, s / 2, s / 2, rad, 0, col, rng(sem)); return { c, s }; };
     const pon = (sp, x, y, a, al) => { if (al <= .01) return; g.save(); g.globalAlpha = al; g.translate(x, y); g.rotate(a); g.drawImage(sp.c, -sp.s / 2, -sp.s / 2, sp.s, sp.s); g.restore(); };
-    const nace = (q, dentro) => { q.x = dentro ? lerp(-W * .08, cx - R * .6, q.r()) : -W * (.03 + q.r() * .08); q.y0 = .06 + q.r() * .88; q.a0 = q.r() * TAU; q.sp = (.55 + q.r() * .9) * (q.r() < .5 ? -1 : 1); q.v = W / 17 * (.8 + q.r() * .45); q.ph = q.r() * TAU; q.fue = q.r() < .18; q.lado = q.r() < .5 ? -1 : 1; q.d = .3 + q.r() * .65; };
+    const nace = (q, dentro) => { q.x = dentro ? lerp(-W * .08, cx - R * .6, q.r()) : -W * (.03 + q.r() * .08); q.y0 = .06 + q.r() * .88; q.a0 = q.r() * TAU; q.sp = (.55 + q.r() * .9) * (q.r() < .5 ? -1 : 1); q.v = W / 22 * (.85 + q.r() * .3); q.ph = q.r() * TAU; q.fue = false; q.lado = q.r() < .5 ? -1 : 1; q.d = .3 + q.r() * .65; };
     const prepara = () => {
       [g, W, H] = setup(cv); if (!W) return;
       const ult = document.querySelector('#compLista li:last-child'), bc = cv.getBoundingClientRect(), bu = ult && ult.getBoundingClientRect(), cu = bu ? bu.left + bu.width / 2 - bc.left : 0;
@@ -1057,7 +1077,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
         q.x += q.v * dt; const u = q.x / fin;
         /* cuatro etapas, una por columna: dispersas y grises · se juntan · se ordenan y se inclinan · florecen */
         const dis = 1 - smooth(.2, .5, u), col = smooth(.44, .74, u), ll = smooth(.8, 1, u), hum = smooth(.5, .72, u) * (1 - smooth(.74, .9, u));
-        let y = lerp(cy + (q.y0 - .5) * H * lerp(.4, .24, hum), q.y0 * H, dis) + Math.sin(T * 1.1 + q.ph) * H * (.045 * dis + .008) + hum * H * .07;
+        let y = lerp(cy + (q.y0 - .5) * H * lerp(.4, .24, hum), lerp(.1, .9, q.y0) * H, dis) + Math.sin(T * .8 + q.ph) * H * (.028 * dis + .006) + hum * H * .05; y = Math.max(RAD * q.z * 1.6, Math.min(H - RAD * q.z * 1.6, y));
         let a = lerp(Math.sin(T * .7 + q.ph) * .25, q.a0 + T * q.sp, dis), x = q.x, al = 1;
         if (q.fue) { /* algunas rodean el girasol y siguen hasta salir */
           const yb = cy + q.lado * (R * 1.12 + (q.y0 - .5) * R * .5); y = lerp(y, yb, ll); if (x > W + 30) nace(q);
@@ -1077,8 +1097,6 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     };
     let t0 = 0; const bucle = t => { const dt = t0 ? Math.min(.05, (t - t0) / 1000) : 0; t0 = t; T += dt; dibuja(dt); raf = enVista ? requestAnimationFrame(bucle) : (t0 = 0); };
     vigila(cv, prepara);
-    cv.addEventListener('pointermove', e => { const b = cv.getBoundingClientRect(); pun = [e.clientX - b.left, e.clientY - b.top]; if (reduce) dibuja(); });
-    cv.addEventListener('pointerleave', () => { pun = null; if (reduce) dibuja(); });
     if (!reduce) new IntersectionObserver(es => { enVista = es[0].isIntersecting; if (enVista && !raf) raf = requestAnimationFrame(bucle); }, { rootMargin: '80px 0px' }).observe(cv);
   /* la firma: nombre y correo, y tu pepita entra en el girasol */
     const fm = $('#firma'), er = $('#firmaE');

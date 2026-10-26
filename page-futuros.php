@@ -57,9 +57,10 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 /* la lámina de Futuros: papel con grano y una luz cálida que respira, dentro del fondo de tinta */
 .open .lamina{position:absolute;left:var(--gut);right:var(--gut);top:calc(var(--hh) + 14px);bottom:14px;z-index:1;border-radius:8px;overflow:hidden;background:#DDD6DF;isolation:isolate}
 .open .lamina::before{content:"";position:absolute;inset:-12%;background:radial-gradient(70% 70% at 88% 78%,#F2B233 0%,#E2592A 36%,rgba(226,89,42,0) 68%),radial-gradient(60% 60% at 12% 18%,#CDCFE6 0%,rgba(205,207,230,0) 62%),linear-gradient(135deg,#D9D5E2 0%,#E6B79C 50%,#F2B233 100%);animation:respira 18s ease-in-out infinite alternate}
-.open .lamina::after{content:"";position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .1 0 0 0 0 .2 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");background-size:300px;mix-blend-mode:multiply;opacity:.7}
+.open .lamina::after{content:"";position:absolute;inset:-300px 0 0 -300px;animation:arena 16s linear infinite;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .1 0 0 0 0 .2 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");background-size:300px;mix-blend-mode:multiply;opacity:.7}
 .open .lamina canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1}
 @keyframes respira{from{transform:translate(0,0) scale(1)}to{transform:translate(-3%,2%) scale(1.08)}}
+@keyframes arena{from{transform:translate(0,0)}to{transform:translate(300px,300px)}}
 .open .t{position:absolute;left:calc(var(--gut) + clamp(24px,4vw,64px));right:calc(var(--gut) + clamp(24px,4vw,64px));bottom:clamp(44px,6vw,90px);padding-bottom:0;width:auto;color:var(--tinta)}
 .open p{color:rgba(31,27,45,.78)}
 
@@ -86,8 +87,14 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .silL.orilla{--L:radial-gradient(70% 70% at 14% 80%,#2F4FA8 0%,#5B6FBF 30%,rgba(91,111,191,0) 66%),radial-gradient(60% 60% at 86% 20%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(120deg,#CDCFE6 0%,#E9D7C8 55%,#F2B233 100%)}
 .silL.noche{--L:radial-gradient(60% 60% at 50% 30%,#CDCFE6 0%,#7B6FB5 45%,#2F4FA8 100%)}
 .silL.amanecer{--L:radial-gradient(70% 70% at 88% 78%,#F2B233 0%,#E2592A 36%,rgba(226,89,42,0) 68%),linear-gradient(135deg,#D9D5E2 0%,#E6B79C 50%,#F2B233 100%)}
+.silL.tarde{--L:radial-gradient(60% 60% at 70% 30%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(160deg,#6A4C93 0%,#A86A7C 55%,#E6B79C 100%)}
+.silL.mar{--L:radial-gradient(60% 60% at 30% 30%,#CDCFE6 0%,rgba(205,207,230,0) 60%),linear-gradient(160deg,#2F4FA8 0%,#5B6FBF 55%,#CDCFE6 100%)}
+.silL.brasa{--L:radial-gradient(60% 60% at 50% 20%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(170deg,#8E2238 0%,#E2592A 60%,#F2B233 100%)}
+.silL.trigo{--L:radial-gradient(60% 60% at 40% 30%,#FFFBF2 0%,rgba(255,251,242,0) 55%),linear-gradient(160deg,#F2B233 0%,#E6B79C 55%,#CDCFE6 100%)}
+.luz.tarde{--L:radial-gradient(60% 60% at 80% 20%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(160deg,#6A4C93 0%,#A86A7C 55%,#E6B79C 100%)}
+.luz.brasa{background:#8E2238;--L:radial-gradient(60% 60% at 70% 30%,#F2B233 0%,rgba(242,178,51,0) 60%),linear-gradient(170deg,#8E2238 0%,#E2592A 60%,#F2B233 100%)}
 @media (prefers-reduced-motion:reduce){.luz::before,.silL i{animation:none}}
-@media (prefers-reduced-motion:reduce){.open .lamina::before{animation:none}}
+@media (prefers-reduced-motion:reduce){.open .lamina::before,.open .lamina::after{animation:none}}
 /* ---------- 2 · informe anual ---------- */
 .inf{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(40px,7vw,120px);align-items:center}
 .libro{justify-self:center;perspective:1400px}
@@ -478,7 +485,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <article class="art" id="lArt"></article>
 </div>
 <dialog class="entrar" id="entrar" aria-labelledby="entT"><div class="marco"><button class="x" type="button" data-cierra aria-label="Cerrar">×</button><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle class="punto" cx="41" cy="9" r="4.2" fill="#F2B233"/></svg><div id="entA"><h3 id="entT">Entra en La Frontera</h3><p data-tf="t9834a96e12"><?php tf_t('t9834a96e12'); ?></p><form id="entF" novalidate><input type="email" id="ent-correo" placeholder="Tu correo" autocomplete="email" aria-label="Tu correo"><label class="ok"><input type="checkbox" id="ent-ok"><span>He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>. Guardamos tu correo solo para avisarte cuando abra La Frontera.</span></label><p class="err" id="entE" role="alert"></p><button class="btn p" type="submit" data-tf="t17c8912d40"><?php tf_t('t17c8912d40'); ?></button></form><p class="nueva">¿Aún no eres parte? <a href="<?php echo esc_url(home_url('/')); ?>#descubre" data-cierra-entrar data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a></p></div><div id="entB" hidden><h3 data-tf="tb94238ba26"><?php tf_t('tb94238ba26'); ?></h3><p id="entBp"></p></div></div></dialog>
-<div class="puerta" id="puerta" role="complementary" aria-label="Súmate"><p data-tf="t580999d1d1"><?php tf_t('t580999d1d1'); ?></p><a class="btn" href="<?php echo esc_url(home_url('/')); ?>#descubre" data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a><button class="cx" type="button" aria-label="Cerrar">×</button></div>
+<div class="puerta" id="puerta" role="complementary" aria-label="Súmate"><p data-tf="tb24422f947"><?php tf_t('tb24422f947'); ?></p><a class="btn" href="<?php echo esc_url(home_url('/')); ?>#descubre" data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a><button class="cx" type="button" aria-label="Cerrar">×</button></div>
 <div class="aviso" id="aviso" role="status"></div>
 
 <dialog class="perfil" id="perfil" aria-labelledby="pNombre">
@@ -554,7 +561,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   if (EC.informe) $('.inf:not(.obra)')?.remove();
 
   /* la portada del informe en marcha: el girasol blanco sobre la luz de fuego */
-  (() => { const cv = $('.cover .girC'); if (!cv) return; vigila(cv, () => { const [g, w, h] = setup(cv); symbol(g, w * .78, h * .86, Math.max(w, h) * .3, 200, '#FFFBF2', K.papel, rng(90), [0, 0, w, h]); }); })();
+  (() => { const cv = $('.cover .girC'); if (!cv) return; vigila(cv, () => { const [g, w, h] = setup(cv); symbol(g, w * .78, h * .72, Math.max(w, h) * .27, 200, '#FFFBF2', K.papel, rng(90), [0, 0, w, h]); }); })();
   /* 1 · la lámina: el girasol grande, de papel, cortado por la esquina */
   (() => { const cv = $('#girasolF'); if (!cv) return; vigila(cv, () => { const [g, w, h] = setup(cv); const R = Math.max(w, h) * .34; symbol(g, w * .86, h * .80, R, 420, '#FFFBF2', K.papel, rng(90), [0, 0, w, h]); }); })();
 
@@ -620,18 +627,18 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const cl = $('#consejoList');
   /* mientras se convoca: las cuatro plazas, con su tarjeta y su ficha, como tendrán las personas */
   const CO = [
-    ['luz:fuego', 'Una joven transfronteriza', 'Plaza por cubrir', 'Entre 18 y 30 años, de la comunidad. Alguien que haya crecido entre países y quiera velar por que Futuros hable con la voz de su generación, y no sobre ella. Una reunión al trimestre y mucha lectura. Si eres tú, escríbenos a hola@transfronteriza.net.'],
-    ['luz:orilla', 'Una investigadora', 'Plaza por cubrir', 'De una universidad o un centro de estudios, en migraciones, educación, empleo, identidad o territorio. Su papel: cuidar el rigor de los datos y de las fuentes del informe y de los papers. Escríbenos a hola@transfronteriza.net.'],
-    ['luz:noche', 'Una persona de la comunidad', 'Plaza por cubrir', 'Una madre, un profesor, alguien de una asociación de barrio: quien conozca la vida transfronteriza desde dentro y pueda decirnos si lo que escribimos se parece a lo que pasa. Escríbenos a hola@transfronteriza.net.'],
-    ['luz:amanecer', 'Una persona de las instituciones', 'Plaza por cubrir', 'De la administración pública o de una fundación. Para que lo que proponemos llegue a quien decide y vuelva con respuesta. Escríbenos a hola@transfronteriza.net.']
+    ['luz:brasa', 'Una joven transfronteriza', '', 'Entre 18 y 30 años, de la comunidad. Alguien que haya crecido entre países y quiera velar por que Futuros hable con la voz de su generación, y no sobre ella. Una reunión al trimestre y mucha lectura. Si eres tú, escríbenos a hola@transfronteriza.net.'],
+    ['luz:mar', 'Una investigadora', '', 'De una universidad o un centro de estudios, en migraciones, educación, empleo, identidad o territorio. Su papel: cuidar el rigor de los datos y de las fuentes del informe y de los papers. Escríbenos a hola@transfronteriza.net.'],
+    ['luz:tarde', 'Una persona de la comunidad', '', 'Una madre, un profesor, alguien de una asociación de barrio: quien conozca la vida transfronteriza desde dentro y pueda decirnos si lo que escribimos se parece a lo que pasa. Escríbenos a hola@transfronteriza.net.'],
+    ['luz:trigo', 'Una persona de las instituciones', '', 'De la administración pública o de una fundación. Para que lo que proponemos llegue a quien decide y vuelva con respuesta. Escríbenos a hola@transfronteriza.net.']
   ];
   const CC = EC.consejo ? CO : C, foto = f => f;
-  cl.innerHTML = CC.map(([f, n, r, b, id], i) => `<li${EI(id, 'tf_persona')}${EC.consejo ? ' class="obra"' : ''}><button class="mb" type="button" data-i="${i}" aria-haspopup="dialog"><div class="ft"${EF(id)}>${f.startsWith('luz:') ? `<div class="silL ${f.slice(4)}" aria-hidden="true"><i></i></div>` : `<img src="${foto(f)}" alt="${n}" loading="lazy">`}</div><h3><canvas class="pep" data-s="${i}" aria-hidden="true"></canvas><span${ED(id, 'titulo')}>${n}</span></h3><p${r.includes('. ') ? '' : ED(id, 'cargo')}>${r.split('. ').pop()}</p></button></li>`).join('');
+  cl.innerHTML = CC.map(([f, n, r, b, id], i) => `<li${EI(id, 'tf_persona')}${EC.consejo ? ' class="obra"' : ''}><button class="mb" type="button" data-i="${i}" aria-haspopup="dialog"><div class="ft"${EF(id)}>${f.startsWith('luz:') ? `<div class="silL ${f.slice(4)}" aria-hidden="true"><i></i></div>` : `<img src="${foto(f)}" alt="${n}" loading="lazy">`}</div><h3><canvas class="pep" data-s="${i}" aria-hidden="true"></canvas><span${ED(id, 'titulo')}>${n}</span></h3>${r ? `<p${r.includes('. ') ? '' : ED(id, 'cargo')}>${r.split('. ').pop()}</p>` : ''}</button></li>`).join('');
   cl.querySelectorAll('.pep').forEach(cv => vigila(cv, () => pepBlanca(cv, +cv.dataset.s)));
   const dlg = $('#perfil'), pPep = $('#pPep');
   let cur = 0;
   dlg.classList.toggle('obra', EC.consejo);
-  const show = i => { cur = (i + CC.length) % CC.length; const [f, n, r, b] = CC[cur]; const lz = f.startsWith('luz:'); $('#pFoto').hidden = lz; $('#pLuz').hidden = !lz; if (lz) $('#pLuz').className = 'silL ' + f.slice(4); else { $('#pFoto').src = foto(f); $('#pFoto').alt = n; } $('#pNombre').textContent = n; $('#pRol').textContent = r; $('#pBio').textContent = b; $('#pNum').textContent = `${cur + 1} de ${CC.length}`; requestAnimationFrame(() => pepBlanca(pPep, cur)); };
+  const show = i => { cur = (i + CC.length) % CC.length; const [f, n, r, b] = CC[cur]; const lz = f.startsWith('luz:'); $('#pFoto').hidden = lz; $('#pLuz').hidden = !lz; if (lz) $('#pLuz').className = 'silL ' + f.slice(4); else { $('#pFoto').src = foto(f); $('#pFoto').alt = n; } $('#pNombre').textContent = n; $('#pRol').textContent = r; $('#pRol').hidden = !r; $('#pBio').textContent = b; $('#pNum').textContent = `${cur + 1} de ${CC.length}`; requestAnimationFrame(() => pepBlanca(pPep, cur)); };
   cl.addEventListener('click', e => { const b = e.target.closest('.mb[data-i]'); if (!b) return; show(+b.dataset.i); dlg.showModal(); });
   $('#pAnt').addEventListener('click', () => show(cur - 1));
   $('#pSig').addEventListener('click', () => show(cur + 1));
