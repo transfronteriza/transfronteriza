@@ -624,7 +624,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
         <div class="tierra" id="mapa"><img src="<?php tf_img('i7628e2efc3', TF_U . '/img/tierra.webp?v=3'); ?>" data-tf-img="i7628e2efc3" alt="Las dos orillas del Estrecho: la península ibérica y el norte de África." draggable="false"></div>
         <div class="panel" id="panel" aria-live="polite"></div>
         <div class="lupa" id="lupa" role="group" aria-label="Zoom del mapa"><button type="button" data-z="1" aria-label="Acercar">+</button><button type="button" data-z="-1" aria-label="Alejar">−</button></div>
-        <p class="pista" aria-hidden="true" data-tf="tb6d9a0d982"><?php tf_t('tb6d9a0d982'); ?></p>
+        <p class="pista" aria-hidden="true" data-tf="t9bae4c53bd"><?php tf_t('t9bae4c53bd'); ?></p>
       </div>
     </div>
   </section>
@@ -643,7 +643,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
       <div class="fronA">
         <canvas class="luz fronL" data-modo="orillas" data-colores="#2F4FA8,#F2B233,#E2A0A6" data-fondo="#EFE6DA" data-escala=".4" aria-hidden="true"></canvas>
         <div class="app" id="app">
-          <div class="cab"><span class="marca"><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle cx="41" cy="9" r="4.2" fill="#F2B233"/></svg>La Frontera</span><button class="vol" type="button" id="volver">← Hilos</button><span class="anon">Anónima<button class="toggle" type="button" role="switch" aria-checked="true" id="anon" aria-label="Escribir de forma anónima"></button></span></div>
+          <div class="cab"><span class="marca"><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle cx="41" cy="9" r="4.2" fill="#F2B233"/></svg>La Frontera</span><button class="vol" type="button" id="volver" aria-label="Volver a los hilos">←</button><span class="anon">Anónima<button class="toggle" type="button" role="switch" aria-checked="true" id="anon" aria-label="Escribir de forma anónima"></button></span></div>
           <div class="dentro">
             <nav class="salas" id="salas" aria-label="Salas"><button type="button" data-sala="todas" aria-pressed="true" data-tf="ta71771c483"><?php tf_t('ta71771c483'); ?></button><button type="button" data-sala="familia" aria-pressed="false" data-tf="t26f88a1ff4"><?php tf_t('t26f88a1ff4'); ?></button><button type="button" data-sala="identidad" aria-pressed="false" data-tf="t031f7396d8"><?php tf_t('t031f7396d8'); ?></button><button type="button" data-sala="idiomas" aria-pressed="false" data-tf="tbc515dfd0c"><?php tf_t('tbc515dfd0c'); ?></button><button type="button" data-sala="ciudades" aria-pressed="false" data-tf="t954ed18c37"><?php tf_t('t954ed18c37'); ?></button></nav>
             <div class="cuerpo" id="appCuerpo"></div>
@@ -1008,19 +1008,19 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     mapaG.addEventListener('pointerup', suelta); mapaG.addEventListener('pointercancel', suelta);
     mapaG.addEventListener('click', e => { if (movio) { e.stopPropagation(); e.preventDefault(); } movio = false; }, true);
     /* al abrir, el Estrecho en el centro: Europa arriba, África abajo, las dos orillas a la vista */
-    const centra = () => { const s = S(), ancho = mapaG.clientWidth > mapaG.clientHeight; tx = (50 - (ancho ? 46 : 44)) / 100 * s; ty = (50 - (ancho ? 46 : 48)) / 100 * s; limita(); pinta(); };
+    const centra = () => { const s = S(), ancho = mapaG.clientWidth > mapaG.clientHeight; tx = (50 - (ancho ? 45 : 43)) / 100 * s; ty = (50 - (ancho ? 51 : 50)) / 100 * s; limita(); pinta(); };
     new ResizeObserver(centra).observe(mapaG); centra(); })();
 
   /* ===== 6 · La Frontera ===== */
   const HILOS = [
-    { q: 'Anónima · 23 · Sevilla', s: 11, h: 'Mis padres no quieren ni conocer a mi novio', t: 'No sé ni por dónde empezar. Llevamos dos años, él es de Dos Hermanas de toda la vida y en mi casa ni lo nombran. Mi madre dice que es por mi bien. No quiero perderlos, pero tampoco quiero seguir quedando a escondidas como si tuviera quince años. ¿A alguien le ha pasado?', a: 48,
-      r: [['Anónima · Madrid', 21, 'Tía, te leo y me veo hace tres años. A mí me ayudó mi hermana mayor, que hizo de puente. Tardaron, no te voy a engañar, pero ahora mi madre le pregunta por él cada domingo. Hamdulillah.'], ['Salma · Málaga', 5, 'No tienes que decidirlo hoy. Si te apetece hablarlo con calma, escríbeme por privado.'], ['Anónima · 19', 33, 'Yo estoy igual ahora mismo. Pensaba que era la única.']] },
-    { q: 'Ibrahima · Almería', s: 2, h: '¿A alguien más le preguntan de dónde es «de verdad»?', t: 'Nací en Almería, en el Torrecárdenas. Y cada vez que lo digo viene la de siempre: «ya, pero ¿de dónde eres de verdad?». ¿Cómo lo lleváis?', a: 131,
-      r: [['Nour · Granada', 3, 'Yo ya contesto «de Granada, de verdad» y me quedo tan ancha.'], ['Anónima · 26', 17, 'Antes me cansaba muchísimo. Ahora depende del día: unas veces explico y otras paso. No le debo nada a nadie.']] },
-    { q: 'Anónima · 17 · Barcelona', s: 29, h: 'Me da vergüenza lo mal que hablo darija con mis abuelos', t: 'Lo entiendo casi todo, pero cuando hablo se ríen un poco y me corto. Al final llamo menos y luego me siento fatal, sobre todo con mi abuela.', a: 64,
-      r: [['Anónima · Tarragona', 8, 'Se ríen con cariño, de verdad. Mi abuela me corrige cada palabra y al final siempre me dice «mezyan». Es nuestro ratito del día. Tú sigue llamando.'], ['Hugo · Tarifa', 4, 'En Tarifa quedamos los jueves para hablar darija entre nosotros, sin nadie que te corrija. Vente cuando quieras.']] },
-    { q: 'Yasmín · Murcia', s: 14, h: 'Busco gente en Murcia para hacer comunidad', t: 'Somos tres y queremos empezar a quedar en octubre, un sábado por la tarde. ¿Alguien más por aquí?', a: 9,
-      r: [['Anónima · Cartagena', 41, 'Yo. Estoy en Cartagena, pero me acerco sin problema.']] }
+    { q: 'Anónima, 23, Sevilla', s: 11, h: 'Mis padres no quieren ni conocer a mi novio', t: 'No sé ni por dónde empezar. Llevamos dos años, él es de Dos Hermanas de toda la vida y en mi casa ni lo nombran. Mi madre dice que es por mi bien. No quiero perderlos, pero tampoco quiero seguir quedando a escondidas como si tuviera quince años. ¿A alguien le ha pasado?', a: 48,
+      r: [['Anónima, Madrid', 21, 'Tía, te leo y me veo hace tres años. A mí me ayudó mi hermana mayor, que hizo de puente. Tardaron, no te voy a engañar, pero ahora mi madre le pregunta por él cada domingo. Hamdulillah.'], ['Salma, Málaga', 5, 'No tienes que decidirlo hoy. Si te apetece hablarlo con calma, escríbeme por privado.'], ['Anónima, 19', 33, 'Yo estoy igual ahora mismo. Pensaba que era la única.']] },
+    { q: 'Ibrahima, Almería', s: 2, h: '¿A alguien más le preguntan de dónde es «de verdad»?', t: 'Nací en Almería, en el Torrecárdenas. Y cada vez que lo digo viene la de siempre: «ya, pero ¿de dónde eres de verdad?». ¿Cómo lo lleváis?', a: 131,
+      r: [['Nour, Granada', 3, 'Yo ya contesto «de Granada, de verdad» y me quedo tan ancha.'], ['Anónima, 26', 17, 'Antes me cansaba muchísimo. Ahora depende del día: unas veces explico y otras paso. No le debo nada a nadie.']] },
+    { q: 'Anónima, 17, Barcelona', s: 29, h: 'Me da vergüenza lo mal que hablo darija con mis abuelos', t: 'Lo entiendo casi todo, pero cuando hablo se ríen un poco y me corto. Al final llamo menos y luego me siento fatal, sobre todo con mi abuela.', a: 64,
+      r: [['Anónima, Tarragona', 8, 'Se ríen con cariño, de verdad. Mi abuela me corrige cada palabra y al final siempre me dice «mezyan». Es nuestro ratito del día. Tú sigue llamando.'], ['Hugo, Tarifa', 4, 'En Tarifa quedamos los jueves para hablar darija entre nosotros, sin nadie que te corrija. Vente cuando quieras.']] },
+    { q: 'Yasmín, Murcia', s: 14, h: 'Busco gente en Murcia para hacer comunidad', t: 'Somos tres y queremos empezar a quedar en octubre, un sábado por la tarde. ¿Alguien más por aquí?', a: 9,
+      r: [['Anónima, Cartagena', 41, 'Yo. Estoy en Cartagena, pero me acerco sin problema.']] }
   ];
   const app = $('#app'), cuerpo = $('#appCuerpo'), escf = $('#escribe');
   let hi = -1, anon = true, sala = 'todas';
@@ -1034,7 +1034,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   $('#volver').addEventListener('click', lista);
   $('#anon').addEventListener('click', e => { anon = !anon; e.currentTarget.setAttribute('aria-checked', anon); });
   const ta = $('#texto'); ta.addEventListener('input', () => { ta.style.height = 'auto'; ta.style.height = Math.min(120, ta.scrollHeight) + 'px'; });
-  escf.addEventListener('submit', e => { e.preventDefault(); const t = ta.value.trim(); if (!t || hi < 0) return; const r = [anon ? 'Anónima · tú' : 'Tú', 77, esc(t)]; HILOS[hi].r.push(r); cuerpo.insertAdjacentHTML('beforeend', `<div class="resp nueva">${quien(r[0], r[1])}<p>${r[2]}</p></div>`); pepsIn(cuerpo); ta.value = ''; ta.style.height = ''; cuerpo.scrollTop = cuerpo.scrollHeight; aviso('Tu respuesta solo se ve en esta demostración'); });
+  escf.addEventListener('submit', e => { e.preventDefault(); const t = ta.value.trim(); if (!t || hi < 0) return; const r = [anon ? 'Anónima (tú)' : 'Tú', 77, esc(t)]; HILOS[hi].r.push(r); cuerpo.insertAdjacentHTML('beforeend', `<div class="resp nueva">${quien(r[0], r[1])}<p>${r[2]}</p></div>`); pepsIn(cuerpo); ta.value = ''; ta.style.height = ''; cuerpo.scrollTop = cuerpo.scrollHeight; aviso('Tu respuesta solo se ve en esta demostración'); });
   lista();
 
   /* ===== 7 · Nuestra voz ===== */
@@ -1205,7 +1205,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 .mapaG{position:relative;aspect-ratio:16/9;border-radius:24px;overflow:hidden;background:#CDCFE6;isolation:isolate;touch-action:none;cursor:grab;user-select:none}
 .mapaG.arrastra{cursor:grabbing}
 .mapaG > .mar{position:absolute;inset:0;width:100%;height:100%;z-index:0;border-radius:0;box-shadow:none}
-.tierra{--z:1;--tx:0px;--ty:0px;position:absolute;left:50%;top:50%;height:125%;aspect-ratio:1/1;width:auto;translate:-50% -50%;transform:translate(var(--tx),var(--ty)) scale(var(--z));transform-origin:50% 50%;will-change:transform;z-index:1}
+.tierra{--z:1;--tx:0px;--ty:0px;position:absolute;left:50%;top:50%;height:112%;aspect-ratio:1/1;width:auto;translate:-50% -50%;transform:translate(var(--tx),var(--ty)) scale(var(--z));transform-origin:50% 50%;will-change:transform;z-index:1}
 .tierra > img{position:absolute;left:-41.67%;top:-31.94%;width:183.33%;height:166.67%;max-width:none;pointer-events:none}
 .tierra .pun{scale:calc(1 / var(--z));font-size:14px}
 .tierra .pun canvas{width:30px;height:30px;transition:transform .5s var(--ease)}
@@ -1230,12 +1230,12 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 .fronV li{display:flex;gap:12px;align-items:center}
 .fronV li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--oro);flex:none}
 .fronA{position:relative;padding:clamp(22px,3.4vw,52px)}
-.fronA .fronL{position:absolute;inset:0;width:100%;height:100%;border-radius:24px;z-index:0}
-.fronA .app{position:relative;z-index:1;border-radius:18px;height:min(600px,72vh);box-shadow:0 40px 90px rgba(31,27,45,.28)}
+.fronA .fronL{position:absolute;inset:0;width:100%;height:100%;border-radius:32px;z-index:0}
+.fronA .app{position:relative;z-index:1;border-radius:24px;overflow:hidden;height:min(600px,72vh);box-shadow:0 40px 90px rgba(31,27,45,.28)}
 .app .cab{background:var(--tinta);color:var(--papel);border-bottom:0;padding:14px 18px}
 .app .cab .marca{color:var(--papel)}
 .app .cab .marca .xf{color:var(--papel)}
-.app .cab .vol{color:rgba(245,238,223,.8)}
+.app .cab .vol{color:rgba(245,238,223,.9);font-size:22px;line-height:1;padding:0 6px}
 .app .cab .anon{color:rgba(245,238,223,.75)}
 .app .dentro{flex:1;min-height:0;display:grid;grid-template-columns:150px minmax(0,1fr)}
 .salas{display:flex;flex-direction:column;gap:4px;padding:14px 10px;background:#fff;border-right:1px solid var(--linea)}
@@ -1243,7 +1243,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 .salas button:hover{background:var(--papel)}
 .salas button[aria-pressed=true]{background:var(--papel);color:var(--tinta);font-weight:500}
 .app .cuerpo{min-height:0;overflow-y:auto;padding:12px;display:grid;gap:8px;align-content:start;background:var(--papel)}
-.app .hl,.app .post,.app .resp{border-radius:14px;background:#fff}
+.app .hl,.app .post,.app .resp{border-radius:18px;background:#fff}
 .app .hl:nth-child(even),.app .resp:nth-child(even),.app .resp:nth-child(odd){background:#fff}
 .app .resp{box-shadow:inset 0 0 0 1px var(--linea);background:transparent}
 .app .resp.nueva{background:#fff}
