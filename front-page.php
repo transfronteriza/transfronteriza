@@ -108,7 +108,7 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .com{color:var(--tinta)}
 .com .btn{background:var(--tinta);color:var(--papel)}
 .com::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(245,238,223,.28),rgba(245,238,223,0) 40%)}
-.cover{position:relative;z-index:2;margin:auto 0;align-self:center;width:clamp(200px,19vw,290px);aspect-ratio:3/4;border-radius:4px;overflow:hidden;background:#27223a;box-shadow:0 1px 0 rgba(245,238,223,.06) inset,0 22px 44px rgba(0,0,0,.45);transform:rotate(3deg);transition:transform .6s var(--ease),box-shadow .6s}
+.cover{position:relative;z-index:2;margin:auto 0;align-self:center;width:clamp(200px,19vw,290px);aspect-ratio:3/4;border-radius:4px;overflow:hidden;background:#27223a;box-shadow:0 1px 0 rgba(245,238,223,.06) inset,0 22px 44px rgba(0,0,0,.45);transform:rotate(3deg);transition:transform .6s var(--ease),box-shadow .6s;outline:1px solid transparent;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform}
 .fut:hover .cover,.fut:focus-visible .cover{transform:rotate(0deg) translateY(-8px);box-shadow:0 1px 0 rgba(245,238,223,.06) inset,0 30px 60px rgba(0,0,0,.55)}
 .cover > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .cover > .luz{position:absolute;inset:0;width:100%;height:100%;border-radius:0}
@@ -117,6 +117,9 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .cover .ct{position:absolute;inset:0;z-index:2;padding:clamp(16px,1.6vw,22px);display:flex;flex-direction:column;gap:10px;color:var(--papel)}
 .cover .ct span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.7}
 .cover .ct h4{font-size:clamp(20px,2vw,28px);line-height:1.04;max-width:11ch}
+.dos .borde{position:absolute;z-index:5;left:0;top:-2%;width:100%;height:104%;pointer-events:none;mix-blend-mode:screen;-webkit-mask:linear-gradient(90deg,transparent 41%,#000 48%,#000 52%,transparent 59%);mask:linear-gradient(90deg,transparent 41%,#000 48%,#000 52%,transparent 59%);animation:frontera 16s ease-in-out infinite alternate}
+@keyframes frontera{from{translate:-1.5% 0}to{translate:1.5% 0}}
+@keyframes fronteraV{from{translate:0 -1.5%}to{translate:0 1.5%}}
 .emblema{position:absolute;left:50%;top:50%;z-index:5;width:var(--em);aspect-ratio:1/1;translate:-50% -50%;pointer-events:none;perspective:900px}
 .emblema .sway{width:100%;height:100%;animation:bascula 9s ease-in-out infinite alternate}
 @keyframes bascula{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
@@ -215,6 +218,7 @@ dialog .x{position:absolute;top:10px;right:14px;z-index:2;width:40px;height:40px
   .cards,.cards.b{grid-template-columns:repeat(2,minmax(0,1fr))}
   .nums{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:48px}
   .dos{--em:clamp(150px,34vw,200px);grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+  .dos .borde{top:0;height:100%;left:-2%;width:104%;-webkit-mask:linear-gradient(180deg,transparent 43%,#000 48.5%,#000 51.5%,transparent 57%);mask:linear-gradient(180deg,transparent 43%,#000 48.5%,#000 51.5%,transparent 57%);animation-name:fronteraV}
   .lado{min-height:70vh;padding:clamp(28px,6vw,56px) var(--gut)}
   .com{padding-right:var(--gut)}
   .fut{padding-left:var(--gut);padding-top:calc(var(--em) / 2 + 28px)}
@@ -270,7 +274,7 @@ canvas.luz{display:block}
 .silL.noche{--L:radial-gradient(60% 60% at 50% 30%,#CDCFE6 0%,#7B6FB5 45%,#2F4FA8 100%)}
 .silL.amanecer{--L:radial-gradient(70% 70% at 88% 78%,#F2B233 0%,#E2592A 36%,rgba(226,89,42,0) 68%),linear-gradient(135deg,#D9D5E2 0%,#E6B79C 50%,#F2B233 100%)}
 @media (prefers-reduced-motion:reduce){.luz::before,.silL i{animation:none}}
-@media (prefers-reduced-motion:reduce){ .pc,.pw canvas,.emblema .sway,.cue svg{animation:none} .intro{height:auto} .stage{position:relative} }
+@media (prefers-reduced-motion:reduce){ .pc,.pw canvas,.emblema .sway,.cue svg,.dos .borde{animation:none} .intro{height:auto} .stage{position:relative} }
 .lf{display:inline-grid;place-items:center;width:42px;height:42px;margin-left:-14px;border-radius:50%;color:var(--lfc,#1F1B2D);transition:background-color .2s,transform .3s}
 .lf:hover{background:rgba(127,127,127,.12);transform:translateY(-1px)}
 .lf:hover{color:var(--lfh,#1F1B2D)}
@@ -378,7 +382,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <section class="dos" data-tf-sec="dos">
     <a class="lado com" id="comunidad" href="<?php echo esc_url(tf_pagina('comunidad')); ?>"><img src="<?php tf_img('i408711db45', TF_U . '/img/comunidad.jpg'); ?>" data-tf-img="i408711db45" loading="lazy" decoding="async" alt="Dos chicas de la comunidad, de espaldas, miran la montaña al atardecer."><div class="t"><h2 data-tf="t8f69233c0e"><?php tf_t('t8f69233c0e'); ?></h2><p data-tf="t2f4fd33425"><?php tf_t('t2f4fd33425'); ?></p><span class="btn">Conoce la comunidad</span></div></a>
     <a class="lado fut" id="futuros" href="<?php echo esc_url(tf_pagina('futuros')); ?>"><div class="t"><h2 data-tf="t96b03ea3c7"><?php tf_t('t96b03ea3c7'); ?></h2><p data-tf="tbc6bf077e8"><?php tf_t('tbc6bf077e8'); ?></p><span class="btn">Entra en Futuros</span></div><div class="cover"><canvas class="luz" data-modo="lamina" data-colores="#F2B233,#E2592A,#6A4C93" data-fondo="#1F1B2D" aria-hidden="true"></canvas><canvas id="girH" aria-hidden="true"></canvas><div class="ct"><h4 data-tf="t2d86fba811"><?php tf_t('t2d86fba811'); ?></h4></div></div></a>
-    <div class="emblema" aria-hidden="true"><div class="sway"><canvas id="girasol"></canvas></div></div>
+    <canvas class="luz borde" data-modo="orillas" data-colores="#F2B233,#E2592A,#2F4FA8" data-fondo="#1F1B2D" data-grano=".3" aria-hidden="true"></canvas>
   </section>
 
   <!-- 5 · Nos hacen posible -->
@@ -414,7 +418,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
             <p class="q" data-tf="t6daa87c535"><?php tf_t('t6daa87c535'); ?></p>
             <div class="chips"><label><input type="checkbox"><span>Encuentros</span></label><label><input type="checkbox"><span>Mi ciudad</span></label><label><input type="checkbox"><span>Formación</span></label><label><input type="checkbox"><span>Futuros</span></label><label><input type="checkbox"><span>Echar una mano</span></label></div>
             <label class="ok"><input type="checkbox" id="f-ok"><span>He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>. Transfronteriza usa estos datos solo para escribirte y contarte lo que hacemos; puedes pedir verlos o borrarlos en hola@transfronteriza.net. Si tienes menos de 14 años, rellénalo con tu madre, padre o tutor.</span></label>
-            <label class="ok"><input type="checkbox" id="f-boletin"><span>Quiero recibir <b>Lo que se mueve</b>: un correo al mes con lo que pasa en la comunidad. Te das de baja cuando quieras.</span></label>
+            <label class="ok"><input type="checkbox" id="f-boletin"><span>Quiero recibir el boletín.</span></label>
           </fieldset>
           <div class="done" id="done" hidden><h3 id="doneT">Gracias.</h3><p data-tf="te4b9f112b2"><?php tf_t('te4b9f112b2'); ?></p><div class="sig"><a class="btn p" href="comunidad.html#ciudad" data-tf="tffa488ce79"><?php tf_t('tffa488ce79'); ?></a><a class="btn l" href="comunidad.html#anual" data-tf="t200e445361"><?php tf_t('t200e445361'); ?></a></div></div>
           <p class="err" id="err" role="alert"></p>
@@ -426,11 +430,10 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 </main>
 
 <footer class="foot"><div class="in">
-  <form class="carta" id="carta" novalidate aria-label="Lo que se mueve">
-    <h3 data-tf="t66d206bf3d"><?php tf_t('t66d206bf3d'); ?></h3>
-    <p data-tf="t97bbea0f7d"><?php tf_t('t97bbea0f7d'); ?></p>
+  <form class="carta" id="carta" novalidate aria-label="Boletín">
+    <h3 data-tf="t67ba6b1c91"><?php tf_t('t67ba6b1c91'); ?></h3>
     <div class="campos"><input type="email" id="c-correo" placeholder="Tu correo" autocomplete="email" aria-label="Tu correo"><button class="btn" type="submit" data-tf="tb9147c5d9e"><?php tf_t('tb9147c5d9e'); ?></button></div>
-    <label class="ok"><input type="checkbox" id="c-boletin"><span>Sí, quiero recibirlo. He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>: solo usamos tu correo para esto y te das de baja en cada envío.</span></label>
+    <label class="ok"><input type="checkbox" id="c-boletin"><span>Acepto la <button type="button" data-legal="privacidad" data-tf="tc8f28f06dd"><?php tf_t('tc8f28f06dd'); ?></button>.</span></label>
     <p class="err" id="cartaE" role="alert"></p>
     <p class="hecho" id="cartaOk" hidden>Te hemos escrito. Confirma desde tu correo y listo.</p>
   </form>
@@ -514,8 +517,6 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   /* 3 · estrellas de la bandera europea */
   (document.querySelector('.stars') || {}).innerHTML = [17, 34, 51].map(y => { const x = 6.5; return `<polygon points="${Array.from({ length: 10 }, (_, j) => { const rr = j % 2 ? 1.75 : 4.3, b = j / 10 * TAU - Math.PI / 2; return `${(x + Math.cos(b) * rr).toFixed(2)},${(y + Math.sin(b) * rr).toFixed(2)}`; }).join(' ')}"/>`; }).join('');
 
-  /* 4 · el girasol en la costura */
-  const drawGirasol = () => { const cv = document.getElementById('girasol'), [g, w] = setup(cv); symbol(g, w / 2, w / 2, w * .47, 200, K.fuego, K.oro, rng(90)); };
 
   /* 6 · espiral que gira */
   const sp = document.getElementById('espiral');
@@ -523,7 +524,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   /* cada lienzo se dibuja cuando tiene tamaño (también si la página carga oculta) y al cambiar de tamaño */
   const pinta = new Map(), ro = new ResizeObserver(es => es.forEach(e => { if (e.contentRect.width > 0) pinta.get(e.target)?.(); }));
   const vigila = (cv, fn) => { pinta.set(cv, fn); ro.observe(cv); };
-  vigila(document.getElementById('girasol'), drawGirasol); vigila(sp, drawSpiral);
+  vigila(sp, drawSpiral);
   { const cv = document.getElementById('girH'); if (cv) vigila(cv, () => { const [g, w, h] = setup(cv); symbol(g, w * .78, h * .70, Math.max(w, h) * .27, 200, '#FFFBF2', '#F5EEDF', rng(90), [0, 0, w, h]); }); }
   document.querySelectorAll('.pw canvas').forEach(cv => vigila(cv, () => drawPepita(cv)));
   /* giro del girasol: ritmo natural y un impulso de alegría al enviar */
