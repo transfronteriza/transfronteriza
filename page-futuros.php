@@ -212,6 +212,7 @@ dialog::backdrop{background:rgba(10,8,18,.72);backdrop-filter:blur(4px);-webkit-
 .art h1{margin-top:clamp(28px,3.4vw,44px);font-size:clamp(38px,5.2vw,64px);line-height:1;letter-spacing:-.04em}
 .firma{display:flex;align-items:center;gap:14px;margin-top:26px;font-size:15.5px}
 .firma img{width:52px;height:52px;border-radius:50%;object-fit:cover;filter:grayscale(1)}
+.firma img.marcaF{filter:none;object-fit:contain;border-radius:0;background:none}
 .firma small{display:block;font-size:14px;opacity:.66}
 .art .lead{margin-top:clamp(32px,4vw,48px);font:400 calc(var(--fs) * 1.3)/1.45 var(--disp);letter-spacing:-.01em}
 .art .cuerpo{margin-top:26px;font-size:var(--fs);line-height:1.72}
@@ -349,7 +350,7 @@ dialog.entrar .ok button{color:#1F1B2D;text-decoration:underline;text-underline-
 @media (max-width:1000px){.lf span{display:none}}
 dialog.entrar{border:0;padding:0;border-radius:10px;background:#F5EEDF;color:#1F1B2D;overflow:auto;max-height:90vh;box-shadow:0 30px 90px rgba(0,0,0,.35)}
 dialog.entrar::backdrop{background:rgba(15,12,24,.6);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
-dialog.entrar .marco{position:relative;display:block;min-height:0;margin:14px;padding:clamp(26px,4vw,44px);border:1px solid rgba(31,27,45,.12);border-radius:6px}
+dialog.entrar .marco{position:relative;display:block;min-height:0;margin:14px;padding:clamp(26px,4vw,44px);border:1px solid rgba(31,27,45,.12);border-radius:18px}
 dialog.entrar .x{position:absolute;top:16px;right:16px;width:44px;height:44px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(31,27,45,.12);background:none;color:#1F1B2D;font-size:22px}
 dialog.entrar .btn{background:#1F1B2D;color:#F5EEDF}
 
@@ -626,7 +627,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     const au = p.informe || p.obra ? null : A[p.a], i = PP.indexOf(p), nx = p.informe ? PP[0] : PP[(i + 1) % PP.length];
     art.innerHTML = `<div class="ab${p.informe ? ' informe' : ''}">${p.luz ? luzCanvas(p.luz) : `<img src="${p.informe ? p.portada : p.banda}" alt="" loading="lazy" decoding="async">`}</div>
       <h1 id="lTit">${p.h}</h1>
-      <div class="firma">${au ? `<img src="${au[3]}" alt="">` : `<img src="<?php echo TF_U; ?>/logo/transfronteriza-simbolo-color.svg" alt="" style="filter:none;object-fit:contain">`}<div>${au ? au[0] : 'Transfronteriza'}<small>${au ? au[1] + ' · ' : ''}${p.d}</small></div></div>
+      <div class="firma">${au ? `<img src="${au[3]}" alt="">` : `<img class="marcaF" src="<?php echo TF_U; ?>/logo/girasol-color.svg" alt="">`}<div>${au ? au[0] : 'Transfronteriza'}<small>${au ? au[1] + ' · ' : ''}${p.d}</small></div></div>
       <p class="lead">${p.lead}</p>
       <div class="cuerpo">${(p.claves || []).map(c => bloque(['d', c[0], c[1]])).join('')}${p.html || (p.b || []).map(bloque).join('')}</div>
       ${p.obra ? `<div class="acts"><a class="btn g" href="#hablemos" data-cierra-lector>${p.informe ? 'Cuéntanoslo' : 'Quiero sumarme a este paper'}</a><a class="btn l" href="mailto:hola@transfronteriza.net">hola@transfronteriza.net</a></div>` : p.informe ? `<div class="acts"><a class="btn g" href="${INF.pdf || '#'}" download>Descargar el informe completo</a></div>` : `<div class="autora"><img src="${au[3]}" alt="${au[0]}"><div><h3>${au[0]}</h3><p class="r">${au[1]}</p><p class="b">${au[2]}</p></div></div>`}

@@ -170,7 +170,7 @@ dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;borde
 .panel{border-radius:6px;overflow:hidden;background:var(--papel)}
 .panel .pf{height:clamp(160px,24svh,230px);overflow:hidden;background:linear-gradient(160deg,var(--teja),var(--lino))}
 .panel .pf img{width:100%;height:100%;object-fit:cover;animation:aparece .6s var(--ease)}
-.panel .pf.sin{position:relative;background:linear-gradient(160deg,#E4B99A,var(--teja) 55%,var(--lino))}
+.panel .pf.sin{position:relative;background:linear-gradient(160deg,#F2B233,#E2592A 55%,#E2A0A6)}
 .panel .pf.sin::after{content:"";position:absolute;inset:0;background:var(--grano);background-size:200px;opacity:.5}
 .panel .pt{padding:clamp(20px,2.2vw,28px)}
 .panel h3{font-size:clamp(28px,2.6vw,38px);line-height:1}
@@ -916,7 +916,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     const ini = new Date(TF.encuentro.fecha), fin = new Date(ini.getTime() + 2 * 864e5), d = Math.ceil(Math.max(0, ini - Date.now()) / 864e5);
     const dia = f => f.getDate(), mes = f => f.toLocaleDateString('es-ES', { month: 'long' });
     const cuando = mes(ini) === mes(fin) ? `Del ${dia(ini)} al ${dia(fin)} de ${mes(fin)} de ${fin.getFullYear()}.` : `Del ${dia(ini)} de ${mes(ini)} al ${dia(fin)} de ${mes(fin)} de ${fin.getFullYear()}.`;
-    $('#cuenta').innerHTML = `<b>${cuando}</b> ${d > 1 ? `Faltan ${d} días.` : d === 1 ? 'Es mañana.' : 'Ya estamos allí.'}`;
+    { const cEl = $('#cuenta'); if (cEl) cEl.innerHTML = `<b>${cuando}</b>`; }
   };
   pintaCuenta();
 
@@ -985,11 +985,11 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     l.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const r = mapaG.getBoundingClientRect(); zoomEn(b.dataset.z === '1' ? 1.5 : 1 / 1.5, r.left + r.width / 2, r.top + r.height / 2); });
     mapaG.addEventListener('wheel', e => { e.preventDefault(); zoomEn(e.deltaY < 0 ? 1.15 : 1 / 1.15, e.clientX, e.clientY); }, { passive: false });
     mapaG.addEventListener('dblclick', e => { if (!e.target.closest('.pun,.panel,.lupa')) zoomEn(z >= 4 ? 1 / 4 : 1.7, e.clientX, e.clientY); });
-    mapaG.addEventListener('pointerdown', e => { if (e.button || e.target.closest('.panel,.lupa')) return; drag = [e.clientX - tx, e.clientY - ty]; movio = false; mapaG.setPointerCapture(e.pointerId); mapaG.classList.add('arrastra'); });
-    mapaG.addEventListener('pointermove', e => { if (!drag) return; const nx = e.clientX - drag[0], ny = e.clientY - drag[1]; if (Math.abs(nx - tx) + Math.abs(ny - ty) > 2) movio = true; tx = nx; ty = ny; limita(); pinta(); if (movio) mapaG.classList.add('tocado'); });
+    mapaG.addEventListener('pointerdown', e => { if (e.button || e.target.closest('.panel,.lupa')) return; drag = [e.clientX - tx, e.clientY - ty]; movio = false; });
+    mapaG.addEventListener('pointermove', e => { if (!drag) return; const nx = e.clientX - drag[0], ny = e.clientY - drag[1]; if (!movio && Math.abs(nx - tx) + Math.abs(ny - ty) > 4) { movio = true; mapaG.setPointerCapture(e.pointerId); mapaG.classList.add('arrastra', 'tocado'); } if (!movio) return; tx = nx; ty = ny; limita(); pinta(); });
     const suelta = () => { drag = null; mapaG.classList.remove('arrastra'); };
     mapaG.addEventListener('pointerup', suelta); mapaG.addEventListener('pointercancel', suelta);
-    mapaG.addEventListener('click', e => { if (movio) { e.stopPropagation(); e.preventDefault(); movio = false; } }, true);
+    mapaG.addEventListener('click', e => { if (movio) { e.stopPropagation(); e.preventDefault(); } movio = false; }, true);
     /* al abrir, el Estrecho en el centro: la tierra se desplaza para que Algeciras y Tánger queden a la vista */
     const centra = () => { const s = S(), ancho = mapaG.clientWidth > mapaG.clientHeight; tx = (50 - (ancho ? 57 : 53)) / 100 * s; ty = (50 - (ancho ? 40 : 42)) / 100 * s; limita(); pinta(); };
     new ResizeObserver(centra).observe(mapaG); centra(); })();
@@ -1225,7 +1225,13 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 .salas button{text-align:left;padding:9px 12px;border-radius:10px;font-size:14px;color:var(--tinta-2);transition:background-color .2s}
 .salas button:hover{background:var(--papel)}
 .salas button[aria-pressed=true]{background:var(--papel);color:var(--tinta);font-weight:500}
-.app .cuerpo{min-height:0;overflow-y:auto}
+.app .cuerpo{min-height:0;overflow-y:auto;padding:12px;display:grid;gap:8px;align-content:start;background:var(--papel)}
+.app .hl,.app .post,.app .resp{border-radius:14px;background:#fff}
+.app .hl:nth-child(even),.app .resp:nth-child(even),.app .resp:nth-child(odd){background:#fff}
+.app .resp{box-shadow:inset 0 0 0 1px var(--linea);background:transparent}
+.app .resp.nueva{background:#fff}
+.escribe{border-radius:0 0 18px 18px}
+.marco{border-radius:18px}
 .hl h4{font-size:19px}
 @media (max-width:1000px){
   .fron{grid-template-columns:minmax(0,1fr)}
