@@ -82,7 +82,7 @@ void main(){
     const P = { cols, bg: hex(cv.dataset.fondo || '#E9DFD6'), modo: MODOS[cv.dataset.modo] ?? 0, grano: +(cv.dataset.grano ?? .32), vel: +(cv.dataset.velocidad ?? 1), t0: Math.random() * 400 };
     const g2 = cv.getContext('2d');
     const dibuja = t => {
-      const { gl, u } = M, dpr = Math.min(1.5, devicePixelRatio || 1), w = Math.max(1, Math.round(cv.clientWidth * dpr * .85)), h = Math.max(1, Math.round(cv.clientHeight * dpr * .85));
+      const { gl, u } = M, dpr = Math.min(1.5, devicePixelRatio || 1), esc = +(cv.dataset.escala || (cv.clientWidth > 900 ? .5 : .8)), w = Math.max(1, Math.round(cv.clientWidth * dpr * esc)), h = Math.max(1, Math.round(cv.clientHeight * dpr * esc));
       if (cv.width !== w || cv.height !== h) { cv.width = w; cv.height = h; }
       if (M.cv.width !== w || M.cv.height !== h) { M.cv.width = w; M.cv.height = h; }
       gl.viewport(0, 0, w, h);
@@ -93,7 +93,7 @@ void main(){
     };
     cv._luz = dibuja; dibuja(0); if (!reduce) io.observe(cv);
   };
-  const loop = ts => { raf = 0; for (const cv of vivos) cv._luz(ts / 1000); if (vivos.size) raf = requestAnimationFrame(loop); };
+  let ult = 0; const loop = ts => { raf = 0; if (ts - ult >= 31) { ult = ts; for (const cv of vivos) cv._luz(ts / 1000); } if (vivos.size) raf = requestAnimationFrame(loop); };
   const arranca = () => document.querySelectorAll('canvas.luz:not([data-lista])').forEach(cv => { cv.dataset.lista = 1; prepara(cv); });
   document.readyState === 'loading' ? addEventListener('DOMContentLoaded', arranca) : arranca();
   window.Luz = { arranca };

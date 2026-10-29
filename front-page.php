@@ -93,7 +93,7 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .nums small{display:block;margin-top:10px;font-size:12.5px;color:var(--tinta-3)}
 
 /* ---------- 4 · comunidad | futuros ---------- */
-.dos{--em:clamp(180px,18vw,260px);position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:88vh;min-height:88svh;overflow:hidden}
+.dos{--em:0px;position:relative;display:grid;grid-template-columns:1fr 1fr;min-height:88vh;min-height:88svh;overflow:hidden}
 .lado{position:relative;overflow:hidden;display:flex;flex-direction:column;padding:clamp(28px,5vw,80px);color:var(--papel)}
 .com{padding-right:calc(var(--em) / 2 + 40px)}
 .fut{padding-left:calc(var(--em) / 2 + 40px);background:var(--tinta)}
@@ -217,7 +217,7 @@ dialog .x{position:absolute;top:10px;right:14px;z-index:2;width:40px;height:40px
 @media (max-width:1000px){
   .cards,.cards.b{grid-template-columns:repeat(2,minmax(0,1fr))}
   .nums{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:48px}
-  .dos{--em:clamp(150px,34vw,200px);grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+  .dos{--em:0px;grid-template-columns:1fr;grid-template-rows:1fr 1fr}
   .dos .borde{rotate:0deg;animation-name:fronteraV}
   .lado{min-height:70vh;padding:clamp(28px,6vw,56px) var(--gut)}
   .com{padding-right:var(--gut)}
@@ -382,7 +382,6 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <section class="dos" data-tf-sec="dos">
     <a class="lado com" id="comunidad" href="<?php echo esc_url(tf_pagina('comunidad')); ?>"><img src="<?php tf_img('i408711db45', TF_U . '/img/comunidad.jpg'); ?>" data-tf-img="i408711db45" loading="lazy" decoding="async" alt="Dos chicas de la comunidad, de espaldas, miran la montaña al atardecer."><div class="t"><h2 data-tf="t8f69233c0e"><?php tf_t('t8f69233c0e'); ?></h2><p data-tf="t2f4fd33425"><?php tf_t('t2f4fd33425'); ?></p><span class="btn">Conoce la comunidad</span></div></a>
     <a class="lado fut" id="futuros" href="<?php echo esc_url(tf_pagina('futuros')); ?>"><div class="t"><h2 data-tf="t96b03ea3c7"><?php tf_t('t96b03ea3c7'); ?></h2><p data-tf="tbc6bf077e8"><?php tf_t('tbc6bf077e8'); ?></p><span class="btn">Entra en Futuros</span></div><div class="cover"><canvas class="luz" data-modo="lamina" data-colores="#F2B233,#E2592A,#6A4C93" data-fondo="#1F1B2D" aria-hidden="true"></canvas><canvas id="girH" aria-hidden="true"></canvas><div class="ct"><h4 data-tf="t2d86fba811"><?php tf_t('t2d86fba811'); ?></h4></div></div></a>
-    <canvas class="luz borde" id="borde" data-modo="corrientes" data-colores="#F2B233,#E2592A,#5B6FBF" data-fondo="#1F1B2D" data-grano=".3" data-velocidad=".8" aria-hidden="true"></canvas>
   </section>
 
   <!-- 5 · Nos hacen posible -->
@@ -535,8 +534,6 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   if (!reduce) new IntersectionObserver(e => { sOn = e[0].isIntersecting; if (sOn) kick(); }).observe(document.querySelector('.join'));
   const alegria = () => { if (reduce) return; boost = TAU * 1.5; kick(); };
 
-  /* la frontera entre Comunidad y Futuros: un torrente de luz a lo largo de la costura */
-  { const b = document.getElementById('borde'), dos = b && b.closest('.dos'); if (b) { const mide = () => { const apil = innerWidth <= 1000; if (apil) { b.style.width = dos.offsetWidth + 'px'; b.style.height = Math.round(dos.offsetHeight * .2) + 'px'; } else { b.style.width = dos.offsetHeight + 'px'; b.style.height = Math.round(dos.offsetWidth * .2) + 'px'; } }; new ResizeObserver(mide).observe(dos); mide(); } }
   /* vídeo que se encuadra al deslizar y cabecera que aparece */
   const frame = document.getElementById('frame'), top = document.getElementById('top');
   const f = () => {

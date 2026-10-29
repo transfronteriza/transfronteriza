@@ -403,7 +403,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 <main>
   <!-- 1 · Apertura -->
   <section class="open" data-tf-sec="open">
-    <div class="lamina" aria-hidden="true"><canvas class="luz" data-modo="lamina" data-colores="#F2B233,#E2592A,#6A4C93" data-fondo="#1F1B2D" aria-hidden="true"></canvas><canvas id="girasolF"></canvas></div>
+    <div class="lamina" aria-hidden="true"><canvas class="luz" data-modo="lamina" data-colores="#F2B233,#E2592A,#6A4C93" data-fondo="#1F1B2D" data-escala=".5" aria-hidden="true"></canvas><canvas id="girasolF"></canvas></div>
     <div class="t">
       <h1 data-tf="t7dd57907b5"><?php tf_t('t7dd57907b5'); ?></h1>
       <p data-tf="tbc6bf077e8"><?php tf_t('tbc6bf077e8'); ?></p>

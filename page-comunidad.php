@@ -619,8 +619,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     <div class="sec-h"><h2 data-tf="t1ea3373dcc"><?php tf_t('t1ea3373dcc'); ?></h2></div>
     <div class="donde">
       <div class="mapaG" id="mapaG">
-        <canvas class="mar luz" id="mar" data-modo="mar" data-colores="#2F4FA8,#5B6FBF,#CDCFE6" data-fondo="#CDCFE6" data-grano=".3" aria-hidden="true"></canvas>
-        <div class="tierra" id="mapa"><img src="<?php tf_img('i3b56773580', TF_U . '/img/tierra.svg'); ?>" data-tf-img="i3b56773580" alt="Las dos orillas del Estrecho, con España y el norte de Marruecos." draggable="false"></div>
+        <canvas class="mar luz" id="mar" data-modo="mar" data-colores="#2F4FA8,#5B6FBF,#CDCFE6" data-fondo="#CDCFE6" data-grano=".3" data-escala=".35" aria-hidden="true"></canvas>
+        <div class="tierra" id="mapa"><img src="<?php tf_img('if08a5f3143', TF_U . '/img/tierra.webp'); ?>" data-tf-img="if08a5f3143" alt="Las dos orillas del Estrecho, con España y el norte de Marruecos." draggable="false"></div>
         <div class="panel" id="panel" aria-live="polite"></div>
         <div class="lupa" id="lupa" role="group" aria-label="Zoom del mapa"><button type="button" data-z="1" aria-label="Acercar">+</button><button type="button" data-z="-1" aria-label="Alejar">−</button></div>
         <p class="pista" aria-hidden="true" data-tf="tb6d9a0d982"><?php tf_t('tb6d9a0d982'); ?></p>
@@ -640,7 +640,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
         <div class="acts"><a class="btn p" href="#" data-entrar data-tf="t93b479b511"><?php tf_t('t93b479b511'); ?></a></div>
       </div>
       <div class="fronA">
-        <canvas class="luz fronL" data-modo="orillas" data-colores="#2F4FA8,#F2B233,#E2A0A6" data-fondo="#EFE6DA" aria-hidden="true"></canvas>
+        <canvas class="luz fronL" data-modo="orillas" data-colores="#2F4FA8,#F2B233,#E2A0A6" data-fondo="#EFE6DA" data-escala=".4" aria-hidden="true"></canvas>
         <div class="app" id="app">
           <div class="cab"><span class="marca"><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle cx="41" cy="9" r="4.2" fill="#F2B233"/></svg>La Frontera</span><button class="vol" type="button" id="volver">← Hilos</button><span class="anon">Anónima<button class="toggle" type="button" role="switch" aria-checked="true" id="anon" aria-label="Escribir de forma anónima"></button></span></div>
           <div class="dentro">
@@ -986,8 +986,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     mapaG.addEventListener('wheel', e => { e.preventDefault(); zoomEn(e.deltaY < 0 ? 1.15 : 1 / 1.15, e.clientX, e.clientY); }, { passive: false });
     mapaG.addEventListener('dblclick', e => { if (!e.target.closest('.pun,.panel,.lupa')) zoomEn(z >= 4 ? 1 / 4 : 1.7, e.clientX, e.clientY); });
     mapaG.addEventListener('pointerdown', e => { if (e.button || e.target.closest('.panel,.lupa')) return; drag = [e.clientX - tx, e.clientY - ty]; movio = false; });
-    mapaG.addEventListener('pointermove', e => { if (!drag) return; const nx = e.clientX - drag[0], ny = e.clientY - drag[1]; if (!movio && Math.abs(nx - tx) + Math.abs(ny - ty) > 4) { movio = true; mapaG.setPointerCapture(e.pointerId); mapaG.classList.add('arrastra', 'tocado'); } if (!movio) return; tx = nx; ty = ny; limita(); pinta(); });
-    const suelta = () => { drag = null; mapaG.classList.remove('arrastra'); };
+    mapaG.addEventListener('pointermove', e => { if (!drag) return; const nx = e.clientX - drag[0], ny = e.clientY - drag[1]; if (!movio && Math.abs(nx - tx) + Math.abs(ny - ty) > 4) { movio = true; try { mapaG.setPointerCapture(e.pointerId); } catch (_) {} mapaG.classList.add('arrastra', 'tocado'); } if (!movio) return; tx = nx; ty = ny; limita(); pinta(); });
+    const suelta = () => { drag = null; mapaG.classList.remove('arrastra'); setTimeout(() => { movio = false; }, 0); };
     mapaG.addEventListener('pointerup', suelta); mapaG.addEventListener('pointercancel', suelta);
     mapaG.addEventListener('click', e => { if (movio) { e.stopPropagation(); e.preventDefault(); } movio = false; }, true);
     /* al abrir, el Estrecho en el centro: la tierra se desplaza para que Algeciras y Tánger queden a la vista */
@@ -1189,7 +1189,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 .mapaG.arrastra{cursor:grabbing}
 .mapaG > .mar{position:absolute;inset:0;width:100%;height:100%;z-index:0;border-radius:0;box-shadow:none}
 .tierra{--z:1;--tx:0px;--ty:0px;position:absolute;left:50%;top:50%;height:125%;aspect-ratio:1/1;width:auto;translate:-50% -50%;transform:translate(var(--tx),var(--ty)) scale(var(--z));transform-origin:50% 50%;will-change:transform;z-index:1}
-.tierra > img{position:absolute;left:-75%;top:-45%;width:210%;height:180%;max-width:none;pointer-events:none;filter:drop-shadow(0 18px 40px rgba(31,27,45,.22))}
+.tierra > img{position:absolute;left:-75%;top:-45%;width:210%;height:180%;max-width:none;pointer-events:none}
 .tierra .pun{scale:calc(1 / var(--z));font-size:14px}
 .tierra .pun canvas{width:30px;height:30px;transition:transform .5s var(--ease)}
 .tierra .pun.sede canvas{width:38px;height:38px}
