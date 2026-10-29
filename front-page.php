@@ -111,7 +111,7 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .cover{position:relative;z-index:2;margin:auto 0;align-self:center;width:clamp(200px,19vw,290px);aspect-ratio:3/4;border-radius:4px;overflow:hidden;background:#27223a;box-shadow:0 1px 0 rgba(245,238,223,.06) inset,0 22px 44px rgba(0,0,0,.45);transform:rotate(3deg);transition:transform .6s var(--ease),box-shadow .6s}
 .fut:hover .cover,.fut:focus-visible .cover{transform:rotate(0deg) translateY(-8px);box-shadow:0 1px 0 rgba(245,238,223,.06) inset,0 30px 60px rgba(0,0,0,.55)}
 .cover > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.cover > .luz{position:absolute;inset:0;border-radius:0}
+.cover > .luz{position:absolute;inset:0;width:100%;height:100%;border-radius:0}
 .cover #girH{position:absolute;inset:0;width:100%;height:100%}
 .cover::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(15,12,24,.6),rgba(15,12,24,0) 55%)}
 .cover .ct{position:absolute;inset:0;z-index:2;padding:clamp(16px,1.6vw,22px);display:flex;flex-direction:column;gap:10px;color:var(--papel)}
@@ -233,6 +233,18 @@ dialog .x{position:absolute;top:10px;right:14px;z-index:2;width:40px;height:40px
   .nums b{font-size:clamp(60px,17vw,84px)}
   .nums p{max-width:32ch}
 }
+
+/* ---------- luz líquida (manual v3): el motor luz.js dibuja en cada canvas.luz ---------- */
+canvas.luz{display:block}
+.silL{position:relative;overflow:hidden;background:#1F1B2D}
+.silL canvas.luz{position:absolute;left:50%;bottom:-4%;width:92%;height:auto;aspect-ratio:1;translate:-50% 0;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 4c13 0 21 9 21 22 0 9-4 16-10 20 20 5 33 22 35 54H4c2-32 15-49 35-54-6-4-10-11-10-20C29 13 37 4 50 4z'/%3E%3C/svg%3E") center bottom/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 4c13 0 21 9 21 22 0 9-4 16-10 20 20 5 33 22 35 54H4c2-32 15-49 35-54-6-4-10-11-10-20C29 13 37 4 50 4z'/%3E%3C/svg%3E") center bottom/100% 100% no-repeat}
+.silL.alta canvas.luz{width:100%;bottom:-6%}
+.silL .anon{position:absolute;left:50%;top:30%;translate:-50% 0;z-index:3;width:30%;color:rgba(245,238,223,.9)}
+/* forma (manual v3): marcos de 24 px, tarjetas de 18 y 14 */
+.ir,.panel,.paper,.mec .foto,.firma,.firmado,.docs a,.hace,.inf .cover,.story .cuadro{border-radius:18px}
+.hace li,.ht,.mb .ft,.trans li,.porque li,.claves li,.tarjeta,.abre{border-radius:14px}
+.open .fr,.open .lamina,.tres{border-radius:24px}
+.ir .ft{position:relative}
 
 /* ---------- la luz con grano (manual v3): lo que se dibuja cuando no hay foto ---------- */
 .luz{position:relative;overflow:hidden;border-radius:6px;isolation:isolate;background:#DDD6DF}
@@ -364,8 +376,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 
   <!-- 4 · Comunidad | Futuros -->
   <section class="dos" data-tf-sec="dos">
-    <a class="lado com" id="comunidad" href="<?php echo esc_url(tf_pagina('comunidad')); ?>"><img src="<?php tf_img('i408711db45', TF_U . '/img/comunidad.jpg'); ?>" data-tf-img="i408711db45" alt="Dos chicas de la comunidad, de espaldas, miran la montaña al atardecer."><div class="t"><h2 data-tf="t8f69233c0e"><?php tf_t('t8f69233c0e'); ?></h2><p data-tf="t2f4fd33425"><?php tf_t('t2f4fd33425'); ?></p><span class="btn">Conoce la comunidad</span></div></a>
-    <a class="lado fut" id="futuros" href="<?php echo esc_url(tf_pagina('futuros')); ?>"><div class="t"><h2 data-tf="t96b03ea3c7"><?php tf_t('t96b03ea3c7'); ?></h2><p data-tf="tbc6bf077e8"><?php tf_t('tbc6bf077e8'); ?></p><span class="btn">Entra en Futuros</span></div><div class="cover"><div class="luz fuego oscura" aria-hidden="true"><canvas id="girH"></canvas></div><div class="ct"><h4 data-tf="t2d86fba811"><?php tf_t('t2d86fba811'); ?></h4></div></div></a>
+    <a class="lado com" id="comunidad" href="<?php echo esc_url(tf_pagina('comunidad')); ?>"><img src="<?php tf_img('i408711db45', TF_U . '/img/comunidad.jpg'); ?>" data-tf-img="i408711db45" loading="lazy" decoding="async" alt="Dos chicas de la comunidad, de espaldas, miran la montaña al atardecer."><div class="t"><h2 data-tf="t8f69233c0e"><?php tf_t('t8f69233c0e'); ?></h2><p data-tf="t2f4fd33425"><?php tf_t('t2f4fd33425'); ?></p><span class="btn">Conoce la comunidad</span></div></a>
+    <a class="lado fut" id="futuros" href="<?php echo esc_url(tf_pagina('futuros')); ?>"><div class="t"><h2 data-tf="t96b03ea3c7"><?php tf_t('t96b03ea3c7'); ?></h2><p data-tf="tbc6bf077e8"><?php tf_t('tbc6bf077e8'); ?></p><span class="btn">Entra en Futuros</span></div><div class="cover"><canvas class="luz" data-modo="lamina" data-colores="#F2B233,#E2592A,#6A4C93" data-fondo="#1F1B2D" aria-hidden="true"></canvas><canvas id="girH" aria-hidden="true"></canvas><div class="ct"><h4 data-tf="t2d86fba811"><?php tf_t('t2d86fba811'); ?></h4></div></div></a>
     <div class="emblema" aria-hidden="true"><div class="sway"><canvas id="girasol"></canvas></div></div>
   </section>
 
@@ -512,7 +524,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const pinta = new Map(), ro = new ResizeObserver(es => es.forEach(e => { if (e.contentRect.width > 0) pinta.get(e.target)?.(); }));
   const vigila = (cv, fn) => { pinta.set(cv, fn); ro.observe(cv); };
   vigila(document.getElementById('girasol'), drawGirasol); vigila(sp, drawSpiral);
-  { const cv = document.getElementById('girH'); if (cv) vigila(cv, () => { const [g, w, h] = setup(cv); symbol(g, w * .78, h * .72, Math.max(w, h) * .27, 200, '#FFFBF2', '#F5EEDF', rng(90), [0, 0, w, h]); }); }
+  { const cv = document.getElementById('girH'); if (cv) vigila(cv, () => { const [g, w, h] = setup(cv); symbol(g, w * .78, h * .70, Math.max(w, h) * .27, 200, '#FFFBF2', '#F5EEDF', rng(90), [0, 0, w, h]); }); }
   document.querySelectorAll('.pw canvas').forEach(cv => vigila(cv, () => drawPepita(cv)));
   /* giro del girasol: ritmo natural y un impulso de alegría al enviar */
   let ang = 0, boost = 0, tS = 0, sOn = false, running = false;
@@ -575,6 +587,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   document.documentElement.dataset.done = 1;
 })();
 </script>
+<script src="<?php echo TF_U; ?>/luz.js"></script>
 <?php wp_footer(); ?>
 </body>
 </html>

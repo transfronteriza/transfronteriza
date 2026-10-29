@@ -69,8 +69,8 @@ dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;borde
 /* ---------- 2 · tres perfiles ---------- */
 .tres{position:relative;display:flex;gap:6px;height:min(76vh,700px);border-radius:6px;overflow:hidden;background:var(--tinta)}
 .perfil{position:relative;flex:1;min-width:0;overflow:hidden;text-align:left;transition:flex .8s var(--ease),height .8s var(--ease)}
-.perfil img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%;transition:transform 1.4s var(--ease)}
-.perfil .luz.fondo{position:absolute;inset:0;border-radius:0}
+.perfil img{position:absolute;left:0;right:0;bottom:0;width:100%;height:94%;object-fit:contain;object-position:50% 100%;transform-origin:50% 100%;transition:transform 1.4s var(--ease)}
+.perfil .luz.fondo{position:absolute;inset:0;width:100%;height:100%;border-radius:0}
 .tres:not(.abierto) .perfil:hover{flex:1.35}
 .tres:not(.abierto) .perfil:hover img{transform:scale(1.04)}
 .perfil::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,12,24,0) 45%,rgba(15,12,24,.75))}
@@ -82,7 +82,7 @@ dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;borde
 .tres.abierto .perfil{flex:0}
 .tres.abierto .perfil.on{flex:1}
 .perfil.on img{animation:kb 16s linear forwards}
-@keyframes kb{from{transform:scale(1)}to{transform:scale(1.12)}}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.06)}}
 .perfil .sub{position:absolute;z-index:3;left:clamp(24px,5vw,72px);right:clamp(24px,5vw,72px);bottom:clamp(96px,10vw,124px);color:var(--papel);font:500 clamp(24px,2.8vw,42px)/1.18 var(--disp);letter-spacing:-.02em;max-width:26ch;opacity:0;transition:opacity .6s .5s}
 .perfil.on .sub{opacity:1}
 .perfil .sub span{opacity:.18;transition:opacity .5s}
@@ -104,7 +104,7 @@ dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;borde
 .ir .ft{aspect-ratio:4/3;overflow:hidden;background:var(--teja)}
 .ir .ft img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
 .ir .ft .luz{width:100%;height:100%;border-radius:0}
-.ir .ft .glifo{position:absolute;right:7%;bottom:8%;width:24%;height:auto;color:#FFFBF2;opacity:.96;filter:drop-shadow(0 6px 16px rgba(31,27,45,.18));transition:transform .6s var(--ease)}
+.ir .ft .glifo{position:absolute;z-index:2;right:7%;bottom:8%;width:24%;height:auto;color:#FFFBF2;opacity:.96;filter:drop-shadow(0 6px 16px rgba(31,27,45,.18));transition:transform .6s var(--ease)}
 .ir:hover .ft .glifo{transform:translateY(-4px)}
 .ir:hover .ft img{transform:scale(1.03)}
 .ir .tx{padding:clamp(20px,2.4vw,30px)}
@@ -465,6 +465,18 @@ dialog.verP::backdrop{background:#0F0C18}
   .trans li{padding:16px}.trans li b{font-size:40px;gap:8px;white-space:nowrap}
 }
 
+/* ---------- luz líquida (manual v3): el motor luz.js dibuja en cada canvas.luz ---------- */
+canvas.luz{display:block}
+.silL{position:relative;overflow:hidden;background:#1F1B2D}
+.silL canvas.luz{position:absolute;left:50%;bottom:-4%;width:92%;height:auto;aspect-ratio:1;translate:-50% 0;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 4c13 0 21 9 21 22 0 9-4 16-10 20 20 5 33 22 35 54H4c2-32 15-49 35-54-6-4-10-11-10-20C29 13 37 4 50 4z'/%3E%3C/svg%3E") center bottom/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 4c13 0 21 9 21 22 0 9-4 16-10 20 20 5 33 22 35 54H4c2-32 15-49 35-54-6-4-10-11-10-20C29 13 37 4 50 4z'/%3E%3C/svg%3E") center bottom/100% 100% no-repeat}
+.silL.alta canvas.luz{width:100%;bottom:-6%}
+.silL .anon{position:absolute;left:50%;top:30%;translate:-50% 0;z-index:3;width:30%;color:rgba(245,238,223,.9)}
+/* forma (manual v3): marcos de 24 px, tarjetas de 18 y 14 */
+.ir,.panel,.paper,.mec .foto,.firma,.firmado,.docs a,.hace,.inf .cover,.story .cuadro{border-radius:18px}
+.hace li,.ht,.mb .ft,.trans li,.porque li,.claves li,.tarjeta,.abre{border-radius:14px}
+.open .fr,.open .lamina,.tres{border-radius:24px}
+.ir .ft{position:relative}
+
 /* ---------- la luz con grano (manual v3): lo que se dibuja cuando no hay foto ---------- */
 .luz{position:relative;overflow:hidden;border-radius:6px;isolation:isolate;background:#DDD6DF}
 .luz::before{content:"";position:absolute;inset:-14%;background:var(--L);animation:respiraL 20s ease-in-out infinite alternate}
@@ -589,9 +601,9 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <section class="sec in" id="encuentrate" style="padding-top:0" data-tf-sec="encuentrate">
     <div class="sec-h"><h2 data-tf="t77e400e1ea"><?php tf_t('t77e400e1ea'); ?></h2></div>
     <div class="enc">
-      <a class="ir" href="#ciudad"><div class="ft"><div class="luz cruce" aria-hidden="true"><svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 44c-7-9-14-16-14-24a14 14 0 0 1 28 0c0 8-7 15-14 24z" fill="currentColor"/><circle cx="24" cy="20" r="5.5" fill="#1F1B2D" opacity=".28"/></svg></div></div><div class="tx"><h3 data-tf="t1d32738558"><?php tf_t('t1d32738558'); ?></h3><p data-tf="te06400a63f"><?php tf_t('te06400a63f'); ?></p></div></a>
-      <a class="ir" href="#anual"><div class="ft"><div class="luz amanecer" aria-hidden="true"><svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 42S6 30 6 17a9.5 9.5 0 0 1 18-4 9.5 9.5 0 0 1 18 4c0 13-18 25-18 25z" fill="currentColor"/></svg></div></div><div class="tx"><h3 data-tf="t5339a3fd5d"><?php tf_t('t5339a3fd5d'); ?></h3><p data-tf="tef1552045d"><?php tf_t('tef1552045d'); ?></p></div></a>
-      <a class="ir" href="#frontera"><div class="ft"><div class="luz orillas" aria-hidden="true"><svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="currentColor" opacity=".55"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="currentColor"/></svg></div></div><div class="tx"><h3 data-tf="tc7871d1ef2"><?php tf_t('tc7871d1ef2'); ?></h3><p data-tf="t7678dae477"><?php tf_t('t7678dae477'); ?></p></div></a>
+      <a class="ir" href="#ciudad"><div class="ft"><canvas class="luz" data-modo="converge" data-colores="#F2B233,#E2592A,#2F4FA8" data-fondo="#EFE6DA" aria-hidden="true"></canvas><svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 44c-7-9-14-16-14-24a14 14 0 0 1 28 0c0 8-7 15-14 24z" fill="currentColor"/><circle cx="24" cy="20" r="5.5" fill="#1F1B2D" opacity=".28"/></svg></div><div class="tx"><h3 data-tf="t1d32738558"><?php tf_t('t1d32738558'); ?></h3><p data-tf="te06400a63f"><?php tf_t('te06400a63f'); ?></p></div></a>
+      <a class="ir" href="#anual"><div class="ft"><canvas class="luz" data-modo="sierra" data-colores="#F2B233,#E2A0A6,#5E8F4E" data-fondo="#DCD9E6" aria-hidden="true"></canvas><svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 42S6 30 6 17a9.5 9.5 0 0 1 18-4 9.5 9.5 0 0 1 18 4c0 13-18 25-18 25z" fill="currentColor"/></svg></div><div class="tx"><h3 data-tf="t5339a3fd5d"><?php tf_t('t5339a3fd5d'); ?></h3><p data-tf="tef1552045d"><?php tf_t('tef1552045d'); ?></p></div></a>
+      <a class="ir" href="#frontera"><div class="ft"><canvas class="luz" data-modo="orillas" data-colores="#2F4FA8,#F2B233,#E2A0A6" data-fondo="#EFE6DA" aria-hidden="true"></canvas><svg class="glifo" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="currentColor"/><circle cx="41" cy="9" r="4.2" fill="#F2B233"/></svg></div><div class="tx"><h3 data-tf="tc7871d1ef2"><?php tf_t('tc7871d1ef2'); ?></h3><p data-tf="t7678dae477"><?php tf_t('t7678dae477'); ?></p></div></a>
     </div>
   </section>
 
@@ -604,7 +616,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   <section class="sec in" id="ciudad" data-tf-sec="ciudad" data-tf-panel="edit.php?post_type=tf_ciudad" data-tf-panel-t="Editar las ciudades">
     <div class="sec-h"><h2 data-tf="t1ea3373dcc"><?php tf_t('t1ea3373dcc'); ?></h2></div>
     <div class="donde">
-      <div class="globo" id="mapa"><canvas class="mar" id="mar" aria-hidden="true"></canvas><img src="<?php tf_img('ie346a3a2be', TF_U . '/img/globo.svg'); ?>" data-tf-img="ie346a3a2be" alt="Globo terráqueo del revés, con España y el norte de Marruecos a los dos lados del Estrecho."></div>
+      <div class="globo" id="mapa"><canvas class="mar luz" id="mar" data-modo="mar" data-colores="#2F4FA8,#5B6FBF,#CDCFE6" data-fondo="#CDCFE6" data-grano=".3" aria-hidden="true"></canvas><img src="<?php tf_img('ie346a3a2be', TF_U . '/img/globo.svg'); ?>" data-tf-img="ie346a3a2be" loading="lazy" decoding="async" alt="Globo terráqueo del revés, con España y el norte de Marruecos a los dos lados del Estrecho."></div>
       <div class="panel" id="panel" aria-live="polite"></div>
       <div class="lupa" id="lupa" role="group" aria-label="Zoom del mapa"><button type="button" data-z="1" aria-label="Acercar">+</button><button type="button" data-z="-1" aria-label="Alejar">−</button></div>
     </div>
@@ -643,9 +655,9 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     <div class="hace">
       <h3 data-tf="t359555dd0a"><?php tf_t('t359555dd0a'); ?></h3>
       <ul>
-        <li><div class="luz ilu tarde" aria-hidden="true"></div><b>Que vengan al encuentro</b><span>Viaje, comida y cama para quien no puede pagarlo. Sin preguntas incómodas.</span></li>
-        <li><div class="luz ilu paso" aria-hidden="true"></div><b>Que haya comunidad en su ciudad</b><span>Un sitio donde quedar cada mes y alguien que acompaña.</span></li>
-        <li><div class="luz ilu noche oscura" aria-hidden="true"></div><b>Que su voz llegue a quien decide</b><span>La investigación de Futuros, hecha con ellas y no sobre ellas.</span></li>
+        <li><canvas class="luz ilu" data-modo="sube" data-colores="#F2B233,#2F4FA8,#FFFBF2" data-fondo="#E6E1E8" aria-hidden="true"></canvas><b>Que vengan al encuentro</b><span>Viaje, comida y cama para quien no puede pagarlo. Sin preguntas incómodas.</span></li>
+        <li><canvas class="luz ilu" data-modo="ondas" data-colores="#F2B233,#E2592A,#6A4C93" data-fondo="#EFE6DA" aria-hidden="true"></canvas><b>Que haya comunidad en su ciudad</b><span>Un sitio donde quedar cada mes y alguien que acompaña.</span></li>
+        <li><canvas class="luz ilu" data-modo="sube" data-colores="#F2B233,#E2592A,#CDCFE6" data-fondo="#1F1B2D" aria-hidden="true"></canvas><b>Que su voz llegue a quien decide</b><span>La investigación de Futuros, hecha con ellas y no sobre ellas.</span></li>
       </ul>
     </div>
     <?php tf_mecenas_datos(); ?>
@@ -736,6 +748,18 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 <?php tf_script_base(tf_datos_comunidad()); ?>
 <script>
 (() => {
+  /* las luces con nombre (manual v3): modo, colores y fondo; luzCanvas() devuelve el lienzo listo para el motor */
+  const LUCES = {
+    ciudad: ['converge', '#F2B233,#E2592A,#2F4FA8', '#EFE6DA'], encuentro: ['sierra', '#F2B233,#E2A0A6,#5E8F4E', '#DCD9E6'], frontera: ['orillas', '#2F4FA8,#F2B233,#E2A0A6', '#EFE6DA'],
+    viaje: ['sube', '#F2B233,#2F4FA8,#FFFBF2', '#E6E1E8'], ondas: ['ondas', '#F2B233,#E2592A,#6A4C93', '#EFE6DA'], voz: ['sube', '#F2B233,#E2592A,#CDCFE6', '#1F1B2D'],
+    lamina: ['lamina', '#F2B233,#E2592A,#E3DCE6', '#E6E0E6'], noche: ['lamina', '#F2B233,#E2592A,#6A4C93', '#1F1B2D'], mar: ['mar', '#2F4FA8,#5B6FBF,#CDCFE6', '#CDCFE6'],
+    idiomas: ['corrientes', '#2F4FA8,#F2B233,#E2592A', '#EFE6DA'], escuela: ['capa', '#F2B233,#E2592A,#CDCFE6', '#E6E1DC'], orillas: ['orillas', '#F2B233,#5E8F4E,#E2592A', '#EFE6DA'],
+    retrato1: ['lamina', '#2F4FA8,#F2B233,#CDCFE6', '#DDD6DF'], retrato2: ['lamina', '#F2B233,#E2A0A6,#CDCFE6', '#E6DCE0'],
+    sil1: ['sube', '#F2B233,#E2592A,#FFFBF2', '#1F1B2D'], sil2: ['sube', '#CDCFE6,#2F4FA8,#FFFBF2', '#1F1B2D'], sil3: ['sube', '#E2A0A6,#6A4C93,#FFFBF2', '#1F1B2D'], sil4: ['sube', '#FFFBF2,#F2B233,#CDCFE6', '#1F1B2D']
+  };
+  const luzCanvas = (n, extra = '') => { const [m, c, f] = LUCES[n] || LUCES.lamina; return `<canvas class="luz${extra}" data-modo="${m}" data-colores="${c}" data-fondo="${f}" aria-hidden="true"></canvas>`; };
+  const luzArranca = () => window.Luz && window.Luz.arranca();
+  const ANON = '<svg class="anon" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="21" fill="none" stroke="currentColor" stroke-width="2"/><path d="M14 30c2-5 6-7 10-7s8 2 10 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="24" cy="17" r="4" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
   /* datos que en WordPress llegan en TF; aquí, los valores de la maqueta */
   window.TF = window.TF || {};
   const EC = Object.assign({ voces: true, informe: true, papers: true, consejo: true }, TF.enConstruccion || {});
@@ -848,7 +872,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   /* ===== 2 · tres perfiles: con vídeo si lo hay; si no, retrato con su frase ===== */
   const PERF = TF.perfiles || [];
   const tres = $('#tres');
-  tres.insertAdjacentHTML('afterbegin', PERF.map((p, i) => `<button class="perfil" type="button" data-i="${i}" aria-label="Escuchar a ${p.n}"${EI(p.id, 'tf_perfil')}>${p.luz ? `<div class="luz ${p.luz} fondo" aria-hidden="true"></div>` : ''}<img src="${p.f}" alt="${p.n}"${EF(p.id)}><p class="sub">${p.q.split(' ').map(w => `<span>${w}</span>`).join(' ')}</p><span class="nom"><span><b${ED(p.id, 'titulo')}>${p.n}</b><small${ED(p.id, 'rol')}>${p.r}</small></span><i>▶</i></span></button>`).join(''));
+  tres.insertAdjacentHTML('afterbegin', PERF.map((p, i) => `<button class="perfil" type="button" data-i="${i}" aria-label="Escuchar a ${p.n}"${EI(p.id, 'tf_perfil')}>${p.luz ? luzCanvas(p.luz, ' fondo') : ''}<img src="${p.f}" alt="${p.n}"${EF(p.id)}><p class="sub">${p.q.split(' ').map(w => `<span>${w}</span>`).join(' ')}</p><span class="nom"><span><b${ED(p.id, 'titulo')}>${p.n}</b><small${ED(p.id, 'rol')}>${p.r}</small></span><i>▶</i></span></button>`).join(''));
   tres.insertAdjacentHTML('beforeend', '<div class="barraP"><b id="barraP"></b></div>');
   let tP = null, vivoP = null;
   const cierraP = () => { cancelAnimationFrame(tP); vivoP?.quita(); vivoP = null; tres.querySelectorAll('.vid').forEach(v => { v.pause(); v.remove(); }); tres.classList.remove('abierto'); tres.querySelectorAll('.perfil').forEach(p => { p.classList.remove('on'); p.querySelectorAll('.sub span').forEach(s => s.classList.remove('v')); }); $('#barraP').style.width = 0; };
@@ -927,12 +951,11 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
       dibuja();
     };
     const bucle = t => { if (t - t0 > 40) { T += Math.min(.1, (t - t0) / 1000); t0 = t; dibuja(); } raf = enVista ? requestAnimationFrame(bucle) : 0; };
-    vigila(cv, prepara);
-    if (!reduce) new IntersectionObserver(es => { enVista = es[0].isIntersecting; if (enVista && !raf) { t0 = performance.now(); raf = requestAnimationFrame(bucle); } }, { rootMargin: '80px 0px' }).observe(cv);
+    /* el zellige queda aquí por si vuelve; el mar lo pinta ahora luz.js (manual v3) */
   })();
   const mapa = $('#mapa'), panel = $('#panel');
   Object.entries(CIU).forEach(([k, c], i) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'pun' + (c.sede ? ' sede' : '') + (c.izq ? ' izq' : '') + (c.arr ? ' arr' : ''); b.style.left = c.x + '%'; b.style.top = c.y + '%'; b.dataset.c = k; b.setAttribute('aria-pressed', 'false'); b.innerHTML = `<canvas aria-hidden="true"></canvas><span>${c.n}</span>`; mapa.appendChild(b); pep(b.querySelector('canvas'), i + 3); });
-  const elige = k => { const c = CIU[k]; mapa.querySelectorAll('.pun').forEach(p => p.setAttribute('aria-pressed', p.dataset.c === k)); document.querySelectorAll('.ciuM button').forEach(p => p.setAttribute('aria-pressed', p.dataset.c === k)); panel.innerHTML = `<div${EI(c.id, 'tf_ciudad')}><figure class="pf${c.foto ? '' : ' sin'}"${EF(c.id)}>${c.foto ? `<img src="${c.foto}" alt="${esc(c.n)}.">` : ''}</figure><div class="pt"><h3${ED(c.id, 'titulo')}>${c.n}</h3><p class="txt"${ED(c.id, 'texto')}>${c.txt}</p><button class="btn p" type="button" data-flujo="ciudad" data-ciudad="${c.n}" data-foto="${c.foto}">Haz comunidad en ${c.n}</button></div></div>`; };
+  const elige = k => { const c = CIU[k]; mapa.querySelectorAll('.pun').forEach(p => p.setAttribute('aria-pressed', p.dataset.c === k)); document.querySelectorAll('.ciuM button').forEach(p => p.setAttribute('aria-pressed', p.dataset.c === k)); panel.innerHTML = `<div${EI(c.id, 'tf_ciudad')}><figure class="pf${c.foto ? '' : ' sin'}"${EF(c.id)}>${c.foto ? `<img src="${c.foto}" alt="${esc(c.n)}." loading="lazy" decoding="async">` : ''}</figure><div class="pt"><h3${ED(c.id, 'titulo')}>${c.n}</h3><p class="txt"${ED(c.id, 'texto')}>${c.txt}</p><button class="btn p" type="button" data-flujo="ciudad" data-ciudad="${c.n}" data-foto="${c.foto}">Haz comunidad en ${c.n}</button></div></div>`; };
   mapa.addEventListener('click', e => { const b = e.target.closest('.pun'); if (b) elige(b.dataset.c); });
   mapa.insertAdjacentHTML('afterend', `<div class="ciuM" role="group" aria-label="Elige una ciudad">${Object.entries(CIU).map(([k, c]) => `<button type="button" data-c="${k}">${esc(c.n)}</button>`).join('')}</div>`);
   const ciuM = mapa.nextElementSibling; ciuM.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { elige(b.dataset.c); if (innerWidth <= 1000) panel.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' }); } });
@@ -983,13 +1006,13 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   if (enObra) {
     H.splice(0, H.length,
       { obra: 1, n: '', q: 'Estamos recogiendo las voces de la comunidad. La tuya puede estar aquí.' },
-      { sil: 1, luz: 'fuego', n: 'Una voz por llegar', q: 'Aquí irá lo que alguien de la comunidad quiera contar: una historia, una frase, un vídeo.' },
-      { sil: 1, luz: 'orilla', n: 'Una voz por llegar', q: 'Lo que no se cuenta en ningún otro sitio. En tu idioma, con tu nombre o sin él.' },
-      { sil: 1, luz: 'noche', n: 'Una voz por llegar', q: 'Fotos, vídeos y frases de la gente que cruza fronteras cada día.' },
-      { sil: 1, luz: 'amanecer', n: 'Una voz por llegar', q: '¿Quieres que la tuya esté aquí? Cuéntanosla en Descúbrete o escríbenos a hola@transfronteriza.net.' });
+      { sil: 1, luz: 'sil1', n: 'Una voz por llegar', q: 'Aquí irá lo que alguien de la comunidad quiera contar: una historia, una frase, un vídeo.' },
+      { sil: 1, luz: 'sil2', anon: 1, n: 'Una voz por llegar', q: 'Lo que no se cuenta en ningún otro sitio. En tu idioma, con tu nombre o sin él.' },
+      { sil: 1, luz: 'sil3', n: 'Una voz por llegar', q: 'Fotos, vídeos y frases de la gente que cruza fronteras cada día.' },
+      { sil: 1, luz: 'sil4', anon: 1, n: 'Una voz por llegar', q: '¿Quieres que la tuya esté aquí? Cuéntanosla en Descúbrete o escríbenos a hola@transfronteriza.net.' });
     $('.cuentaV span').textContent = '¿Quieres que la tuya esté aquí? Cuéntanosla en Descúbrete o escríbenos a hola@transfronteriza.net.';
   }
-  $('#tira').innerHTML = H.map((h, i) => `<button class="ht${h.sil ? ' sil' : ''}${h.obra ? ' obra' : ''}" type="button" data-i="${i}"${EI(h.id, 'tf_historia')}>${h.luz ? `<div class="silL alta ${h.luz}" aria-hidden="true"><i></i></div>` : h.v ? `<video src="${h.v}" poster="${h.p}" muted loop playsinline preload="none" aria-hidden="true"></video>` : h.f ? `<img src="${h.f}" alt="" loading="lazy"${h.fx ? ` style="object-position:${h.fx * 100}% 50%"` : ''}${EF(h.id)}>` : h.obra ? `<p class="tx"><small>En construcción</small>${h.q}</p>` : `<p class="tx">«<span${ED(h.id, 'frase')}>${h.q}</span>»</p>`}${h.vm ? '<i class="pl">▶</i>' : ''}<span${ED(h.id, 'titulo')}>${h.n}</span><i class="anillo"></i></button>`).join('');
+  $('#tira').innerHTML = H.map((h, i) => `<button class="ht${h.sil ? ' sil' : ''}${h.obra ? ' obra' : ''}" type="button" data-i="${i}"${EI(h.id, 'tf_historia')}>${h.luz ? `<div class="silL alta" aria-hidden="true">${luzCanvas(h.luz)}${h.anon ? ANON : ''}</div>` : h.v ? `<video src="${h.v}" poster="${h.p}" muted loop playsinline preload="none" aria-hidden="true"></video>` : h.f ? `<img src="${h.f}" alt="" loading="lazy"${h.fx ? ` style="object-position:${h.fx * 100}% 50%"` : ''}${EF(h.id)}>` : h.obra ? `<p class="tx"><small>En construcción</small>${h.q}</p>` : `<p class="tx">«<span${ED(h.id, 'frase')}>${h.q}</span>»</p>`}${h.vm ? '<i class="pl">▶</i>' : ''}<span${ED(h.id, 'titulo')}>${h.n}</span><i class="anillo"></i></button>`).join('');
   document.querySelectorAll('.ht video').forEach(v => { const b = v.parentElement; b.addEventListener('mouseenter', () => v.play().catch(() => {})); b.addEventListener('mouseleave', () => v.pause()); });
   const st = $('#story'), cuadroS = $('#sCuadro'), bar = $('#sBar'); let vi = 0, tv = null, t0 = 0, paus = false, resto = 0, foco = null, dur = 6500, media = null, vivoS = null;
   bar.innerHTML = H.map(() => '<i><b></b></i>').join('');
@@ -999,11 +1022,11 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     vi = Math.max(0, Math.min(H.length - 1, i)); const h = H[vi];
     media?.remove(); media = null; vivoS?.quita(); vivoS = null;
     if (h.vm) vivoS = vimeo(cuadroS, h, { avance: pintaBar, fin: () => vi < H.length - 1 ? muestra(vi + 1) : cierraS() });
-    else if (h.luz) { media = document.createElement('div'); media.className = 'silL alta ' + h.luz; media.innerHTML = '<i></i>'; dur = 7000; }
+    else if (h.luz) { media = document.createElement('div'); media.className = 'silL alta'; media.innerHTML = luzCanvas(h.luz) + (h.anon ? ANON : ''); dur = 7000; }
     else if (!h.f && !h.v) { media = document.createElement('p'); media.className = 'tx'; media.textContent = `«${h.q}»`; dur = 7000; }
     else media = document.createElement(h.v ? 'video' : 'img');
     if (h.vm || !media || media.className === 'tx' || h.luz) {} else if (h.v) { media.src = h.v; media.poster = h.p; media.muted = true; media.playsInline = true; media.loop = true; media.autoplay = true; dur = 5000; } else { media.src = h.f; media.alt = h.n; dur = h.q ? 7000 : 4000; }
-    if (media) cuadroS.prepend(media); if (h.v) media.play().catch(() => {});
+    if (media) cuadroS.prepend(media); if (h.v) media.play().catch(() => {}); if (h.luz) luzArranca();
     $('#sQuien').textContent = h.n; $('#sCita').textContent = h.q && (h.f || h.luz) && !h.vm ? `«${h.q}»` : '';
     t0 = performance.now(); pintaBar(0); cancelAnimationFrame(tv); if (!reduce) tv = requestAnimationFrame(tick);
   };
@@ -1042,9 +1065,9 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   document.addEventListener('click', e => { if (e.target.closest('#saberMas')) $('#saber').showModal(); });
   pintaC();
   $('#donarM').addEventListener('click', () => $('#donar').click());
-  { let enSec = false, enTarj = false; const pinta = () => $('#barraM').classList.toggle('on', enSec && !enTarj);
+  { let enSec = false, enTarj = false, pasada = false; const pinta = () => $('#barraM').classList.toggle('on', enSec && !enTarj && !pasada);
     new IntersectionObserver(e => { enSec = e[0].isIntersecting; pinta(); }).observe($('#mecenas'));
-    new IntersectionObserver(e => { enTarj = e[0].isIntersecting; pinta(); }, { threshold: .25 }).observe(document.querySelector('.tarjeta')); }
+    new IntersectionObserver(e => { enTarj = e[0].isIntersecting; pasada = !enTarj && e[0].boundingClientRect.top < 0; pinta(); }, { threshold: .25 }).observe(document.querySelector('.tarjeta')); }
   $('#donar').addEventListener('click', () => { const A = anual(), D = deduce(A); abrePaso('mecenas', { aportacion: `${eur(cant)}${SUF[freq]}`, resumen: `Vas a donar <b>${eur(cant)}${SUF[freq]}</b>. ${logro(A)}${DESGRAVA ? `<br>Hacienda te devolverá <b>${eur(freq === 'mes' ? D / 12 : D)}${freq === 'mes' ? ' al mes' : ''}</b>, así que de verdad te cuesta <b>${eur(freq === 'mes' ? (A - D) / 12 : A - D)}${SUF[freq]}</b>.` : ''}` }); });
 
   /* ===== 9 · manifiesto: una corriente de pepitas que entra por la izquierda, desordenada y sin color; se junta, coge color y desemboca en el girasol, que gira despacio. Se mueve sola, nunca con el scroll ===== */
@@ -1138,6 +1161,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   document.documentElement.dataset.done = 1;
 })();
 </script>
+<script src="<?php echo TF_U; ?>/luz.js"></script>
 <?php wp_footer(); ?>
 </body>
 </html>
