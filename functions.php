@@ -158,15 +158,27 @@ function tf_vimeo($url) {
 }
 function tf_encuadre($id) { return ['izquierda' => .3, 'derecha' => .64][tf_campo('encuadre', $id)] ?? .5; }
 function tf_datos_comunidad() {
-	$perf = array_map(function ($p) {
+	$k = 0;
+	$perf = array_map(function ($p) use (&$k) {
 		$d = ['id' => $p->ID, 'f' => tf_foto($p->ID, 'large'), 'n' => get_the_title($p), 'r' => tf_campo('rol', $p->ID), 'q' => tf_campo('frase', $p->ID), 'v' => tf_campo('video', $p->ID) ?: ''];
+		/* la persona va recortada sobre luz con grano: o el tema trae su recorte (img/voces/<slug>-luz.webp) o la foto subida lleva «-luz» en el nombre */
+		$slug = strtolower(explode('-', $p->post_name ?: sanitize_title(get_the_title($p)))[0]);
+		if ($slug && file_exists(get_theme_file_path("img/voces/$slug-luz.webp"))) $d['f'] = TF_U . "/img/voces/$slug-luz.webp";
+		if ($d['f'] && strpos($d['f'], '-luz') !== false) { $d['luz'] = $k % 2 ? 'retrato2' : 'retrato1'; $k++; }
 		if (!$d['v'] && ($v = tf_vimeo(tf_campo('vimeo', $p->ID)))) { $d += ['vm' => $v['vm'], 'vr' => $v['vr'], 'fx' => tf_encuadre($p->ID)]; if (!$d['f']) $d['f'] = $v['poster']; }
 		return $d;
 	}, tf_q('tf_perfil'));
+	/* sin recortes no hay perfiles de WordPress: valen los dos del tema (Ismail y Rebab) */
+	$perf = array_values(array_filter($perf, function ($d) { return !empty($d['luz']); }));
 	$ciu = [];
 	foreach (tf_q('tf_ciudad') as $p) {
 		[$x, $y] = tf_globo(tf_campo('latitud', $p->ID), tf_campo('longitud', $p->ID)); $e = tf_campo('etiqueta', $p->ID);
-		$ciu[$p->post_name ?: 'c' . $p->ID] = ['id' => $p->ID, 'n' => get_the_title($p), 'txt' => tf_campo('texto', $p->ID), 'foto' => tf_foto($p->ID, 'large'), 'x' => $x, 'y' => $y, 'sede' => tf_campo('sede', $p->ID) ? 1 : 0, 'izq' => $e === 'izquierda' ? 1 : 0, 'arr' => $e === 'arriba' ? 1 : 0];
+		/* la foto de la ciudad: si el tema trae una (img/comunidad/ciudad-<slug>.jpg) manda esa, sin personas; el texto de relleno antiguo se sustituye por el de «súmate» */
+		$slug = strtolower(explode('-', $p->post_name ?: sanitize_title(get_the_title($p)))[0]); $n = get_the_title($p); $txt = (string) tf_campo('texto', $p->ID);
+		$foto = file_exists(get_theme_file_path("img/comunidad/ciudad-$slug.jpg")) ? TF_U . "/img/comunidad/ciudad-$slug.jpg" : tf_foto($p->ID, 'large');
+		if (!$txt || strpos($txt, 'Quedamos una vez al mes') === 0) $txt = "¿Vives en $n? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.";
+		if (strpos($txt, 'Aquí nació todo') === 0) $txt = 'Aquí nació Transfronteriza, a un paso del Estrecho. Si vives cerca, súmate: te presentamos a la comunidad.';
+		$ciu[$p->post_name ?: 'c' . $p->ID] = ['id' => $p->ID, 'n' => $n, 'txt' => $txt, 'foto' => $foto, 'x' => $x, 'y' => $y, 'sede' => tf_campo('sede', $p->ID) ? 1 : 0, 'izq' => $e === 'izquierda' ? 1 : 0, 'arr' => $e === 'arriba' ? 1 : 0];
 	}
 	$his = array_map(function ($p) {
 		$v = tf_campo('video', $p->ID); $f = tf_foto($p->ID, 'large'); $h = ['id' => $p->ID, 'n' => get_the_title($p)];

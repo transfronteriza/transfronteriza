@@ -69,7 +69,8 @@ dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;borde
 /* ---------- 2 · tres perfiles ---------- */
 .tres{position:relative;display:flex;gap:6px;height:min(76vh,700px);border-radius:6px;overflow:hidden;background:var(--tinta)}
 .perfil{position:relative;flex:1;min-width:0;overflow:hidden;text-align:left;transition:flex .8s var(--ease),height .8s var(--ease)}
-.perfil img{position:absolute;left:0;right:0;bottom:0;width:100%;height:94%;object-fit:contain;object-position:50% 100%;transform-origin:50% 100%;transition:transform 1.4s var(--ease)}
+.perfil img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%;transform-origin:50% 100%;transition:transform 1.4s var(--ease)}
+.perfil.rec img{inset:auto 0 0 0;height:94%;object-fit:contain;object-position:50% 100%}
 .perfil .luz.fondo{position:absolute;inset:0;width:100%;height:100%;border-radius:0}
 .tres:not(.abierto) .perfil:hover{flex:1.35}
 .tres:not(.abierto) .perfil:hover img{transform:scale(1.04)}
@@ -884,9 +885,13 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   };
 
   /* ===== 2 · tres perfiles: con vídeo si lo hay; si no, retrato con su frase ===== */
-  const PERF = TF.perfiles || [];
+  const PERF0 = [
+    { f: '<?php echo TF_U; ?>/img/voces/ismail-luz.webp', luz: 'retrato1', n: 'Ismail', r: 'Joven transfronterizo', q: 'Nací cruzando fronteras y crecí entre gente blanca y gente morena. Si alguien piensa negármelo, que lo intente.', vm: '1174696216', vr: 16 / 9, fx: .6 },
+    { f: '<?php echo TF_U; ?>/img/voces/rebab-luz.webp', luz: 'retrato2', n: 'Rebab', r: 'Joven transfronteriza', q: '¿Qué soy? ¿Un error de Dios? ¿Qué les queda a las que sobresalen de la norma?', vm: '1174696042', vr: 16 / 9, fx: .62 }
+  ];
+  const PERF = TF.perfiles && TF.perfiles.length ? TF.perfiles : PERF0;
   const tres = $('#tres');
-  tres.insertAdjacentHTML('afterbegin', PERF.map((p, i) => `<button class="perfil" type="button" data-i="${i}" aria-label="Escuchar a ${p.n}"${EI(p.id, 'tf_perfil')}>${p.luz ? luzCanvas(p.luz, ' fondo') : ''}<img src="${p.f}" alt="${p.n}"${EF(p.id)}><p class="sub">${p.q.split(' ').map(w => `<span>${w}</span>`).join(' ')}</p><span class="nom"><span><b${ED(p.id, 'titulo')}>${p.n}</b><small${ED(p.id, 'rol')}>${p.r}</small></span><i>▶</i></span></button>`).join(''));
+  tres.insertAdjacentHTML('afterbegin', PERF.map((p, i) => `<button class="perfil${/-luz/.test(p.f) ? ' rec' : ''}" type="button" data-i="${i}" aria-label="Escuchar a ${p.n}"${EI(p.id, 'tf_perfil')}>${luzCanvas(p.luz || (i % 2 ? 'retrato2' : 'retrato1'), ' fondo')}<img src="${p.f}" alt="${p.n}"${EF(p.id)}><p class="sub">${p.q.split(' ').map(w => `<span>${w}</span>`).join(' ')}</p><span class="nom"><span><b${ED(p.id, 'titulo')}>${p.n}</b><small${ED(p.id, 'rol')}>${p.r}</small></span><i>▶</i></span></button>`).join(''));
   tres.insertAdjacentHTML('beforeend', '<div class="barraP"><b id="barraP"></b></div>');
   let tP = null, vivoP = null;
   const cierraP = () => { cancelAnimationFrame(tP); vivoP?.quita(); vivoP = null; tres.querySelectorAll('.vid').forEach(v => { v.pause(); v.remove(); }); tres.classList.remove('abierto'); tres.querySelectorAll('.perfil').forEach(p => { p.classList.remove('on'); p.querySelectorAll('.sub span').forEach(s => s.classList.remove('v')); }); $('#barraP').style.width = 0; };
@@ -921,7 +926,18 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   pintaCuenta();
 
   /* ===== 5 · el globo del revés, con la gente de cada ciudad ===== */
-  const CIU = TF.ciudades || {};
+  const CIU0 = {
+    algeciras: { n: 'Algeciras', txt: 'Aquí nació Transfronteriza, a un paso del Estrecho. Si vives cerca, súmate: te presentamos a la comunidad.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-algeciras.jpg', x: 60.72, y: 36.18, sede: 1 },
+    jerez: { n: 'Jérez del Marquesado', txt: 'La finca Las Viñas, al pie de Sierra Nevada. Aquí hacemos el encuentro de cada septiembre.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-jerez.jpg', x: 48.74, y: 42.81, sede: 1, izq: 1 },
+    granada: { n: 'Granada', txt: '¿Vives en Granada? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-granada.jpg', x: 51.02, y: 42.75, arr: 1 },
+    ceuta: { n: 'Ceuta', txt: '¿Vives en Ceuta? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '', x: 60.1, y: 34.6, arr: 1 },
+    gibraltar: { n: 'Gibraltar', txt: '¿Vives en Gibraltar? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '', x: 60.25, y: 36.55, izq: 1 },
+    almeria: { n: 'Almería', txt: '¿Vives en Almería? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '', x: 45.4, y: 40.7 },
+    malaga: { n: 'Málaga', txt: '¿Vives en Málaga? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-malaga.jpg', x: 55.29, y: 39.84 },
+    murcia: { n: 'Murcia', txt: '¿Vives en Murcia? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-murcia.jpg', x: 38.45, y: 48.15, izq: 1 },
+    madrid: { n: 'Madrid', txt: '¿Vives en Madrid? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-madrid.jpg', x: 51.49, y: 63.67 },
+    barcelona: { n: 'Barcelona', txt: '¿Vives en Barcelona? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-barcelona.jpg', x: 23.04, y: 70.73 }
+  };
   /* el mar: el zellige añil de la marca (espiga de azulejo esmaltado, junta de cal) y la luz que lo cruza despacio */
   const ANIL = ['#2F4FA8', '#294796', '#3657B3', '#223D85', '#3B5FBE', '#2B4A9F', '#4A6BC2', '#1E377A', '#3252AC', '#5575C6'];
   const zellige = (g, x0, y0, w, h, r, s, pal = ANIL, grout = '#E4DDCD') => {
@@ -967,6 +983,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     const bucle = t => { if (t - t0 > 40) { T += Math.min(.1, (t - t0) / 1000); t0 = t; dibuja(); } raf = enVista ? requestAnimationFrame(bucle) : 0; };
     /* el zellige queda aquí por si vuelve; el mar lo pinta ahora luz.js (manual v3) */
   })();
+  const CIU = TF.ciudades && Object.keys(TF.ciudades).length ? TF.ciudades : CIU0;
   const mapa = $('#mapa'), mapaG = $('#mapaG'), panel = $('#panel');
   Object.entries(CIU).forEach(([k, c], i) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'pun' + (c.sede ? ' sede' : '') + (c.izq ? ' izq' : '') + (c.arr ? ' arr' : ''); b.style.left = c.x + '%'; b.style.top = c.y + '%'; b.dataset.c = k; b.setAttribute('aria-pressed', 'false'); b.innerHTML = `<canvas aria-hidden="true"></canvas><span>${c.n}</span>`; mapa.appendChild(b); pep(b.querySelector('canvas'), i + 3); });
   const elige = k => { const c = CIU[k]; mapa.querySelectorAll('.pun').forEach(p => p.setAttribute('aria-pressed', p.dataset.c === k)); document.querySelectorAll('.ciuM button').forEach(p => p.setAttribute('aria-pressed', p.dataset.c === k)); panel.innerHTML = `<div${EI(c.id, 'tf_ciudad')}><figure class="pf${c.foto ? '' : ' sin'}"${EF(c.id)}>${c.foto ? `<img src="${c.foto}" alt="${esc(c.n)}." loading="lazy" decoding="async">` : ''}</figure><div class="pt"><h3${ED(c.id, 'titulo')}>${c.n}</h3><p class="txt"${ED(c.id, 'texto')}>${c.txt}</p><button class="btn p" type="button" data-flujo="ciudad" data-ciudad="${c.n}" data-foto="${c.foto}">Haz comunidad en ${c.n}</button></div></div>`; };
@@ -975,7 +992,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const ciuM = mapaG.nextElementSibling; ciuM.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { elige(b.dataset.c); if (innerWidth <= 1000) panel.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' }); } });
   /* en pantallas estrechas la ficha de la ciudad va debajo del mapa */
   { const mq = matchMedia('(max-width:1000px)'); const coloca = () => { if (mq.matches) { panel.classList.add('movil'); ciuM.after(panel); } else { panel.classList.remove('movil'); mapaG.querySelector('.lupa').before(panel); } }; mq.addEventListener('change', coloca); coloca(); }
-  if (Object.keys(CIU).length) elige(Object.keys(CIU)[0]);
+  elige(CIU.algeciras ? 'algeciras' : Object.keys(CIU)[0]);
   /* el mapa se maneja como un mapa: arrastrar para moverse, rueda o botones para acercar, doble clic para acercar ahí */
   (() => { const l = $('#lupa'); if (!l) return; let z = 1, tx = 0, ty = 0, drag = null, movio = false;
     const S = () => mapa.getBoundingClientRect().width / z;
