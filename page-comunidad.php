@@ -643,7 +643,6 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
         <h2 data-tf="t4d20f5ee80"><?php tf_t('t4d20f5ee80'); ?></h2>
         <div class="frases"><p data-tf="tb39ee0fd33"><?php tf_t('tb39ee0fd33'); ?></p><p data-tf="t87765b2a56"><?php tf_t('t87765b2a56'); ?></p></div>
         <p class="desc" data-tf="t657d9dca65"><?php tf_t('t657d9dca65'); ?></p>
-        <ul class="fronV"><li data-tf="tb115ad2c6e"><?php tf_t('tb115ad2c6e'); ?></li><li data-tf="tcf7b2d8f33"><?php tf_t('tcf7b2d8f33'); ?></li><li data-tf="te8371987d3"><?php tf_t('te8371987d3'); ?></li></ul>
         <div class="acts"><a class="btn p" href="#" data-entrar data-tf="t93b479b511"><?php tf_t('t93b479b511'); ?></a></div>
       </div>
       <div class="fronA">
@@ -932,11 +931,11 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 
   /* ===== 5 · el globo del revés, con la gente de cada ciudad ===== */
   const CIU0 = {
-    algeciras: { n: 'Algeciras', txt: 'Aquí nació Transfronteriza, a un paso del Estrecho. Si vives cerca, súmate: te presentamos a la comunidad.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-algeciras.jpg', x: 62.22, y: 49.51, sede: 1 },
+    algeciras: { n: 'Algeciras', txt: 'Aquí nació Transfronteriza, a un paso del Estrecho. Si vives cerca, súmate: te presentamos a la comunidad.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-algeciras.jpg', x: 61.39, y: 49.51, sede: 1 },
     jerez: { n: 'Jérez del Marquesado', txt: 'La finca Las Viñas, al pie de Sierra Nevada. Aquí hacemos el encuentro de cada septiembre.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-jerez.jpg', x: 47.72, y: 56.88, sede: 1, aba: 1 },
     granada: { n: 'Granada', txt: '¿Vives en Granada? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-granada.jpg', x: 51.94, y: 56.81, arr: 1 },
-    ceuta: { n: 'Ceuta', txt: '¿Vives en Ceuta? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-ceuta.jpg', x: 61.5, y: 45.76, arr: 1 },
-    gibraltar: { n: 'Gibraltar', txt: '¿Vives en Gibraltar? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-gibraltar.jpg', x: 58.06, y: 47.5, izq: 1 },
+    ceuta: { n: 'Ceuta', txt: '¿Vives en Ceuta? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-ceuta.jpg', x: 60.11, y: 47.43, arr: 1 },
+    gibraltar: { n: 'Gibraltar', txt: '¿Vives en Gibraltar? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-gibraltar.jpg', x: 59.61, y: 48.61, izq: 1 },
     almeria: { n: 'Almería', txt: '¿Vives en Almería? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-almeria.jpg', x: 44.22, y: 54.44, izq: 1 },
     malaga: { n: 'Málaga', txt: '¿Vives en Málaga? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-malaga.jpg', x: 56.22, y: 53.61 },
     murcia: { n: 'Murcia', txt: '¿Vives en Murcia? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-murcia.jpg', x: 36.83, y: 62.36, izq: 1 },
@@ -1237,7 +1236,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 .fronV li{display:flex;gap:12px;align-items:center}
 .fronV li::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--oro);flex:none}
 .fronA{position:relative;padding:clamp(22px,3.4vw,52px)}
-.fronA .fronL{position:absolute;inset:0;width:100%;height:100%;border-radius:40px;z-index:0}
+.fronA .fronL{position:absolute;inset:0;width:100%;height:100%;border-radius:40px;clip-path:inset(0 round 40px);z-index:0}
 .fronA .app{position:relative;z-index:1;border-radius:28px;overflow:hidden;height:min(600px,72vh);box-shadow:0 40px 90px rgba(31,27,45,.28)}
 .app .cab{background:var(--tinta);color:var(--papel);border-bottom:0;padding:14px 18px}
 .app .cab .marca{color:var(--papel)}
@@ -1260,7 +1259,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 @media (max-width:1000px){
   .fron{grid-template-columns:minmax(0,1fr)}
   .fronA{padding:14px}
-  .fronA .fronL{border-radius:28px}
+  .fronA .fronL{border-radius:28px;clip-path:inset(0 round 28px)}
   .fronA .app{height:min(560px,70vh)}
   .app .dentro{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
   .salas{flex-direction:row;overflow-x:auto;scrollbar-width:none;border-right:0;border-bottom:1px solid var(--linea);padding:10px}
