@@ -202,7 +202,7 @@ function tf_datos_comunidad() {
 function tf_encuentro_bloque() {
 	echo '<div class="anual"><figure class="af"><img src="' . esc_url(tf_op('enc_foto', TF_U . '/img/comunidad/grupo.jpg')) . '" alt="La comunidad reunida en Jérez del Marquesado, con Sierra Nevada al fondo." loading="lazy" data-tf-f="o.enc_foto"></figure><div class="at">';
 	echo '<h2 data-tf-c="o.enc_titulo">' . esc_html(tf_op('enc_titulo', 'Nos vemos en Sierra Nevada.')) . '</h2><p class="lead" data-tf-c="o.enc_texto">' . esc_html(tf_op('enc_texto', 'Cada septiembre, la comunidad se junta tres días en la finca Las Viñas, en Jérez del Marquesado. Talleres, música, montaña y noches largas de conversación.')) . '</p>';
-	echo '<p class="cuenta" id="cuenta"></p><div class="acts"><button class="btn p" type="button" data-flujo="anual">'; tf_tp('p-quiero-ir', 'Quiero ir'); echo '</button><button class="enl" type="button" data-flujo="aviso">'; tf_tp('p-avisame', 'Avísame cuando abran las plazas'); echo '</button></div></div></div>';
+	echo '<div class="acts"><button class="btn p" type="button" data-flujo="anual">'; tf_tp('p-quiero-ir', 'Quiero ir'); echo '</button><button class="enl" type="button" data-flujo="aviso">'; tf_tp('p-avisame', 'Avísame'); echo '</button></div></div></div>';
 }
 function tf_mecenas_intro() {
 	$foto = tf_op('mec_foto', TF_U . '/img/comunidad/mecenas.jpg');
@@ -236,7 +236,7 @@ add_action('template_redirect', function () {
  * Los textos originales están en textos-base.php; lo cambiado se guarda aparte y tiene prioridad.
  * ========================================================= */
 function tf_permitido() { return ['b' => [], 'strong' => [], 'i' => [], 'em' => [], 'br' => [], 'mark' => [], 'sup' => [], 'sub' => [], 'span' => ['class' => true], 'a' => ['href' => true, 'target' => true, 'rel' => true]]; }
-function tf_base_php() { return ['p-leer-informe' => 'Leer el informe', 'p-descargar-pdf' => 'Descargar PDF', 'p-quiero-ir' => 'Quiero ir', 'p-avisame' => 'Avísame cuando abran las plazas']; }
+function tf_base_php() { return ['p-leer-informe' => 'Leer el informe', 'p-descargar-pdf' => 'Descargar PDF', 'p-quiero-ir' => 'Quiero ir', 'p-avisame' => 'Avísame']; }
 function tf_base() { static $b = null; if ($b === null) { $f = __DIR__ . '/textos-base.php'; $b = (is_file($f) ? (array) include $f : []) + tf_base_php(); } return $b; }
 /* un texto fijo del PHP: se pinta dentro de un <span data-tf> para poder cambiarlo desde la web */
 function tf_tp($k, $def, $eco = true) {
