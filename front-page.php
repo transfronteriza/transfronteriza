@@ -108,11 +108,11 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .com{color:var(--tinta)}
 .com .btn{background:var(--tinta);color:var(--papel)}
 .com::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(245,238,223,.28),rgba(245,238,223,0) 40%)}
-.cover{position:relative;z-index:2;margin:auto 0;align-self:center;width:clamp(200px,19vw,290px);aspect-ratio:3/4;border-radius:4px;overflow:hidden;background:#27223a;box-shadow:0 1px 0 rgba(245,238,223,.06) inset,0 22px 44px rgba(0,0,0,.45);transform:rotate(3deg);transition:transform .6s var(--ease),box-shadow .6s;outline:1px solid transparent;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform}
+.cover{position:relative;z-index:2;margin:auto 0;align-self:center;width:clamp(200px,19vw,290px);aspect-ratio:3/4;border-radius:4px;overflow:hidden;background:#1F1B2D;isolation:isolate;transform:translateZ(0);box-shadow:0 1px 0 rgba(245,238,223,.06) inset,0 22px 44px rgba(0,0,0,.45);transform:rotate(3deg);transition:transform .6s var(--ease),box-shadow .6s;outline:1px solid transparent;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform}
 .fut:hover .cover,.fut:focus-visible .cover{transform:rotate(0deg) translateY(-8px);box-shadow:0 1px 0 rgba(245,238,223,.06) inset,0 30px 60px rgba(0,0,0,.55)}
 .cover > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.cover > .luz{position:absolute;inset:0;width:100%;height:100%;border-radius:0}
-.cover #girH{position:absolute;inset:0;width:100%;height:100%}
+.cover > .luz{position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px);border-radius:0}
+.cover #girH{position:absolute;inset:-1px;width:calc(100% + 2px);height:calc(100% + 2px)}
 .cover::after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(15,12,24,.6),rgba(15,12,24,0) 55%)}
 .cover .ct{position:absolute;inset:0;z-index:2;padding:clamp(16px,1.6vw,22px);display:flex;flex-direction:column;gap:10px;color:var(--papel)}
 .cover .ct span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;opacity:.7}
@@ -178,6 +178,7 @@ input[type=text]:focus,input[type=email]:focus{outline:0;box-shadow:inset 0 0 0 
 .foot nav{display:flex;gap:28px;flex-wrap:wrap;align-items:center}
 .foot nav a:hover{color:var(--papel)}
 .foot .leg{margin-top:36px;font-size:13px;color:rgba(245,238,223,.42);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.leg .legn{display:flex;gap:18px;flex-wrap:wrap}
 .foot .in{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,400px);grid-template-areas:"row carta" "leg leg";gap:44px clamp(32px,6vw,96px);align-items:start}
 .foot .row{grid-area:row;flex-direction:column;align-items:flex-start;gap:26px}
 .foot .leg{grid-area:leg;margin-top:0}
@@ -398,7 +399,6 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
         <h2 data-tf="t9d63ac4424"><?php tf_t('t9d63ac4424'); ?></h2>
         <p class="sub" data-tf="tfb8b046ee2"><?php tf_t('tfb8b046ee2'); ?></p>
         <form id="reg" novalidate>
-          <div class="steps" aria-hidden="true"><i class="on"></i><i></i><span id="stepTxt">Paso 1 de 2</span></div>
           <fieldset id="s1">
             <div class="two"><label class="f">Tu nombre<input type="text" id="f-nombre" autocomplete="given-name" required></label><label class="f">Tu correo<input type="email" id="f-correo" autocomplete="email" required></label></div>
             <p class="q" data-tf="t597087772a"><?php tf_t('t597087772a'); ?></p>
@@ -437,7 +437,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     <p class="hecho" id="cartaOk" hidden>Te hemos escrito. Confirma desde tu correo y listo.</p>
   </form>
   <div class="row"><img class="flogo" src="<?php tf_img('ia8745bc028', TF_U . '/logo/h-oscuro-34.svg'); ?>" data-tf-img="ia8745bc028" alt="Transfronteriza"><nav aria-label="Pie"><a href="<?php echo esc_url(tf_pagina('comunidad')); ?>" data-tf="t38114eb012"><?php tf_t('t38114eb012'); ?></a><a href="<?php echo esc_url(tf_pagina('futuros')); ?>" data-tf="tf6078594dd"><?php tf_t('tf6078594dd'); ?></a><a href="#descubre" data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a><a href="mailto:hola@transfronteriza.net" data-tf="ta0aa22019a"><?php tf_t('ta0aa22019a'); ?></a></nav></div>
-  <div class="leg"><span>© 2026 Asociación Juvenil Transfronteriza</span><span><button type="button" data-legal="aviso" data-tf="t2a27eb438d"><?php tf_t('t2a27eb438d'); ?></button> · <button type="button" data-legal="privacidad" data-tf="tcd9bcb9fd2"><?php tf_t('tcd9bcb9fd2'); ?></button> · <button type="button" data-legal="cookies" data-tf="t53614378a5"><?php tf_t('t53614378a5'); ?></button></span></div>
+  <div class="leg"><span>© 2026 Asociación Juvenil Transfronteriza</span><span class="legn"><button type="button" data-legal="aviso" data-tf="t2a27eb438d"><?php tf_t('t2a27eb438d'); ?></button><button type="button" data-legal="privacidad" data-tf="tcd9bcb9fd2"><?php tf_t('tcd9bcb9fd2'); ?></button><button type="button" data-legal="cookies" data-tf="t53614378a5"><?php tf_t('t53614378a5'); ?></button></span></div>
 </div></footer>
 
 <dialog class="legal" id="legal" aria-label="Información legal">
@@ -502,7 +502,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const card = ([f, n, e, c, q, id], i) => {
     const rt = ((r0() - .5) * 7).toFixed(2), ty = Math.round((r0() - .5) * (innerWidth < 700 ? 16 : 50)), sd = (6 + r0() * 4).toFixed(1), dl = (-r0() * 6).toFixed(1);
     const [a, b] = corners[(r0() * corners.length) | 0];
-    return `<li class="pc"${EI(id, 'tf_tarjeta')} style="--rt:${rt}deg;--ty:${ty}px;--sd:${sd}s;--dl:${dl}s"><div class="cin"><div class="ph"${EF(id)}><img src="${f}" alt="${n}, ${e} años, ${c}." loading="lazy"></div><blockquote>«<span${ED(id, 'frase')}>${q}</span>»</blockquote><p class="who"><b${ED(id, 'titulo')}>${n}</b>, <span${ED(id, 'edad')}>${e}</span> · <span${ED(id, 'ciudad')}>${c}</span></p></div><span class="pw" style="${a};${b}"><canvas data-seed="${i + 10}" style="--pd:${(3.5 + r0() * 3).toFixed(1)}s;--pr:${Math.round((r0() < .5 ? -1 : 1) * (22 + r0() * 20))}deg;--px:${Math.round((r0() - .5) * 16)}px;--py:${Math.round(-7 - r0() * 8)}px" aria-hidden="true"></canvas></span></li>`;
+    return `<li class="pc"${EI(id, 'tf_tarjeta')} style="--rt:${rt}deg;--ty:${ty}px;--sd:${sd}s;--dl:${dl}s"><div class="cin"><div class="ph"${EF(id)}><img src="${f}" alt="${n}, ${e} años, ${c}." loading="lazy"></div><blockquote>«<span${ED(id, 'frase')}>${q}</span>»</blockquote><p class="who"><b${ED(id, 'titulo')}>${n}</b>, <span${ED(id, 'edad')}>${e}</span>, <span${ED(id, 'ciudad')}>${c}</span></p></div><span class="pw" style="${a};${b}"><canvas data-seed="${i + 10}" style="--pd:${(3.5 + r0() * 3).toFixed(1)}s;--pr:${Math.round((r0() < .5 ? -1 : 1) * (22 + r0() * 20))}deg;--px:${Math.round((r0() - .5) * 16)}px;--py:${Math.round(-7 - r0() * 8)}px" aria-hidden="true"></canvas></span></li>`;
   };
   document.getElementById('cardsA').innerHTML = P.slice(0, 4).map(card).join('');
   document.getElementById('cardsB').innerHTML = P.slice(4).map((p, i) => card(p, i + 4)).join('');
@@ -524,7 +524,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const pinta = new Map(), ro = new ResizeObserver(es => es.forEach(e => { if (e.contentRect.width > 0) pinta.get(e.target)?.(); }));
   const vigila = (cv, fn) => { pinta.set(cv, fn); ro.observe(cv); };
   vigila(sp, drawSpiral);
-  { const cv = document.getElementById('girH'); if (cv) vigila(cv, () => { const [g, w, h] = setup(cv); symbol(g, w * .78, h * .70, Math.max(w, h) * .27, 200, '#FFFBF2', '#F5EEDF', rng(90), [0, 0, w, h]); }); }
+  { const cv = document.getElementById('girH'); if (cv) vigila(cv, () => { const [g, w, h] = setup(cv); symbol(g, w * .78, h * .70, Math.max(w, h) * .27, 200, '#FFFBF2', '#F5EEDF', rng(90), [3, 3, w - 6, h - 6]); }); }
   document.querySelectorAll('.pw canvas').forEach(cv => vigila(cv, () => drawPepita(cv)));
   /* giro del girasol: ritmo natural y un impulso de alegría al enviar */
   let ang = 0, boost = 0, tS = 0, sOn = false, running = false;
@@ -558,7 +558,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const fm = document.getElementById('reg'), s1 = document.getElementById('s1'), s2 = document.getElementById('s2'), err = document.getElementById('err');
   const next = document.getElementById('next'), back = document.getElementById('back'), dots = fm.querySelectorAll('.steps i'), stepTxt = document.getElementById('stepTxt');
   let step = 1;
-  const go = n => { step = n; s1.hidden = n !== 1; s2.hidden = n !== 2; dots[1].classList.toggle('on', n === 2); stepTxt.textContent = `Paso ${n} de 2`; back.hidden = n !== 2; next.textContent = n === 2 ? 'Enviar' : 'Seguir'; err.textContent = ''; };
+  const go = n => { step = n; s1.hidden = n !== 1; s2.hidden = n !== 2; if (dots[1]) dots[1].classList.toggle('on', n === 2); if (stepTxt) stepTxt.textContent = `Paso ${n} de 2`; back.hidden = n !== 2; next.textContent = n === 2 ? 'Enviar' : 'Seguir'; err.textContent = ''; };
   back.addEventListener('click', () => go(1));
   fm.addEventListener('submit', e => {
     e.preventDefault();

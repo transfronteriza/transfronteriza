@@ -139,8 +139,8 @@ function tf_documentos() {
 
 /* ---------- Comunidad ---------- */
 function tf_globo($lat, $lon) {
-	/* el mapa de las dos orillas (img/tierra.webp): norte arriba, el cuadro va de 12,5° O a 5,5° E y de 29° N a 43,4° N */
-	return [round(((float) $lon + 12.5) / 18 * 100, 2), round((43.4 - (float) $lat) / 14.4 * 100, 2)];
+	/* el mapa de las dos orillas (img/tierra.webp): del revés (sur arriba, este a la izquierda); el cuadro va de 12,5° O a 5,5° E y de 29° N a 43,4° N */
+	return [round(100 - ((float) $lon + 12.5) / 18 * 100, 2), round(100 - (43.4 - (float) $lat) / 14.4 * 100, 2)];
 }
 /* vídeo de Vimeo: basta con pegar el enlace; la proporción y la portada las pide a Vimeo una vez por semana */
 function tf_vimeo($url) {
