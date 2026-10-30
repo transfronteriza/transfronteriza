@@ -933,9 +933,9 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const CIU0 = {
     algeciras: { n: 'Algeciras', txt: 'Aquí nació Transfronteriza, a un paso del Estrecho. Si vives cerca, súmate: te presentamos a la comunidad.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-algeciras.jpg', x: 61.39, y: 49.51, sede: 1 },
     jerez: { n: 'Jérez del Marquesado', txt: 'La finca Las Viñas, al pie de Sierra Nevada. Aquí hacemos el encuentro de cada septiembre.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-jerez.jpg', x: 47.72, y: 56.88, sede: 1, aba: 1 },
-    granada: { n: 'Granada', txt: '¿Vives en Granada? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-granada.jpg', x: 51.94, y: 56.81, arr: 1 },
-    ceuta: { n: 'Ceuta', txt: '¿Vives en Ceuta? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-ceuta.jpg', x: 60.11, y: 47.43, arr: 1 },
-    gibraltar: { n: 'Gibraltar', txt: '¿Vives en Gibraltar? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-gibraltar.jpg', x: 59.61, y: 48.61, izq: 1 },
+    granada: { n: 'Granada', txt: '¿Vives en Granada? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-granada.jpg', x: 52.22, y: 56.81, arr: 1 },
+    ceuta: { n: 'Ceuta', txt: '¿Vives en Ceuta? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-ceuta.jpg', x: 60.11, y: 47.08, arr: 1 },
+    gibraltar: { n: 'Gibraltar', txt: '¿Vives en Gibraltar? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-gibraltar.jpg', x: 59.33, y: 48.4, izq: 1 },
     almeria: { n: 'Almería', txt: '¿Vives en Almería? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-almeria.jpg', x: 44.22, y: 54.44, izq: 1 },
     malaga: { n: 'Málaga', txt: '¿Vives en Málaga? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-malaga.jpg', x: 56.22, y: 53.61 },
     murcia: { n: 'Murcia', txt: '¿Vives en Murcia? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.', foto: '<?php echo TF_U; ?>/img/comunidad/ciudad-murcia.jpg', x: 36.83, y: 62.36, izq: 1 },
@@ -1211,11 +1211,11 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 .tierra{--z:1;--tx:0px;--ty:0px;position:absolute;left:50%;top:50%;height:180%;aspect-ratio:1/1;width:auto;translate:-50% -50%;transform:translate(var(--tx),var(--ty)) scale(var(--z));transform-origin:50% 50%;will-change:transform;z-index:1}
 .tierra > img{position:absolute;left:-41.66%;top:-34.73%;width:183.33%;height:166.67%;max-width:none;pointer-events:none}
 .tierra .pun{scale:calc(1 / var(--z));font-size:14px}
-.tierra .pun canvas{width:24px;height:24px;transition:transform .5s var(--ease)}
-.tierra .pun.sede canvas{width:30px;height:30px}
+.tierra .pun canvas{width:22px;height:22px;transition:transform .5s var(--ease)}
+.tierra .pun.sede canvas{width:28px;height:28px}
 .tierra .pun span{padding:5px 10px;border-radius:999px;background:rgba(245,238,223,.92);color:var(--tinta);text-shadow:none;box-shadow:0 6px 16px rgba(31,27,45,.14)}
 .tierra .pun[aria-pressed=true] span{background:var(--tinta);color:var(--papel)}
-.tierra .pun[aria-pressed=true] canvas{transform:scale(1.25)}
+.tierra .pun[aria-pressed=true] canvas{transform:scale(1.1)}
 #mapaG > .panel{position:absolute;z-index:3;right:clamp(14px,2vw,28px);bottom:clamp(14px,2vw,28px);width:min(360px,38%);box-shadow:0 30px 70px rgba(31,27,45,.28)}
 #mapaG > .panel .pf{height:clamp(130px,16vw,190px)}
 .mapaG .lupa{display:flex;left:auto;right:clamp(14px,2vw,28px);top:clamp(14px,2vw,28px);bottom:auto;flex-direction:column}
