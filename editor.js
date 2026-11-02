@@ -1,5 +1,6 @@
 /* Editar esta página. Solo lo carga quien puede editar.
-   - Textos fijos de la web [data-tf] y campos de las fichas [data-tf-c] (tarjetas, historias, papers, encuentro, mecenas…): se escriben encima.
+   - Textos fijos de la web [data-tf] (también los que pinta el JavaScript, que marca textos.js) y campos de las fichas [data-tf-c]
+     (tarjetas, historias, papers, encuentro, mecenas…): se escriben encima. Las fichas se guardan como texto plano (textContent).
    - Fotos y vídeos [data-tf-img] [data-tf-vid] [data-tf-f]: se pulsan y se elige otro de la biblioteca.
    - Cada elemento de una lista [data-tf-item]: abrir su ficha, añadir otro o quitarlo de la web.
    - Secciones [data-tf-sec]: ocultar o mostrar, y enlace a su lista del panel. */
@@ -10,6 +11,9 @@
   const plano = (() => { const d = document.createElement('div'); d.contentEditable = 'plaintext-only'; return d.contentEditable === 'plaintext-only'; })();
   const NOMBRE = { tf_tarjeta: 'tarjeta', tf_historia: 'historia', tf_perfil: 'perfil', tf_ciudad: 'ciudad', tf_paper: 'paper', tf_persona: 'persona', tf_cifra: 'cifra', tf_apoyo: 'logo', tf_documento: 'documento', tf_informe: 'informe' };
   let on = false, ocultas = new Set(E.ocultas || []), secCambio = false;
+  const TX = window.TF_TX || { orig: {}, imgsOrig: {} };
+  const baseDe = k => k in E.base ? E.base[k] : TX.orig[k];
+  const imgDef = k => k in E.imgs ? E.imgs[k] : TX.imgsOrig[k];
   const cambios = { textos: {}, imgs: {}, contenido: {}, fotos: {} }, quitar = new Set();
 
   /* ---------- botón para empezar y barra de abajo ---------- */
@@ -31,8 +35,8 @@
       const k = n.dataset.tf; cambios.textos[k] = n.innerHTML;
       $$(`[data-tf="${k}"]`).forEach(o => { if (o !== n) o.innerHTML = n.innerHTML; });
     } else {
-      const k = n.dataset.tfC; cambios.contenido[k] = n.innerText.replace(/\s+/g, ' ').trim();
-      $$(`[data-tf-c="${k}"]`).forEach(o => { if (o !== n) o.textContent = n.innerText; });
+      const k = n.dataset.tfC, v = n.textContent.replace(/\s+/g, ' ').trim(); cambios.contenido[k] = v;
+      $$(`[data-tf-c="${k}"]`).forEach(o => { if (o !== n) o.textContent = v; });
     }
     cuenta(); ponOriginal(n);
   };
@@ -47,10 +51,10 @@
   const ponOriginal = n => {
     btnOrig?.remove(); btnOrig = null; if (!n || !n.hasAttribute('data-tf')) return; const k = n.dataset.tf;
     const cambiado = k in cambios.textos ? cambios.textos[k] !== null : E.cambiados.includes(k);
-    if (!cambiado || !(k in E.base)) return;
+    if (!cambiado || baseDe(k) == null) return;
     btnOrig = el('button', 'tfe-orig', '↺ Volver al texto original'); btnOrig.type = 'button';
     btnOrig.addEventListener('mousedown', ev => ev.preventDefault());
-    btnOrig.addEventListener('click', () => { $$(`[data-tf="${k}"]`).forEach(o => o.innerHTML = E.base[k]); cambios.textos[k] = null; cuenta(); btnOrig.remove(); btnOrig = null; });
+    btnOrig.addEventListener('click', () => { $$(`[data-tf="${k}"]`).forEach(o => o.innerHTML = baseDe(k)); cambios.textos[k] = null; cuenta(); btnOrig.remove(); btnOrig = null; });
     const r = n.getBoundingClientRect(); btnOrig.style.top = (r.top + scrollY - 34) + 'px'; btnOrig.style.left = (r.left + scrollX) + 'px';
     capa.appendChild(btnOrig);
   };
@@ -72,7 +76,7 @@
   const quitaMenu = () => { menu?.remove(); menu = null; };
   const menuMedio = (m, x, y) => {
     quitaMenu(); const esVid = m.tagName === 'VIDEO', ficha = m.dataset.tfF;
-    const k = ficha || m.dataset.tfImg || m.dataset.tfVid || m.querySelector('[data-tf-vid]')?.dataset.tfVid, def = ficha ? null : E.imgs[k];
+    const k = ficha || m.dataset.tfImg || m.dataset.tfVid || m.querySelector('[data-tf-vid]')?.dataset.tfVid, def = ficha ? null : imgDef(k);
     const cambiada = !ficha && (k in cambios.imgs ? cambios.imgs[k] !== null : E.imgsCambiadas.includes(k));
     menu = el('div', 'tfe-menu', `<button type="button" data-a="elige">${esVid ? 'Elegir otro vídeo' : 'Elegir otra foto'}</button>${cambiada && def ? `<button type="button" data-a="orig">${esVid ? 'Volver al vídeo original' : 'Volver a la foto original'}</button>` : ''}`);
     menu.style.top = (y + scrollY + 8) + 'px'; menu.style.left = Math.min(x + scrollX, scrollX + innerWidth - 250) + 'px';
@@ -135,10 +139,15 @@
   };
   const noEnviar = e => { if (on) { e.preventDefault(); e.stopPropagation(); } };
 
+  const activa = raiz => {
+    (raiz.matches?.('[data-tf]') ? [raiz] : []).concat([...raiz.querySelectorAll('[data-tf]')]).forEach(n => { if (!n.closest('.tfe-barra,.tfe-capa')) { n.contentEditable = 'true'; n.spellcheck = true; } });
+    (raiz.matches?.('[data-tf-c]') ? [raiz] : []).concat([...raiz.querySelectorAll('[data-tf-c]')]).forEach(n => { n.contentEditable = plano ? 'plaintext-only' : 'true'; n.spellcheck = true; });
+  };
+  /* lo que la página pinta mientras se edita (un paso, una ventana) también se marca y se vuelve editable */
+  new MutationObserver(ms => { if (!on) return; for (const m of ms) m.addedNodes.forEach(n => { if (n.nodeType !== 1 || n.closest('.tfe-barra,.tfe-capa,.media-modal')) return; TX.marca?.(n); activa(n); }); }).observe(document.documentElement, { childList: true, subtree: true });
   const entra = () => {
     on = true; document.body.classList.add('tf-editando'); abre.hidden = true; barra.hidden = false; capa.hidden = false;
-    $$('[data-tf]').forEach(n => { n.contentEditable = 'true'; n.spellcheck = true; });
-    $$('[data-tf-c]').forEach(n => { n.contentEditable = plano ? 'plaintext-only' : 'true'; n.spellcheck = true; });
+    activa(document.body);
     $$('video').forEach(v => { if (medio(v)) v.pause(); });
     ponFichas(); cuenta();
   };
@@ -153,7 +162,7 @@
   barra.querySelector('.tfe-guarda').addEventListener('click', async ev => {
     const b = ev.currentTarget; b.disabled = true; b.textContent = 'Guardando…';
     try {
-      const r = await fetch(E.api, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': E.nonce }, body: JSON.stringify({ pagina: E.pagina, textos: cambios.textos, imgs: cambios.imgs, contenido: cambios.contenido, fotos: cambios.fotos, quitar: [...quitar], ocultas: secCambio ? [...ocultas] : undefined }) });
+      const r = await fetch(E.api, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': E.nonce }, body: JSON.stringify({ pagina: E.pagina, textos: cambios.textos, imgs: cambios.imgs, originales: Object.fromEntries(Object.keys(cambios.textos).filter(k => k.startsWith('tj') && TX.orig[k] != null).map(k => [k, TX.orig[k]])), contenido: cambios.contenido, fotos: cambios.fotos, quitar: [...quitar], ocultas: secCambio ? [...ocultas] : undefined }) });
       if (!r.ok) throw new Error(r.status);
       Object.entries(cambios.textos).forEach(([k, v]) => { const i = E.cambiados.indexOf(k); if (v === null) { if (i > -1) E.cambiados.splice(i, 1); } else if (i < 0) E.cambiados.push(k); });
       Object.entries(cambios.imgs).forEach(([k, v]) => { const i = E.imgsCambiadas.indexOf(k); if (v === null) { if (i > -1) E.imgsCambiadas.splice(i, 1); } else if (i < 0) E.imgsCambiadas.push(k); });

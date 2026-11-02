@@ -90,7 +90,7 @@ dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;borde
 .perfil .sub span.v{opacity:1}
 .perfil.on .nom i{display:none}
 .perfil .vid{position:absolute;inset:0;z-index:4;width:100%;height:100%;object-fit:cover;background:#000}
-.vm{position:absolute;inset:0;z-index:4;overflow:hidden;background:#000}
+.vm{position:absolute;inset:0;z-index:4;overflow:hidden;background:#000;transition:opacity .5s}.vm.carga{opacity:0}
 .vm iframe{position:absolute;border:0}
 .cerrarP{position:absolute;z-index:6;top:18px;right:18px;width:46px;height:46px;border-radius:50%;background:rgba(15,12,24,.45);color:var(--papel);font-size:22px;opacity:0;pointer-events:none;transition:opacity .4s .4s}
 .tres.abierto .cerrarP{opacity:1;pointer-events:auto}
@@ -417,7 +417,7 @@ dialog.verP::backdrop{background:#0F0C18}
 .verP .marco{position:relative;min-height:100%;display:flex;flex-direction:column;justify-content:center;gap:24px;padding:76px var(--gut) calc(34px + env(safe-area-inset-bottom,0px))}
 .verP .x{position:absolute;top:16px;right:16px;width:46px;height:46px;border-radius:50%;background:rgba(245,238,223,.14);color:var(--papel);font-size:22px}
 .vv{position:relative;width:min(100%,calc(60vh * var(--r)));aspect-ratio:var(--r);margin-inline:auto;border-radius:8px;overflow:hidden;background:#000}
-.vv iframe,.vv video{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vv iframe,.vv video{position:absolute;inset:0;width:100%;height:100%;border:0;transition:opacity .5s}.vv .post{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}.vv.carga iframe{opacity:0}
 .verP .fp{width:min(100%,360px);aspect-ratio:4/5;object-fit:cover;border-radius:8px;margin-inline:auto}
 .verP h3{font-size:34px;line-height:1;letter-spacing:-.03em}
 .verP small{display:block;margin-top:6px;font-size:15px;opacity:.72}
@@ -911,12 +911,13 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const cargaV = () => apiV || (apiV = new Promise((ok, ko) => { const s = document.createElement('script'); s.src = 'https://cdn.jsdelivr.net/npm/@vimeo/player@2/dist/player.min.js'; s.onload = () => ok(window.Vimeo); s.onerror = ko; document.head.appendChild(s); }));
   const vimeo = (caja, P, { avance, fin } = {}) => {
     const d = document.createElement('div'), f = document.createElement('iframe'), R = P.vr || 16 / 9, fx = P.fx ?? .5;
-    d.className = 'vm'; f.src = `https://player.vimeo.com/video/${P.vm}?autoplay=1&title=0&byline=0&portrait=0&controls=0&playsinline=1&dnt=1`; f.allow = 'autoplay; fullscreen; picture-in-picture'; f.title = P.n;
+    d.className = 'vm carga'; f.src = `https://player.vimeo.com/video/${P.vm}?autoplay=1&title=0&byline=0&portrait=0&controls=0&playsinline=1&dnt=1`; f.allow = 'autoplay; fullscreen; picture-in-picture'; f.title = P.n;
     d.appendChild(f); caja.prepend(d);
     const ajusta = () => { const w = caja.clientWidth, h = caja.clientHeight; let W = w, A = w / R; if (A < h) { A = h; W = h * R; } Object.assign(f.style, { width: W + 'px', height: A + 'px', left: (w - W) * fx + 'px', top: (h - A) / 2 + 'px' }); };
     ajusta(); const ro = new ResizeObserver(ajusta); ro.observe(caja);
-    let pl = null; cargaV().then(V => { pl = new V.Player(f); if (avance) pl.on('timeupdate', e => avance(e.percent)); if (fin) pl.on('ended', fin); }).catch(() => {});
-    return { quita: () => { ro.disconnect(); pl?.destroy?.().catch?.(() => {}); d.remove(); }, pausa: () => pl?.pause().catch(() => {}), sigue: () => pl?.play().catch(() => {}) };
+    const listo = () => d.classList.remove('carga'); const tl = setTimeout(listo, 3500);
+    let pl = null; cargaV().then(V => { pl = new V.Player(f); pl.on('play', listo); pl.on('timeupdate', e => { listo(); if (avance) avance(e.percent); }); if (fin) pl.on('ended', fin); }).catch(listo);
+    return { quita: () => { clearTimeout(tl); ro.disconnect(); pl?.destroy?.().catch?.(() => {}); d.remove(); }, pausa: () => pl?.pause().catch(() => {}), sigue: () => pl?.play().catch(() => {}) };
   };
 
   /* ===== 2 · tres perfiles: con vídeo si lo hay; si no, retrato con su frase ===== */
@@ -944,9 +945,10 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const dvp = $('#verP'), vpM = $('#vpM');
   const verP = i => {
     const P = PERF[i];
-    vpM.innerHTML = P.vm ? `<div class="vv" style="--r:${P.vr || 16 / 9}"><iframe src="https://player.vimeo.com/video/${P.vm}?autoplay=1&playsinline=1&title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="${esc(P.n)}"></iframe></div>`
+    vpM.innerHTML = P.vm ? `<div class="vv carga" style="--r:${P.vr || 16 / 9}"><img class="post" src="${P.f}" alt=""><iframe src="https://player.vimeo.com/video/${P.vm}?autoplay=1&playsinline=1&title=0&byline=0&portrait=0&dnt=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="${esc(P.n)}"></iframe></div>`
       : P.v ? `<div class="vv" style="--r:${P.vr || 9 / 16}"><video src="${P.v}" controls playsinline autoplay></video></div>` : `<img class="fp" src="${P.f}" alt="${esc(P.n)}">`;
     $('#vpN').textContent = P.n; $('#vpR').textContent = P.r || ''; $('#vpQ').textContent = P.q ? `«${P.q}»` : '';
+    const vv = vpM.querySelector('.vv.carga'); if (vv) { const listo = () => vv.classList.remove('carga'); const tl = setTimeout(listo, 3500); cargaV().then(V => { const pl = new V.Player(vv.querySelector('iframe')); pl.on('play', listo); pl.on('loaded', () => setTimeout(listo, 800)); }).catch(listo); dvp.addEventListener('close', () => clearTimeout(tl), { once: true }); }
     dvp.showModal();
   };
   dvp.addEventListener('close', () => { vpM.innerHTML = ''; });
@@ -1093,12 +1095,12 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const muestra = i => {
     vi = Math.max(0, Math.min(H.length - 1, i)); const h = H[vi];
     media?.remove(); media = null; vivoS?.quita(); vivoS = null;
-    if (h.vm) vivoS = vimeo(cuadroS, h, { avance: pintaBar, fin: () => vi < H.length - 1 ? muestra(vi + 1) : cierraS() });
+    if (h.vm) { if (h.f) { media = document.createElement('img'); media.src = h.f; media.alt = ''; cuadroS.prepend(media); } vivoS = vimeo(cuadroS, h, { avance: pintaBar, fin: () => vi < H.length - 1 ? muestra(vi + 1) : cierraS() }); }
     else if (h.luz) { media = document.createElement('div'); media.className = 'silL alta'; media.innerHTML = luzCanvas(h.luz); dur = 7000; }
     else if (!h.f && !h.v) { media = document.createElement('p'); media.className = 'tx'; media.textContent = `«${h.q}»`; dur = 7000; }
     else media = document.createElement(h.v ? 'video' : 'img');
     if (h.vm || !media || media.className === 'tx' || h.luz) {} else if (h.v) { media.src = h.v; media.poster = h.p; media.muted = true; media.playsInline = true; media.loop = true; media.autoplay = true; dur = 5000; } else { media.src = h.f; media.alt = h.n; dur = h.q ? 7000 : 4000; }
-    if (media) cuadroS.prepend(media); if (h.v) media.play().catch(() => {}); if (h.luz) luzArranca();
+    if (media && !h.vm) cuadroS.prepend(media); if (h.v) media.play().catch(() => {}); if (h.luz) luzArranca();
     $('#sQuien').textContent = h.n; $('#sCita').textContent = h.q && (h.f || h.luz) && !h.vm ? `«${h.q}»` : '';
     t0 = performance.now(); pintaBar(0); cancelAnimationFrame(tv); if (!reduce) tv = requestAnimationFrame(tick);
   };

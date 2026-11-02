@@ -240,7 +240,9 @@ add_action('template_redirect', function () {
  * Editar esta página: textos, fotos, vídeos y secciones se cambian desde la propia web.
  * Los textos originales están en textos-base.php; lo cambiado se guarda aparte y tiene prioridad.
  * ========================================================= */
-function tf_permitido() { return ['b' => [], 'strong' => [], 'i' => [], 'em' => [], 'br' => [], 'mark' => [], 'sup' => [], 'sub' => [], 'span' => ['class' => true], 'a' => ['href' => true, 'target' => true, 'rel' => true]]; }
+function tf_permitido() { $c = ['class' => true]; return ['b' => $c, 'strong' => $c, 'i' => $c, 'em' => $c, 'br' => [], 'mark' => $c, 'sup' => [], 'sub' => [], 'small' => $c, 'u' => [], 's' => [], 'q' => [], 'cite' => [], 'time' => $c, 'span' => $c, 'a' => ['href' => true, 'target' => true, 'rel' => true, 'class' => true]]; }
+/* claves de lo que pinta el JavaScript de la página (las marca textos.js): tj… textos, ij… fotos */
+function tf_clave_js($k, $pref) { return (bool) preg_match('/^' . $pref . '[a-z0-9]{1,16}$/', (string) $k); }
 function tf_base_php() { return ['p-leer-informe' => 'Leer el informe', 'p-descargar-pdf' => 'Descargar PDF', 'p-quiero-ir' => 'Quiero ir', 'p-avisame' => 'Avísame']; }
 function tf_base() { static $b = null; if ($b === null) { $f = __DIR__ . '/textos-base.php'; $b = (is_file($f) ? (array) include $f : []) + tf_base_php(); } return $b; }
 /* un texto fijo del PHP: se pinta dentro de un <span data-tf> para poder cambiarlo desde la web */
@@ -262,13 +264,20 @@ add_action('wp_head', function () {
 	foreach ((array) get_option('tf_ocultas', []) as $x) if (strpos($x, $p . ':') === 0) $sel[] = '[data-tf-sec="' . esc_attr(substr($x, strlen($p) + 1)) . '"]';
 	if ($sel) echo '<style>body:not(.tf-editando) ' . implode(',body:not(.tf-editando) ', $sel) . '{display:none!important}</style>' . "\n";
 }, 20);
-/* el editor solo se carga para quien puede editar */
+/* textos.js lo carga todo el mundo: aplica los cambios a lo que pinta el JavaScript; el editor, solo quien puede editar */
 add_action('wp_enqueue_scripts', function () {
+	wp_enqueue_script('tf-textos', TF_U . '/textos.js', [], (string) filemtime(__DIR__ . '/textos.js'), true);
 	if (!current_user_can('edit_posts')) return;
 	wp_enqueue_media();
 	wp_enqueue_style('tf-editor', TF_U . '/editor.css', [], (string) filemtime(__DIR__ . '/editor.css'));
-	wp_enqueue_script('tf-editor', TF_U . '/editor.js', [], (string) filemtime(__DIR__ . '/editor.js'), true);
+	wp_enqueue_script('tf-editor', TF_U . '/editor.js', ['tf-textos'], (string) filemtime(__DIR__ . '/editor.js'), true);
 }, 10000);
+add_action('wp_footer', function () {
+	$t = []; $i = [];
+	foreach ((array) get_option('tf_textos', []) as $k => $v) if (tf_clave_js($k, 'tj')) $t[$k] = wp_kses((string) $v, tf_permitido());
+	foreach ((array) get_option('tf_imgs', []) as $k => $v) if (tf_clave_js($k, 'ij')) $i[$k] = esc_url($v);
+	echo '<script>window.TF_TX=' . wp_json_encode(['textos' => $t, 'imgs' => $i], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . ';</script>' . "\n";
+}, 4);
 add_action('wp_footer', function () {
 	if (!current_user_can('edit_posts')) return;
 	$usados = array_keys((array) ($GLOBALS['tf_usados'] ?? [])); $imgs = (array) ($GLOBALS['tf_imgs'] ?? []);
@@ -277,9 +286,9 @@ add_action('wp_footer', function () {
 	echo '<script>window.TF_ED=' . wp_json_encode([
 		'api' => esc_url_raw(rest_url('tf/v1/editar')), 'nonce' => wp_create_nonce('wp_rest'), 'admin' => admin_url(), 'pagina' => $p,
 		'ficha' => admin_url('post.php?action=edit&post='), 'nueva' => admin_url('post-new.php?post_type='),
-		'base' => array_intersect_key(tf_base(), array_flip($usados)),
-		'cambiados' => array_values(array_intersect(array_keys((array) get_option('tf_textos', [])), $usados)),
-		'imgs' => $imgs, 'imgsCambiadas' => array_values(array_intersect(array_keys((array) get_option('tf_imgs', [])), array_keys($imgs))),
+		'base' => array_intersect_key(tf_base(), array_flip($usados)) + array_filter((array) get_option('tf_textos_orig', []), function ($k) { return tf_clave_js($k, 'tj'); }, ARRAY_FILTER_USE_KEY),
+		'cambiados' => array_values(array_filter(array_keys((array) get_option('tf_textos', [])), function ($k) use ($usados) { return in_array($k, $usados, true) || tf_clave_js($k, 'tj'); })),
+		'imgs' => $imgs, 'imgsCambiadas' => array_values(array_filter(array_keys((array) get_option('tf_imgs', [])), function ($k) use ($imgs) { return isset($imgs[$k]) || tf_clave_js($k, 'ij'); })),
 		'ocultas' => $oc,
 	], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . ';</script>' . "\n";
 }, 5);
@@ -321,13 +330,20 @@ add_action('rest_api_init', function () {
 		$h = (array) get_option('tf_editar_historial', []);
 		array_unshift($h, ['fecha' => current_time('mysql'), 'quien' => wp_get_current_user()->display_name, 'textos' => $t, 'imgs' => $i, 'ocultas' => $oc]);
 		update_option('tf_editar_historial', array_slice($h, 0, 30), false);
-		$base = tf_base();
+		$base = tf_base(); $orig = (array) get_option('tf_textos_orig', []); $originales = (array) $r->get_param('originales');
 		foreach ((array) $r->get_param('textos') as $k => $v) {
-			$k = sanitize_key($k); if (!isset($base[$k])) continue;
+			$k = sanitize_key($k);
+			if (!isset($base[$k])) {
+				if (!tf_clave_js($k, 'tj')) continue;
+				if (isset($originales[$k])) $orig[$k] = trim(wp_kses((string) $originales[$k], tf_permitido()));
+				if (!isset($orig[$k])) continue;
+				$base[$k] = $orig[$k];
+			}
 			if ($v === null) { unset($t[$k]); continue; }
 			$v = trim(wp_kses((string) $v, tf_permitido()));
 			if ($v === trim(wp_kses($base[$k], tf_permitido()))) unset($t[$k]); else $t[$k] = $v;
 		}
+		update_option('tf_textos_orig', $orig, false);
 		foreach ((array) $r->get_param('imgs') as $k => $v) {
 			$k = sanitize_key($k); $v = $v === null ? '' : esc_url_raw((string) $v);
 			if ($v === '') unset($i[$k]); elseif (strpos($v, home_url('/')) === 0) $i[$k] = $v;
