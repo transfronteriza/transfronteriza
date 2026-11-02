@@ -247,6 +247,13 @@ dialog.video .x{position:absolute;top:-52px;right:0;width:44px;height:44px;borde
 .story .cuadro > .silL{position:absolute;inset:0}
 .ht.sil::after{display:none}
 .ht.sil span{display:none}
+.paso textarea{width:100%;box-sizing:border-box;min-height:140px;padding:14px 16px;border-radius:14px;border:0;box-shadow:inset 0 0 0 1px var(--linea);background:#fff;font:inherit;font-size:16px;line-height:1.5;color:var(--tinta);resize:vertical}
+.paso textarea:focus{outline:0;box-shadow:inset 0 0 0 2px var(--oro)}
+.paso .archivo{display:flex;align-items:center;gap:12px;padding:16px;border-radius:14px;background:#fff;box-shadow:inset 0 0 0 1px var(--linea);cursor:pointer;color:var(--tinta-2)}
+.paso .archivo input{position:absolute;width:1px;height:1px;opacity:0}
+.paso .archivo span{font-size:15px}
+.paso .archivo::before{content:"+";flex:none;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--papel);color:var(--tinta);font:400 22px/1 var(--text)}
+.paso .fin .btn.g{margin-right:8px}
 .ht.cta{display:grid;place-items:center;padding:18px;background:var(--oro);color:var(--tinta);text-align:center;transition:transform .3s var(--ease)}
 .ht.cta::after{display:none}
 .ht.cta .tx{position:static;padding:0;display:block;color:var(--tinta);font-size:clamp(20px,1.8vw,26px)}
@@ -828,13 +835,15 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     if (st.tipo === 'correo') return `<input type="email" name="v" autocomplete="email" placeholder="Tu correo" aria-label="Tu correo" value="${esc(datos.correo || '')}">`;
     if (st.tipo === 'ciudad') return `<input type="text" name="v" autocomplete="address-level2" placeholder="Tu ciudad" aria-label="Tu ciudad" value="${esc(datos.ciudad || '')}">`;
     if (st.tipo === 'chips') return `<div class="chips">${st.op.map((o, i) => `<label><input type="${st.multi ? 'checkbox' : 'radio'}" name="v" value="${esc(o)}"${!st.multi && i === 0 ? ' checked' : ''}><span>${esc(o)}</span></label>`).join('')}</div>`;
+    if (st.tipo === 'texto') return `<textarea name="v" rows="5" placeholder="${esc(st.ph || 'Escribe aquí')}" aria-label="${esc(st.ph || 'Tu texto')}">${esc(datos[st.clave] || '')}</textarea>`;
+    if (st.tipo === 'archivo') return `<label class="archivo"><input type="file" name="v" accept="image/*,video/mp4,video/quicktime,video/webm"><span>${datos[st.clave] ? esc(datos[st.clave].name) : 'Elegir una foto o un vídeo'}</span></label>`;
     if (st.tipo === 'res') return `<p class="res">${st.html(datos)}</p>`;
     return '';
   };
   const pintaPaso = () => {
     const pasos = F.pasos, total = pasos.length + 1;
     $('#pb').style.width = ((pi + 1) / total * 100) + '%';
-    if (pi >= pasos.length) { TF.enviar(F.id || 'comunidad', Object.fromEntries(Object.entries(datos).filter(([k, v]) => v && !['foto', 'resumen'].includes(k)))); const f = F.fin(datos); caja.innerHTML = `<div class="fin"><img src="${f.foto}" alt=""><div><h3 id="pasoT">${esc(f.t)}</h3><p>${esc(f.p)}</p><button class="btn p" type="button" id="pasoFin">Volver</button></div></div>`; $('#pasoFin').addEventListener('click', cierraPaso); return; }
+    if (pi >= pasos.length) { if (F.id === 'historia') TF.enviarHistoria(datos); else TF.enviar(F.id || 'comunidad', Object.fromEntries(Object.entries(datos).filter(([k, v]) => v && !['foto', 'resumen', 'grupo'].includes(k)))); const f = F.fin(datos); caja.innerHTML = `<div class="fin"><img src="${f.foto}" alt=""><div><h3 id="pasoT">${esc(f.t)}</h3><p>${esc(f.p)}</p>${f.enlace ? `<a class="btn g" href="${esc(f.enlace.url)}" target="_blank" rel="noopener">${esc(f.enlace.t)}</a> ` : ''}<button class="btn ${f.enlace ? 'l' : 'p'}" type="button" id="pasoFin">Volver</button></div></div>`; $('#pasoFin').addEventListener('click', cierraPaso); return; }
     const st = pasos[pi], t = typeof st.t === 'function' ? st.t(datos) : st.t, ay = typeof st.ay === 'function' ? st.ay(datos) : st.ay;
     caja.innerHTML = `<form novalidate><h3 id="pasoT">${esc(t)}</h3>${ay ? `<p class="ay">${esc(ay)}</p>` : ''}${campo(st)}${st.consent ? `<label class="ok"><input type="checkbox" id="paso-ok"><span>He leído la <button type="button" data-legal="privacidad">información sobre privacidad</button>. ${esc(F.capa || 'Usamos tus datos solo para esto.')}${F.nota ? ' ' + esc(F.nota) : ''}</span></label><label class="ok"><input type="checkbox" id="paso-boletin"><span>${F.carta || 'Quiero recibir el boletín.'}</span></label>` : ''}<p class="err" role="alert"></p><div class="acts"><button class="btn p" type="submit">${pi === pasos.length - 1 ? esc(F.enviar || 'Enviar') : 'Siguiente'}</button>${pi ? '<button class="atras" type="button" data-atras>Atrás</button>' : ''}</div></form>`;
     const fm = caja.querySelector('form'), inp = fm.querySelector('input[type=text],input[type=email]');
@@ -845,6 +854,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
       if (st.tipo === 'correo') { const v = inp.value.trim(); if (!correoOk(v)) { er.textContent = 'Escribe un correo válido.'; return; } datos.correo = v; }
       if (st.tipo === 'ciudad') { const v = inp.value.trim(); if (!v) { er.textContent = 'Escribe tu ciudad.'; return; } datos.ciudad = v; }
       if (st.tipo === 'chips') datos[st.clave || 'opcion'] = [...fm.querySelectorAll('input[name=v]:checked')].map(i => i.value);
+      if (st.tipo === 'texto') { const v = fm.querySelector('textarea').value.trim(); if (!v && !st.opcional) { er.textContent = 'Escribe algo, aunque sea una frase.'; return; } datos[st.clave] = v; }
+      if (st.tipo === 'archivo') { const a = fm.querySelector('input[type=file]').files[0]; if (a && a.size > 20 * 1024 * 1024) { er.textContent = 'El archivo pesa más de 20 MB. Prueba con otro más ligero.'; return; } datos[st.clave] = a || null; }
       if (st.consent) { /* las dos casillas viajan con su texto: son la prueba del consentimiento */
         const ok = $('#paso-ok'), bo = $('#paso-boletin'), txt = i => (i.closest('label').textContent || '').replace(/\s+/g, ' ').trim();
         if (!ok.checked) { er.textContent = 'Necesitamos que aceptes la información sobre privacidad.'; return; }
@@ -853,6 +864,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
       pi++; pintaPaso();
     });
     fm.querySelector('[data-atras]')?.addEventListener('click', () => { pi--; pintaPaso(); });
+    fm.querySelector('input[type=file]')?.addEventListener('change', e => { const sp = e.target.closest('label').querySelector('span'); sp.textContent = e.target.files[0] ? e.target.files[0].name : 'Elegir una foto o un vídeo'; });
   };
   const abrePaso = (flujo, extra = {}) => { F = FLUJOS[flujo]; if (!F) return; F.id = flujo; datos = { ...extra, nombre: datos.nombre, correo: datos.correo }; pi = 0; paso.hidden = false; document.documentElement.style.overflow = 'hidden'; pintaPaso(); };
   const cierraPaso = () => { paso.hidden = true; document.documentElement.style.overflow = ''; };
@@ -860,6 +872,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && !paso.hidden && !document.querySelector('dialog[open]')) cierraPaso(); });
   const NOMBRE = { tipo: 'nombre', t: '¡Empezamos por tu nombre!', ay: 'Así sabremos cómo llamarte.' };
   const CORREO = (consent) => ({ tipo: 'correo', t: d => `¿A qué correo te escribimos, ${d.nombre}?`, ay: 'Solo para esto. Nada de spam.', consent });
+  /* pasarela de pago: en la web es la dirección de Stripe; en la maqueta, ?demo-pago la simula */
+  const PAGO = (TF.mecenas && TF.mecenas.pago) || '';
   const FLUJOS = {
     anual: { enviar: 'Guardadme sitio', capa: 'Usamos tus datos para organizar tu plaza y los viajes al encuentro; puedes pedir verlos o borrarlos en hola@transfronteriza.net.', pasos: [NOMBRE, CORREO(), { tipo: 'ciudad', t: '¿Desde dónde vendrías?', ay: 'Así organizamos los viajes compartidos.' }, { tipo: 'chips', clave: 'beca', t: '¿Te vendría bien una beca para venir?', ay: 'Las becas cubren viaje, comida y alojamiento. Sin preguntas incómodas.', op: ['Sí', 'Quizá', 'No, gracias'], consent: true }],
       fin: d => ({ foto: '<?php echo TF_U; ?>/img/comunidad/encuentros.jpg', t: `¡Te guardamos sitio, ${d.nombre}!`, p: 'Te escribimos en cuanto abran las plazas del encuentro de septiembre de 2027 en Jérez del Marquesado.' }) },
@@ -867,13 +881,30 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     descubre: { enviar: 'Quiero formar parte', capa: 'Usamos tus datos solo para escribirte y contarte lo que hacemos; puedes pedir verlos o borrarlos en hola@transfronteriza.net.', pasos: [NOMBRE, CORREO(), { tipo: 'ciudad', t: d => `¿Dónde vives, ${d.nombre}?`, ay: 'Así te presentamos a la comunidad más cercana.' }, { tipo: 'chips', multi: true, clave: 'interes', t: '¿Qué te apetece?', ay: 'Marca todo lo que quieras.', op: ['Encuentros', 'Mi ciudad', 'Formación', 'Futuros', 'Echar una mano'], consent: true }],
       fin: d => ({ foto: '<?php echo TF_U; ?>/img/comunidad/encuentros.jpg', t: `¡Bienvenida, ${d.nombre}!`, p: `Te escribimos en unos días para presentarte a la comunidad${d.ciudad ? ' de ' + d.ciudad : ''} y contarte lo que se mueve.` }) },
     ciudad: { enviar: 'Quiero ir', capa: 'Usamos tus datos para presentarte a la comunidad de tu ciudad y avisarte de la próxima quedada.', pasos: [NOMBRE, CORREO(), { tipo: 'chips', multi: true, clave: 'plan', t: d => `¿Qué te apetece hacer con la comunidad de ${d.ciudad}?`, ay: 'Marca todo lo que quieras.', op: ['Tomar algo', 'Pasear', 'Cocinar juntas', 'Hablar de lo nuestro', 'Hacer deporte'], consent: true }],
-      fin: d => ({ foto: d.foto, t: `¡Te esperamos en ${d.ciudad}, ${d.nombre}!`, p: 'Te escribimos para presentarte a la comunidad y decirte cuándo es la próxima quedada.' }) },
+      fin: d => ({ enlace: d.grupo ? { url: d.grupo, t: `Entra en el grupo de ${d.ciudad}` } : null, foto: d.foto, t: `¡Te esperamos en ${d.ciudad}, ${d.nombre}!`, p: d.grupo ? 'Entra en el grupo de tu ciudad y preséntate: allí se organiza la próxima quedada.' : 'Te escribimos para presentarte a la comunidad y decirte cuándo es la próxima quedada.' }) },
     abrir: { enviar: 'Quiero abrirla', capa: 'Usamos tus datos para acompañarte a abrir comunidad en tu ciudad.', pasos: [NOMBRE, CORREO(), { tipo: 'ciudad', t: '¿En qué ciudad quieres abrirla?' }, { tipo: 'chips', clave: 'gente', t: '¿Cuánta gente conoces allí?', op: ['De momento, solo yo', 'Dos o tres personas', 'Un grupo'], consent: true }],
       fin: d => ({ foto: '<?php echo TF_U; ?>/img/comunidad/puerta.jpg', t: `¡Vamos a abrir comunidad en ${d.ciudad}!`, p: 'Te enviamos el método y los materiales, y alguien del equipo te acompaña en los primeros encuentros.' }) },
-    mecenas: { enviar: 'Hazme mecenas', capa: 'Usamos tus datos para completar tu aportación y llevar la contabilidad; el pago lo procesa Stripe y nosotras nunca vemos tu tarjeta. Puedes pedir verlos en hola@transfronteriza.net.', carta: 'Quiero que cada año me contéis a quién he acompañado y recibir <b>Lo que se mueve</b>, un correo al mes.', nota: DESGRAVA ? 'Para el certificado de la Renta te pediremos el DNI más adelante.' : '', pasos: [NOMBRE, CORREO(), { tipo: 'res', t: 'Revisa tu aportación', html: d => d.resumen, consent: true }],
-      fin: d => ({ foto: '<?php echo TF_U; ?>/img/comunidad/sandia.jpg', t: `¡Gracias, ${d.nombre}!`, p: 'Te escribimos en unos días para completar tu aportación de forma segura. Cada año te contaremos a quién has acompañado.' }) }
+    historia: { id: 'historia', enviar: 'Enviar mi historia', capa: 'Guardamos tu historia y tus datos para leerla y, solo si nos das permiso, publicarla en Nuestra voz. Puedes pedir que la retiremos en hola@transfronteriza.net.',
+      pasos: [NOMBRE, CORREO(), { tipo: 'texto', clave: 'historia', t: d => `Cuéntanos, ${d.nombre}.`, ay: 'Una frase, un recuerdo, una escena. Lo que quieras y como quieras.', ph: 'Mi madre me riñe en darija y me consuela en andaluz…' }, { tipo: 'archivo', clave: 'archivo', t: '¿Una foto o un vídeo?', ay: 'Si quieres. Hasta 20 MB. Puedes seguir sin nada.' }, { tipo: 'chips', clave: 'publicar', t: '¿Podemos publicarla en Nuestra voz?', op: ['Sí, con mi nombre', 'Sí, sin mi nombre', 'No, es solo para vosotras'], consent: true }],
+      fin: d => ({ foto: '<?php echo TF_U; ?>/img/comunidad/escribe.jpg', t: `Gracias, ${d.nombre}.`, p: 'La leemos con calma y te escribimos. Si nos has dado permiso, pronto estará en Nuestra voz.' }) },
+    mecenas: { enviar: PAGO ? 'Ir al pago seguro' : 'Hazme mecenas', capa: 'Usamos tus datos para completar tu aportación y llevar la contabilidad; el pago lo procesa Stripe y nosotras nunca vemos tu tarjeta. Puedes pedir verlos en hola@transfronteriza.net.', carta: 'Quiero que cada año me contéis a quién he acompañado y recibir <b>Lo que se mueve</b>, un correo al mes.', nota: DESGRAVA ? 'Para el certificado de la Renta te pediremos el DNI más adelante.' : '', pasos: [NOMBRE, CORREO(), { tipo: 'res', t: 'Revisa tu aportación', html: d => d.resumen, consent: true }],
+      fin: d => PAGO ? (paga(d), { foto: '<?php echo TF_U; ?>/img/comunidad/sandia.jpg', t: `¡Gracias, ${d.nombre}!`, p: 'Te llevamos al pago seguro de Stripe. Nosotras nunca vemos los datos de tu tarjeta.' })
+        : ({ foto: '<?php echo TF_U; ?>/img/comunidad/sandia.jpg', t: `¡Gracias, ${d.nombre}!`, p: 'Te escribimos en unos días para completar tu aportación de forma segura. Cada año te contaremos a quién has acompañado.' }) }
   };
-  document.addEventListener('click', e => { const b = e.target.closest('[data-flujo]'); if (b) abrePaso(b.dataset.flujo, b.dataset.ciudad ? { ciudad: b.dataset.ciudad, foto: b.dataset.foto } : {}); });
+  /* el pago se hace en Stripe; si no se abre, queda como antes: os escribís para completarla */
+  function paga(d) {
+    const falla = () => { const p = caja.querySelector('.fin p'); if (p) p.textContent = 'No hemos podido abrir el pago ahora. Te escribimos en unos días para completar tu aportación de forma segura.'; };
+    if (PAGO === 'demo') return setTimeout(() => { location.href = '?pago=gracias#mecenas'; }, 1500);
+    fetch(PAGO, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ cant: d.cant, freq: d.freq, nombre: d.nombre, correo: d.correo }) })
+      .then(r => r.json()).then(j => { if (!j.url) throw 0; location.href = j.url; }).catch(falla);
+  }
+  /* vuelta de Stripe con el pago hecho */
+  if (new URLSearchParams(location.search).get('pago') === 'gracias') {
+    F = { pasos: [], fin: () => ({ foto: '<?php echo TF_U; ?>/img/comunidad/sandia.jpg', t: '¡Ya eres mecenas!', p: 'Gracias. Te llega el recibo por correo. Cada año te contaremos a quién has acompañado.' }) };
+    pi = 0; paso.hidden = false; document.documentElement.style.overflow = 'hidden'; pintaPaso();
+    history.replaceState(null, '', location.pathname + location.hash);
+  }
+  document.addEventListener('click', e => { const b = e.target.closest('[data-flujo]'); if (b) abrePaso(b.dataset.flujo, b.dataset.ciudad ? { ciudad: b.dataset.ciudad, foto: b.dataset.foto, grupo: b.dataset.grupo || '' } : {}); });
 
   /* vídeos de Vimeo: el reproductor oficial, recortado para llenar el cuadro como si fuera una foto */
   let apiV = null;
@@ -990,7 +1021,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   const CIU = Object.assign({}, CIU0); for (const [k, v] of Object.entries(TF.ciudades || {})) { const b = k.split('-')[0], m = CIU0[b]; delete CIU[b]; CIU[k] = m ? Object.assign({}, v, { x: m.x, y: m.y, izq: m.izq || 0, arr: m.arr || 0, aba: m.aba || 0 }) : v; }
   const mapa = $('#mapa'), mapaG = $('#mapaG'), panel = $('#panel');
   Object.entries(CIU).forEach(([k, c], i) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'pun' + (c.sede ? ' sede' : '') + (c.izq ? ' izq' : '') + (c.arr ? ' arr' : '') + (c.aba ? ' aba' : ''); b.style.left = c.x + '%'; b.style.top = c.y + '%'; b.dataset.c = k; b.setAttribute('aria-pressed', 'false'); b.innerHTML = `<canvas aria-hidden="true"></canvas><span>${c.n}</span>`; mapa.appendChild(b); pep(b.querySelector('canvas'), i + 3); });
-  const elige = k => { const c = CIU[k]; mapa.querySelectorAll('.pun').forEach(p => p.setAttribute('aria-pressed', p.dataset.c === k)); document.querySelectorAll('.ciuM button').forEach(p => p.setAttribute('aria-pressed', p.dataset.c === k)); panel.innerHTML = `<div${EI(c.id, 'tf_ciudad')}><figure class="pf${c.foto ? '' : ' sin'}"${EF(c.id)}>${c.foto ? `<img src="${c.foto}" alt="${esc(c.n)}." loading="lazy" decoding="async">` : ''}</figure><div class="pt"><h3${ED(c.id, 'titulo')}>${c.n}</h3><p class="txt"${ED(c.id, 'texto')}>${c.txt}</p><button class="btn p" type="button" data-flujo="ciudad" data-ciudad="${c.n}" data-foto="${c.foto}">Haz comunidad en ${c.n}</button></div></div>`; };
+  const elige = k => { const c = CIU[k]; mapa.querySelectorAll('.pun').forEach(p => p.setAttribute('aria-pressed', p.dataset.c === k)); document.querySelectorAll('.ciuM button').forEach(p => p.setAttribute('aria-pressed', p.dataset.c === k)); panel.innerHTML = `<div${EI(c.id, 'tf_ciudad')}><figure class="pf${c.foto ? '' : ' sin'}"${EF(c.id)}>${c.foto ? `<img src="${c.foto}" alt="${esc(c.n)}." loading="lazy" decoding="async">` : ''}</figure><div class="pt"><h3${ED(c.id, 'titulo')}>${c.n}</h3><p class="txt"${ED(c.id, 'texto')}>${c.txt}</p><button class="btn p" type="button" data-flujo="ciudad" data-ciudad="${c.n}" data-foto="${c.foto}" data-grupo="${c.grupo || ''}">Haz comunidad en ${c.n}</button></div></div>`; };
   mapa.addEventListener('click', e => { const b = e.target.closest('.pun'); if (b) elige(b.dataset.c); });
   mapaG.insertAdjacentHTML('afterend', `<div class="ciuM" role="group" aria-label="Elige una ciudad">${Object.entries(CIU).map(([k, c]) => `<button type="button" data-c="${k}">${esc(c.n)}</button>`).join('')}</div>`);
   const ciuM = mapaG.nextElementSibling; ciuM.addEventListener('click', e => { const b = e.target.closest('button'); if (b) { elige(b.dataset.c); if (innerWidth <= 1000) panel.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'nearest' }); } });
@@ -1053,7 +1084,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
       { sil: 1, luz: 'sil3', n: 'Una voz por llegar', q: 'Fotos, vídeos y frases de la gente que cruza fronteras cada día.' },
       { sil: 1, luz: 'sil4', anon: 1, n: 'Una voz por llegar', q: '¿Quieres que la tuya esté aquí? Cuéntanosla en Descúbrete o escríbenos a hola@transfronteriza.net.' });
   }
-  $('#tira').innerHTML = H.map((h, i) => `<${enObra ? 'div' : 'button'} class="ht${h.sil ? ' sil' : ''}${h.obra ? ' obra' : ''}"${enObra ? '' : ' type="button"'} data-i="${i}"${EI(h.id, 'tf_historia')}>${h.luz ? `<div class="silL alta" aria-hidden="true">${luzCanvas(h.luz)}</div>` : h.v ? `<video src="${h.v}" poster="${h.p}" muted loop playsinline preload="none" aria-hidden="true"></video>` : h.f ? `<img src="${h.f}" alt="" loading="lazy"${h.fx ? ` style="object-position:${h.fx * 100}% 50%"` : ''}${EF(h.id)}>` : h.obra ? `<p class="tx"><small>En construcción</small>${h.q}</p>` : `<p class="tx">«<span${ED(h.id, 'frase')}>${h.q}</span>»</p>`}${h.vm ? '<i class="pl">▶</i>' : ''}${h.sil ? '' : `<span${ED(h.id, 'titulo')}>${h.n}</span>`}<i class="anillo"></i></${enObra ? 'div' : 'button'}>`).join('') + '<a class="ht cta" href="<?php echo esc_url(home_url('/')); ?>#descubre"><span class="tx">Cuenta la tuya</span></a>';
+  $('#tira').innerHTML = H.map((h, i) => `<${enObra ? 'div' : 'button'} class="ht${h.sil ? ' sil' : ''}${h.obra ? ' obra' : ''}"${enObra ? '' : ' type="button"'} data-i="${i}"${EI(h.id, 'tf_historia')}>${h.luz ? `<div class="silL alta" aria-hidden="true">${luzCanvas(h.luz)}</div>` : h.v ? `<video src="${h.v}" poster="${h.p}" muted loop playsinline preload="none" aria-hidden="true"></video>` : h.f ? `<img src="${h.f}" alt="" loading="lazy"${h.fx ? ` style="object-position:${h.fx * 100}% 50%"` : ''}${EF(h.id)}>` : h.obra ? `<p class="tx"><small>En construcción</small>${h.q}</p>` : `<p class="tx">«<span${ED(h.id, 'frase')}>${h.q}</span>»</p>`}${h.vm ? '<i class="pl">▶</i>' : ''}${h.sil ? '' : `<span${ED(h.id, 'titulo')}>${h.n}</span>`}<i class="anillo"></i></${enObra ? 'div' : 'button'}>`).join('') + '<button class="ht cta" type="button" data-flujo="historia"><span class="tx">Cuenta la tuya</span></button>';
   document.querySelectorAll('.ht video').forEach(v => { const b = v.parentElement; b.addEventListener('mouseenter', () => v.play().catch(() => {})); b.addEventListener('mouseleave', () => v.pause()); });
   const st = $('#story'), cuadroS = $('#sCuadro'), bar = $('#sBar'); let vi = 0, tv = null, t0 = 0, paus = false, resto = 0, foco = null, dur = 6500, media = null, vivoS = null;
   bar.innerHTML = H.map(() => '<i><b></b></i>').join('');
@@ -1109,7 +1140,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   { let enSec = false, enTarj = false, pasada = false; const pinta = () => $('#barraM').classList.toggle('on', enSec && !enTarj && !pasada);
     new IntersectionObserver(e => { enSec = e[0].isIntersecting; pinta(); }).observe($('#mecenas'));
     new IntersectionObserver(e => { enTarj = e[0].isIntersecting; pasada = !enTarj && e[0].boundingClientRect.top < 0; pinta(); }, { threshold: .25 }).observe(document.querySelector('.tarjeta')); }
-  $('#donar').addEventListener('click', () => { const A = anual(), D = deduce(A); abrePaso('mecenas', { aportacion: `${eur(cant)}${SUF[freq]}`, resumen: `Vas a donar <b>${eur(cant)}${SUF[freq]}</b>. ${logro(A)}${DESGRAVA ? `<br>Hacienda te devolverá <b>${eur(freq === 'mes' ? D / 12 : D)}${freq === 'mes' ? ' al mes' : ''}</b>, así que de verdad te cuesta <b>${eur(freq === 'mes' ? (A - D) / 12 : A - D)}${SUF[freq]}</b>.` : ''}` }); });
+  $('#donar').addEventListener('click', () => { const A = anual(), D = deduce(A); abrePaso('mecenas', { cant, freq, aportacion: `${eur(cant)}${SUF[freq]}`, resumen: `Vas a donar <b>${eur(cant)}${SUF[freq]}</b>. ${logro(A)}${DESGRAVA ? `<br>Hacienda te devolverá <b>${eur(freq === 'mes' ? D / 12 : D)}${freq === 'mes' ? ' al mes' : ''}</b>, así que de verdad te cuesta <b>${eur(freq === 'mes' ? (A - D) / 12 : A - D)}${SUF[freq]}</b>.` : ''}` }); });
 
   /* ===== 9 · manifiesto: una corriente de pepitas que entra por la izquierda, desordenada y sin color; se junta, coge color y desemboca en el girasol, que gira despacio. Se mueve sola, nunca con el scroll ===== */
   (() => {

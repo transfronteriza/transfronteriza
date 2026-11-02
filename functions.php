@@ -54,11 +54,14 @@ function tf_enlaces($html) {
 /* ---------- lo que comparten todas las páginas: datos y envío de formularios ---------- */
 function tf_script_base($datos) {
 	$datos['api'] = esc_url_raw(rest_url('tf/v1/formulario'));
+	$datos['api_historia'] = esc_url_raw(rest_url('tf/v1/historia'));
 	$datos['enConstruccion'] = tf_en_construccion();
 	echo '<script>window.TF=' . wp_json_encode($datos, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . ';';
 	/* TF.enviar manda los campos y, aparte, los consentimientos (casilla, texto mostrado) y el origen: es la prueba del art. 7.1 del RGPD.
 	   TF.leer saca de un formulario los campos; las casillas cuyo id acaba en -ok (privacidad) y -boletin (Lo que se mueve) van en __c. */
 	echo 'TF.enviar=(tipo,datos)=>{try{datos=Object.assign({},datos||{});const c=datos.__c||{};delete datos.__c;fetch(TF.api,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tipo,datos,consentimientos:c,origen:{formulario:tipo,pagina:location.pathname+location.hash}})}).catch(()=>{})}catch(e){}};';
+	/* TF.enviarHistoria manda «Cuenta tu historia» con su archivo (multipart) y los consentimientos */
+	echo 'TF.enviarHistoria=d=>{try{const fd=new FormData();["nombre","correo","historia"].forEach(k=>fd.append(k,d[k]||""));fd.append("publicar",(d.publicar||[]).join(", "));if(d.archivo)fd.append("archivo",d.archivo);const c=d.__c||{};fd.append("consentimientos",JSON.stringify(c));fd.append("pagina",location.pathname+location.hash);fetch(TF.api_historia,{method:"POST",body:fd}).catch(()=>{})}catch(e){}};';
 	echo 'TF.leer=f=>{const o={},c={},lt=i=>(i.closest("label")?.textContent||"").replace(/\s+/g," ").trim();f.querySelectorAll("input,textarea,select").forEach(i=>{if(/-ok$/.test(i.id))c.privacidad={si:!!i.checked,texto:lt(i)};else if(/-boletin$/.test(i.id))c.boletin={si:!!i.checked,texto:lt(i)};else if(i.type==="checkbox"||i.type==="radio"){if(i.checked){const k=i.name||"opciones",t=i.value&&i.value!=="on"?i.value:lt(i);o[k]=o[k]?o[k]+", "+t:t}}else if(i.value&&i.type!=="hidden")o[(i.id||i.name||"campo").replace(/^[a-z]+-/,"")]=i.value});o.__c=c;return o};';
 	echo '</script>';
 }
@@ -176,7 +179,7 @@ function tf_datos_comunidad() {
 		$foto = file_exists(get_theme_file_path("img/comunidad/ciudad-$slug.jpg")) ? TF_U . "/img/comunidad/ciudad-$slug.jpg" : tf_foto($p->ID, 'large');
 		if (!$txt || strpos($txt, 'Quedamos una vez al mes') === 0) $txt = "¿Vives en $n? Súmate a la comunidad de tu ciudad: te presentamos a quien ya está y quedamos para vernos.";
 		if (strpos($txt, 'Aquí nació todo') === 0) $txt = 'Aquí nació Transfronteriza, a un paso del Estrecho. Si vives cerca, súmate: te presentamos a la comunidad.';
-		$ciu[$p->post_name ?: 'c' . $p->ID] = ['id' => $p->ID, 'n' => $n, 'txt' => $txt, 'foto' => $foto, 'x' => $x, 'y' => $y, 'sede' => tf_campo('sede', $p->ID) ? 1 : 0, 'izq' => $e === 'izquierda' ? 1 : 0, 'arr' => $e === 'arriba' ? 1 : 0];
+		$ciu[$p->post_name ?: 'c' . $p->ID] = ['id' => $p->ID, 'n' => $n, 'txt' => $txt, 'foto' => $foto, 'grupo' => esc_url_raw((string) tf_campo('grupo', $p->ID)), 'x' => $x, 'y' => $y, 'sede' => tf_campo('sede', $p->ID) ? 1 : 0, 'izq' => $e === 'izquierda' ? 1 : 0, 'arr' => $e === 'arriba' ? 1 : 0];
 	}
 	$his = array_map(function ($p) {
 		$v = tf_campo('video', $p->ID); $f = tf_foto($p->ID, 'large'); $h = ['id' => $p->ID, 'n' => get_the_title($p)];
@@ -193,6 +196,8 @@ function tf_datos_comunidad() {
 		'perfiles' => $perf, 'ciudades' => (object) $ciu, 'historias' => $his,
 		'encuentro' => ['fecha' => tf_op('enc_fecha', '2027-09-17T10:00:00')],
 		'mecenas' => [
+			/* pasarela: el plugin Núcleo abre el pago en Stripe cuando está encendida y tiene clave */
+			'pago' => (tf_op('pago_activo', false) && tf_op('pago_clave', '')) ? esc_url_raw(rest_url('tf/v1/pago')) : '',
 			'desgrava' => (bool) tf_op('mec_desgrava', false),
 			'pre' => ['mes' => $lista('mec_mes', [3, 6, 9]), 'ano' => $lista('mec_ano', [30, 60, 90]), 'vez' => $lista('mec_vez', [10, 25, 50])],
 			'logro' => $lin('mec_impacto', ['Pagas la merienda y los materiales de una quedada de la comunidad en una ciudad.', 'Pagas el billete de bus de una joven transfronteriza para venir al encuentro de Sierra Nevada.', 'Pagas el viaje y la comida de una joven transfronteriza durante los tres días del encuentro de Sierra Nevada.']),
