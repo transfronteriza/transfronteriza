@@ -64,6 +64,7 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 @keyframes arena{from{transform:translate(0,0)}to{transform:translate(300px,300px)}}
 .open .t{position:absolute;left:calc(var(--gut) + clamp(24px,4vw,64px));right:calc(var(--gut) + clamp(24px,4vw,64px));bottom:clamp(44px,6vw,90px);padding-bottom:0;width:auto;color:var(--papel)}
 .open p{color:rgba(245,238,223,.8)}
+@media (max-width:620px){.open .t::before{content:"";position:absolute;z-index:-1;left:-24px;right:-24px;top:-72px;bottom:-60px;background:linear-gradient(to top,rgba(31,27,45,.92) 0%,rgba(31,27,45,.7) 55%,rgba(31,27,45,0) 100%)}}
 
 /* ---------- luz líquida (manual v3): el motor luz.js dibuja en cada canvas.luz ---------- */
 canvas.luz{display:block}
@@ -590,7 +591,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
   /* la portada del informe en marcha: el girasol blanco sobre la luz de fuego */
   (() => { const cv = $('.cover .girC'); if (!cv) return; vigila(cv, () => { const [g, w, h] = setup(cv); symbol(g, w * .78, h * .70, Math.max(w, h) * .27, 200, '#FFFBF2', K.papel, rng(90), [3, 3, w - 6, h - 6]); }); })();
   /* 1 · la lámina: el girasol grande, de papel, cortado por la esquina */
-  (() => { const cv = $('#girasolF'); if (!cv) return; vigila(cv, () => { const [g, w, h] = setup(cv); const R = Math.max(w, h) * .3; symbol(g, w * .78, h * .70, R, 420, '#FFFBF2', K.papel, rng(90), [0, 0, w, h]); }); })();
+  (() => { const cv = $('#girasolF'); if (!cv) return; vigila(cv, () => { const [g, w, h] = setup(cv); const m = w < 620; const R = Math.max(w, h) * (m ? .24 : .3); symbol(g, w * (m ? .74 : .78), h * (m ? .40 : .70), R, 420, '#FFFBF2', K.papel, rng(90), [0, 0, w, h]); }); })();
 
   /* 2 · informe y 3 · papers, con su lector */
   const A = TF.autores || {}, P = TF.papers || [], INF = TF.informe || { id: 'informe', informe: true, h: '', d: '', lead: '', html: '', claves: [] };

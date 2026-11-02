@@ -1035,7 +1035,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     const limita = () => { const s = S() * z, mx = s * .75, my = s * .7; tx = Math.max(-mx, Math.min(mx, tx)); ty = Math.max(-my, Math.min(my, ty)); };
     const zoomEn = (f, px, py) => { const r = mapaG.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2, nz = Math.max(.8, Math.min(4, z * f)), k = nz / z; tx = (tx - (px - cx)) * k + (px - cx); ty = (ty - (py - cy)) * k + (py - cy); z = nz; limita(); pinta(); mapaG.classList.add('tocado'); };
     l.addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const r = mapaG.getBoundingClientRect(); zoomEn(b.dataset.z === '1' ? 1.5 : 1 / 1.5, r.left + r.width / 2, r.top + r.height / 2); });
-    mapaG.addEventListener('wheel', e => { e.preventDefault(); zoomEn(e.deltaY < 0 ? 1.15 : 1 / 1.15, e.clientX, e.clientY); }, { passive: false });
+    mapaG.addEventListener('wheel', e => { if (innerWidth <= 1000) return; e.preventDefault(); zoomEn(e.deltaY < 0 ? 1.15 : 1 / 1.15, e.clientX, e.clientY); }, { passive: false });
     mapaG.addEventListener('dblclick', e => { if (!e.target.closest('.pun,.panel,.lupa')) zoomEn(z >= 4 ? 1 / 4 : 1.7, e.clientX, e.clientY); });
     mapaG.addEventListener('pointerdown', e => { if (e.button || e.target.closest('.panel,.lupa')) return; drag = [e.clientX - tx, e.clientY - ty]; movio = false; });
     mapaG.addEventListener('pointermove', e => { if (!drag) return; const nx = e.clientX - drag[0], ny = e.clientY - drag[1]; if (!movio && Math.abs(nx - tx) + Math.abs(ny - ty) > 4) { movio = true; try { mapaG.setPointerCapture(e.pointerId); } catch (_) {} mapaG.classList.add('arrastra', 'tocado'); } if (!movio) return; tx = nx; ty = ny; limita(); pinta(); });
@@ -1253,7 +1253,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 .mapaG .pista{position:absolute;z-index:3;left:clamp(14px,2vw,28px);bottom:clamp(14px,2vw,28px);margin:0;padding:7px 12px;border-radius:999px;background:rgba(31,27,45,.55);color:var(--papel);font-size:12.5px;pointer-events:none;transition:opacity .6s}
 .mapaG.tocado .pista{opacity:0}
 @media (max-width:1000px){
-  .mapaG{aspect-ratio:4/5;border-radius:18px}
+  .mapaG{aspect-ratio:4/5;border-radius:18px;touch-action:pan-y}
   .tierra{height:150%}
   .tierra .pun span{display:none}
   .tierra .pun[aria-pressed=true] span{display:block}
