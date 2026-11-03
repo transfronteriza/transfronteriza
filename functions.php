@@ -36,7 +36,7 @@ function tf_en($s) { if (!is_string($s) || $s === '') return $s; $k = preg_repla
 function tf_traduce_datos($d) {
 	if (is_array($d)) { foreach ($d as $k => $v) $d[$k] = tf_traduce_datos($v); return $d; }
 	if (is_object($d)) { foreach ($d as $k => $v) $d->$k = tf_traduce_datos($v); return $d; }
-	return is_string($d) && strpos($d, '<') === false ? tf_en($d) : $d;
+	return is_string($d) ? tf_en($d) : $d;
 }
 /* traduce el texto de un trozo de HTML (nodos de texto y alt/title/aria-label), respetando lo cambiado en inglés en cada ficha */
 function tf_traduce_html($h) {
@@ -63,7 +63,7 @@ add_filter('template_include', function ($t) {
 add_filter('document_title_parts', function ($t) {
 	if (tf_lang() !== 'en') return $t;
 	$p = get_query_var('tf_en'); $t['title'] = ['home' => 'Transfronteriza – The community that crosses borders', 'comunidad' => 'Community – Transfronteriza', 'futuros' => 'Futures – Transfronteriza'][$p] ?? 'Transfronteriza';
-	if ($p === 'home') unset($t['tagline'], $t['site']);
+	unset($t['tagline'], $t['site']);
 	return $t;
 });
 /* la misma página en cada idioma */
@@ -319,7 +319,10 @@ function tf_t($k) {
 	if (tf_lang() === 'en' && ($es = tf_mapa()[$k] ?? null) !== null) {
 		/* si ese texto se cambió en castellano y el cambio tiene traducción, se hereda */
 		$oes = (array) get_option('tf_textos', []);
-		if (array_key_exists($es, $oes)) { $tr = tf_traduce_html('>' . $oes[$es] . '<'); if ($tr !== '>' . $oes[$es] . '<') { echo wp_kses(substr($tr, 1, -1), tf_permitido()); return; } }
+		if (array_key_exists($es, $oes)) {
+			if (!preg_match('/[A-Za-zÁÉÍÓÚÑáéíóúñ]/u', wp_strip_all_tags((string) $oes[$es]))) { echo wp_kses((string) $oes[$es], tf_permitido()); return; } /* se vació en castellano: también en inglés */
+			$tr = tf_traduce_html('>' . $oes[$es] . '<'); if ($tr !== '>' . $oes[$es] . '<') { echo wp_kses(substr($tr, 1, -1), tf_permitido()); return; }
+		}
 	}
 	echo tf_base()[$k] ?? '';
 }
@@ -343,8 +346,18 @@ add_action('wp_footer', function () {
 	$t = []; $i = []; $f = [];
 	foreach ((array) get_option(tf_opt('tf_textos'), []) as $k => $v) if (tf_clave_js($k, 'tj')) $t[$k] = wp_kses((string) $v, tf_permitido());
 	foreach ((array) get_option('tf_imgs', []) as $k => $v) if (tf_clave_js($k, 'ij')) $i[$k] = esc_url($v);
-	if (tf_lang() === 'en') foreach ((array) get_option('tf_fichas_en', []) as $k => $v) $f[$k] = (string) $v;
-	echo '<script>window.TF_TX=' . wp_json_encode(['textos' => $t, 'imgs' => $i, 'fichas' => $f, 'lang' => tf_lang()], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . ';</script>' . "\n";
+	$her = [];
+	if (tf_lang() === 'en') {
+		foreach ((array) get_option('tf_fichas_en', []) as $k => $v) $f[$k] = (string) $v;
+		/* lo que se cambió en castellano en textos que pinta el JavaScript se hereda si el original y el cambio tienen traducción */
+		$orig = (array) get_option('tf_textos_orig', []); $norm = function ($x) { return preg_replace('/\s+/u', ' ', trim(substr($x, 1, -1))); };
+		foreach ((array) get_option('tf_textos', []) as $k => $v) {
+			if (!tf_clave_js($k, 'tj') || !isset($orig[$k]) || isset($t[$k])) continue;
+			$o = tf_traduce_html('>' . $orig[$k] . '<'); $c = tf_traduce_html('>' . $v . '<');
+			if ($o !== '>' . $orig[$k] . '<' && $c !== '>' . $v . '<') $her[$norm($o)] = wp_kses($norm($c), tf_permitido());
+		}
+	}
+	echo '<script>window.TF_TX=' . wp_json_encode(['textos' => $t, 'imgs' => $i, 'fichas' => $f, 'heredados' => $her, 'lang' => tf_lang()], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . ';</script>' . "\n";
 }, 4);
 add_action('wp_footer', function () {
 	if (!current_user_can('edit_posts')) return;

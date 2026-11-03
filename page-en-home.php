@@ -421,7 +421,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
             <label class="ok"><input type="checkbox" id="f-ok"><span>I have read the <button type="button" data-legal="privacidad" data-tf="t8c11e0a2d0"><?php tf_t('t8c11e0a2d0'); ?></button>. Transfronteriza usa estos datos solo para escribirte y contarte lo que hacemos; puedes pedir verlos o borrarlos en hola@transfronteriza.net. Si tienes menos de 14 años, rellénalo con tu madre, padre o tutor.</span></label>
             <label class="ok"><input type="checkbox" id="f-boletin"><span>I want to receive the newsletter.</span></label>
           </fieldset>
-          <div class="done" id="done" hidden><h3 id="doneT">Gracias.</h3><p data-tf="t8765b5a7fa"><?php tf_t('t8765b5a7fa'); ?></p><div class="sig"><a class="btn p" href="comunidad.html#ciudad" data-tf="td2c709da98"><?php tf_t('td2c709da98'); ?></a><a class="btn l" href="comunidad.html#anual" data-tf="t71bcd3190c"><?php tf_t('t71bcd3190c'); ?></a></div></div>
+          <div class="done" id="done" hidden><h3 id="doneT">Thank you.</h3><p data-tf="t8765b5a7fa"><?php tf_t('t8765b5a7fa'); ?></p><div class="sig"><a class="btn p" href="comunidad.html#ciudad" data-tf="td2c709da98"><?php tf_t('td2c709da98'); ?></a><a class="btn l" href="comunidad.html#anual" data-tf="t71bcd3190c"><?php tf_t('t71bcd3190c'); ?></a></div></div>
           <p class="err" id="err" role="alert"></p>
           <div class="nav" id="nav"><button class="btn p" type="submit" id="next">Continue</button><button class="back" type="button" id="back" hidden>Back</button></div>
         </form>

@@ -471,7 +471,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
           <label class="ok"><input type="checkbox" id="h-boletin"><span>I want to receive the newsletter.</span></label>
           <div><button class="btn g" type="submit" data-tf="tf2b1a5daa3"><?php tf_t('tf2b1a5daa3'); ?></button></div>
         </div>
-        <div class="gracias" id="h3s" hidden><h3 id="hT">Gracias.</h3><p data-tf="teb8c974fff"><?php tf_t('teb8c974fff'); ?></p></div>
+        <div class="gracias" id="h3s" hidden><h3 id="hT">Thank you.</h3><p data-tf="teb8c974fff"><?php tf_t('teb8c974fff'); ?></p></div>
         <p class="err" id="herr" role="alert"></p>
       </form>
     </div>
@@ -635,7 +635,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
       <div class="firma">${au ? `<img src="${au[3]}" alt="">` : `<img class="marcaF" src="<?php echo TF_U; ?>/logo/girasol-color.svg" alt="">`}<div>${au ? au[0] : 'Transfronteriza'}<small>${au ? au[1] + ', ' : ''}${p.d}</small></div></div>
       <p class="lead">${p.lead}</p>
       <div class="cuerpo">${(p.claves || []).map(c => bloque(['d', c[0], c[1]])).join('')}${p.html || (p.b || []).map(bloque).join('')}</div>
-      ${p.obra ? `<div class="acts"><a class="btn g" href="#hablemos" data-cierra-lector>${p.informe ? 'Tell us' : 'I want to join this paper'}</a><a class="btn l" href="mailto:hola@transfronteriza.net">hola@transfronteriza.net</a></div>` : p.informe ? `<div class="acts"><a class="btn g" href="${INF.pdf || '#'}" download>Descargar el informe completo</a></div>` : `<div class="autora"><img src="${au[3]}" alt="${au[0]}"><div><h3>${au[0]}</h3><p class="r">${au[1]}</p><p class="b">${au[2]}</p></div></div>`}
+      ${p.obra ? `<div class="acts"><a class="btn g" href="#hablemos" data-cierra-lector>${p.informe ? 'Tell us' : 'I want to join this paper'}</a><a class="btn l" href="mailto:hola@transfronteriza.net">hola@transfronteriza.net</a></div>` : p.informe ? `<div class="acts"><a class="btn g" href="${INF.pdf || '#'}" download>Download the full report</a></div>` : `<div class="autora"><img src="${au[3]}" alt="${au[0]}"><div><h3>${au[0]}</h3><p class="r">${au[1]}</p><p class="b">${au[2]}</p></div></div>`}
       ${nx && nx !== p ? `<button class="sig" type="button" data-abre="${nx.id}"><div><small>${p.informe ? 'First paper' : 'Next paper'}</small><b>${nx.h}</b></div><i>→</i></button>` : ''}`;
     luzArranca(); lector.hidden = false; lector.scrollTop = 0; document.documentElement.style.overflow = 'hidden';
     history.replaceState(null, '', '#' + (p.informe ? 'leer-informe' : p.id)); $('#lX').focus({ preventScroll: true }); prog();

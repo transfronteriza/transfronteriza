@@ -25,6 +25,7 @@
     const o = norm(el.innerHTML), k = 'tj' + huella(el.tagName.toLowerCase() + '|' + o);
     el.setAttribute('data-tf', k); TX.orig[k] = o;
     if (k in TX.textos) el.innerHTML = TX.textos[k];
+    else if (TX.heredados && o in TX.heredados) el.innerHTML = TX.heredados[o];
   };
   const marcaImg = im => {
     if (im.hasAttribute('data-tf-img') || im.closest(FUERA) || !/\/themes\//.test(im.src || '')) return;
