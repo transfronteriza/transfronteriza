@@ -31,7 +31,12 @@ function tf_lang() { return get_query_var('tf_en') ? 'en' : 'es'; }
 function tf_opt($nombre) { return tf_lang() === 'en' ? $nombre . '_en' : $nombre; }
 function tf_en_dic() { static $d = null; if ($d === null) { $f = __DIR__ . '/en.php'; $d = is_file($f) ? (array) include $f : []; } return $d; }
 /* traduce una cadena exacta (sin etiquetas) al inglés; si no está en el diccionario, se queda como está */
-function tf_en($s) { if (!is_string($s) || $s === '') return $s; $k = preg_replace('/\s+/', ' ', trim($s)); return tf_en_dic()[$k] ?? $s; }
+function tf_en($s) {
+	if (!is_string($s) || $s === '') return $s;
+	$k = preg_replace('/\s+/u', ' ', trim(html_entity_decode($s, ENT_QUOTES, 'UTF-8'))); $e = tf_en_dic()[$k] ?? null;
+	if ($e === null) return $s;
+	return strpos($s, '&lt;') !== false || strpos($s, '&gt;') !== false ? str_replace(['<', '>'], ['&lt;', '&gt;'], $e) : $e; /* si venía con entidades (texto guardado como &lt;3), se devuelve igual */
+}
 /* traduce los datos que viajan al JavaScript (tarjetas, ciudades, historias, papers…) */
 function tf_traduce_datos($d) {
 	if (is_array($d)) { foreach ($d as $k => $v) $d[$k] = tf_traduce_datos($v); return $d; }
@@ -350,11 +355,11 @@ add_action('wp_footer', function () {
 	if (tf_lang() === 'en') {
 		foreach ((array) get_option('tf_fichas_en', []) as $k => $v) $f[$k] = (string) $v;
 		/* lo que se cambió en castellano en textos que pinta el JavaScript se hereda si el original y el cambio tienen traducción */
-		$orig = (array) get_option('tf_textos_orig', []); $norm = function ($x) { return preg_replace('/\s+/u', ' ', trim(substr($x, 1, -1))); };
+		$orig = (array) get_option('tf_textos_orig', []); $norm = function ($x) { return preg_replace('/\s+/u', ' ', trim(substr($x, 1, -1))); }; $comoDom = function ($x) { return htmlspecialchars(html_entity_decode($x, ENT_QUOTES, 'UTF-8'), ENT_NOQUOTES, 'UTF-8', false); }; /* como lo serializa innerHTML: & < > con entidad, comillas sin ella */
 		foreach ((array) get_option('tf_textos', []) as $k => $v) {
 			if (!tf_clave_js($k, 'tj') || !isset($orig[$k]) || isset($t[$k])) continue;
 			$o = tf_traduce_html('>' . $orig[$k] . '<'); $c = tf_traduce_html('>' . $v . '<');
-			if ($o !== '>' . $orig[$k] . '<' && $c !== '>' . $v . '<') $her[$norm($o)] = wp_kses($norm($c), tf_permitido());
+			if ($o !== '>' . $orig[$k] . '<' && $c !== '>' . $v . '<') $her[$comoDom($norm($o))] = wp_kses($norm($c), tf_permitido());
 		}
 	}
 	echo '<script>window.TF_TX=' . wp_json_encode(['textos' => $t, 'imgs' => $i, 'fichas' => $f, 'heredados' => $her, 'lang' => tf_lang()], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . ';</script>' . "\n";
