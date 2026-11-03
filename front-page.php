@@ -1,5 +1,5 @@
 <?php if (!defined('ABSPATH')) exit; ?><!doctype html>
-<html lang="es">
+<html lang="<?php echo tf_lang(); ?>">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -40,6 +40,7 @@ h1,h2,h3,h4{font-family:var(--disp);font-weight:500;letter-spacing:-.025em;text-
 .top nav{display:flex;align-items:center;gap:28px;margin-left:auto;font-size:15.5px}
 .top nav a:not(.btn){color:var(--tinta-2);transition:color .2s}
 .top nav a:not(.btn):hover{color:var(--tinta)}
+.top nav a.lang{font:600 12.5px/1 var(--disp);letter-spacing:.06em;padding:7px 9px;border-radius:999px;box-shadow:inset 0 0 0 1px currentColor;opacity:.75}.top nav a.lang:hover{opacity:1}
 .top .btn{padding:12px 20px;font-size:14.5px}
 
 /* ---------- 1 · vídeo que se encuadra, con su rastro de pepitas ---------- */
@@ -315,6 +316,7 @@ dialog.entrar .btn{background:#1F1B2D;color:#F5EEDF}
 .mnuP nav{display:flex;flex-direction:column}
 .mnuP nav a{padding:14px 0;border-bottom:1px solid var(--mln);font:500 34px/1.05 var(--disp);letter-spacing:-.03em}
 .mnuP nav a[aria-current]{color:var(--mac)}
+.mnuP nav a.lang{font-size:22px;letter-spacing:0;opacity:.8}
 .mnuP .btn{align-self:flex-start}
 .mnuP .mail{margin-top:auto;padding:12px 0;font-size:16px;opacity:.72}
 body.admin-bar .mnuP{top:calc(var(--hh) + 46px)}
@@ -345,10 +347,10 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 
 <header class="top" id="top"><div class="row">
   <a class="logo" href="#inicio" aria-label="Transfronteriza, inicio"><img src="<?php tf_img('i9aac151d2b', TF_U . '/logo/h-color-34.svg'); ?>" data-tf-img="i9aac151d2b" alt="Transfronteriza"></a>
-  <nav aria-label="Principal"><a href="<?php echo esc_url(tf_pagina('comunidad')); ?>" data-tf="t38114eb012"><?php tf_t('t38114eb012'); ?></a><a href="<?php echo esc_url(tf_pagina('futuros')); ?>" data-tf="tf6078594dd"><?php tf_t('tf6078594dd'); ?></a><a class="btn p" href="#descubre" data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a><a class="lf" href="#" data-entrar aria-label="Entra en La Frontera" title="Entra en La Frontera"><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle class="punto" cx="41" cy="9" r="4.2" fill="#F2B233"/></svg></a></nav>
+  <nav aria-label="Principal"><a href="<?php echo esc_url(tf_enlace('comunidad')); ?>" data-tf="t38114eb012"><?php tf_t('t38114eb012'); ?></a><a href="<?php echo esc_url(tf_enlace('futuros')); ?>" data-tf="tf6078594dd"><?php tf_t('tf6078594dd'); ?></a><a class="btn p" href="#descubre" data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a><a class="lang" <?php tf_idioma_enlace(); ?> data-tf="t2d3195a745"><?php tf_t('t2d3195a745'); ?></a><a class="lf" href="#" data-entrar aria-label="Entra en La Frontera" title="Entra en La Frontera"><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle class="punto" cx="41" cy="9" r="4.2" fill="#F2B233"/></svg></a></nav>
   <button class="mnu" type="button" aria-label="Abrir el menú" aria-expanded="false" aria-controls="mnuP"><i></i><i></i></button>
 </div></header>
-<div class="mnuP" id="mnuP" hidden><nav aria-label="Menú"><a href="<?php echo esc_url(tf_pagina('comunidad')); ?>" data-tf="t38114eb012"><?php tf_t('t38114eb012'); ?></a><a href="<?php echo esc_url(tf_pagina('futuros')); ?>" data-tf="tf6078594dd"><?php tf_t('tf6078594dd'); ?></a><a href="#" data-entrar data-tf="t11905120cc"><?php tf_t('t11905120cc'); ?></a></nav><a class="btn p" href="#descubre" data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a><a class="mail" href="mailto:hola@transfronteriza.net" data-tf="ta0aa22019a"><?php tf_t('ta0aa22019a'); ?></a></div>
+<div class="mnuP" id="mnuP" hidden><nav aria-label="Menú"><a href="<?php echo esc_url(tf_enlace('comunidad')); ?>" data-tf="t38114eb012"><?php tf_t('t38114eb012'); ?></a><a href="<?php echo esc_url(tf_enlace('futuros')); ?>" data-tf="tf6078594dd"><?php tf_t('tf6078594dd'); ?></a><a href="#" data-entrar data-tf="t11905120cc"><?php tf_t('t11905120cc'); ?></a><a class="lang" <?php tf_idioma_enlace(); ?> data-tf="t7458d9d1d0"><?php tf_t('t7458d9d1d0'); ?></a></nav><a class="btn p" href="#descubre" data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a><a class="mail" href="mailto:hola@transfronteriza.net" data-tf="ta0aa22019a"><?php tf_t('ta0aa22019a'); ?></a></div>
 
 <main id="inicio">
   <!-- 1 · Somos la comunidad que cruza fronteras -->
@@ -381,8 +383,8 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 
   <!-- 4 · Comunidad | Futuros -->
   <section class="dos" data-tf-sec="dos">
-    <a class="lado com" id="comunidad" href="<?php echo esc_url(tf_pagina('comunidad')); ?>"><img src="<?php tf_img('i408711db45', TF_U . '/img/comunidad.jpg'); ?>" data-tf-img="i408711db45" loading="lazy" decoding="async" alt="Dos chicas de la comunidad, de espaldas, miran la montaña al atardecer."><div class="t"><h2 data-tf="t8f69233c0e"><?php tf_t('t8f69233c0e'); ?></h2><p data-tf="t2f4fd33425"><?php tf_t('t2f4fd33425'); ?></p><span class="btn">Conoce la comunidad</span></div></a>
-    <a class="lado fut" id="futuros" href="<?php echo esc_url(tf_pagina('futuros')); ?>"><div class="t"><h2 data-tf="t96b03ea3c7"><?php tf_t('t96b03ea3c7'); ?></h2><p data-tf="tbc6bf077e8"><?php tf_t('tbc6bf077e8'); ?></p><span class="btn">Entra en Futuros</span></div><div class="cover"><canvas class="luz" data-modo="lamina" data-colores="#F2B233,#E2592A,#6A4C93" data-fondo="#1F1B2D" aria-hidden="true"></canvas><canvas id="girH" aria-hidden="true"></canvas><div class="ct"><h4 data-tf="t2d86fba811"><?php tf_t('t2d86fba811'); ?></h4></div></div></a>
+    <a class="lado com" id="comunidad" href="<?php echo esc_url(tf_enlace('comunidad')); ?>"><img src="<?php tf_img('i408711db45', TF_U . '/img/comunidad.jpg'); ?>" data-tf-img="i408711db45" loading="lazy" decoding="async" alt="Dos chicas de la comunidad, de espaldas, miran la montaña al atardecer."><div class="t"><h2 data-tf="t8f69233c0e"><?php tf_t('t8f69233c0e'); ?></h2><p data-tf="t2f4fd33425"><?php tf_t('t2f4fd33425'); ?></p><span class="btn">Conoce la comunidad</span></div></a>
+    <a class="lado fut" id="futuros" href="<?php echo esc_url(tf_enlace('futuros')); ?>"><div class="t"><h2 data-tf="t96b03ea3c7"><?php tf_t('t96b03ea3c7'); ?></h2><p data-tf="tbc6bf077e8"><?php tf_t('tbc6bf077e8'); ?></p><span class="btn">Entra en Futuros</span></div><div class="cover"><canvas class="luz" data-modo="lamina" data-colores="#F2B233,#E2592A,#6A4C93" data-fondo="#1F1B2D" aria-hidden="true"></canvas><canvas id="girH" aria-hidden="true"></canvas><div class="ct"><h4 data-tf="t2d86fba811"><?php tf_t('t2d86fba811'); ?></h4></div></div></a>
   </section>
 
   <!-- 5 · Nos hacen posible -->
@@ -436,7 +438,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
     <p class="err" id="cartaE" role="alert"></p>
     <p class="hecho" id="cartaOk" hidden>Te hemos escrito. Confirma desde tu correo y listo.</p>
   </form>
-  <div class="row"><img class="flogo" src="<?php tf_img('ia8745bc028', TF_U . '/logo/h-oscuro-34.svg'); ?>" data-tf-img="ia8745bc028" alt="Transfronteriza"><nav aria-label="Pie"><a href="<?php echo esc_url(tf_pagina('comunidad')); ?>" data-tf="t38114eb012"><?php tf_t('t38114eb012'); ?></a><a href="<?php echo esc_url(tf_pagina('futuros')); ?>" data-tf="tf6078594dd"><?php tf_t('tf6078594dd'); ?></a><a href="#descubre" data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a><a href="mailto:hola@transfronteriza.net" data-tf="ta0aa22019a"><?php tf_t('ta0aa22019a'); ?></a></nav></div>
+  <div class="row"><img class="flogo" src="<?php tf_img('ia8745bc028', TF_U . '/logo/h-oscuro-34.svg'); ?>" data-tf-img="ia8745bc028" alt="Transfronteriza"><nav aria-label="Pie"><a href="<?php echo esc_url(tf_enlace('comunidad')); ?>" data-tf="t38114eb012"><?php tf_t('t38114eb012'); ?></a><a href="<?php echo esc_url(tf_enlace('futuros')); ?>" data-tf="tf6078594dd"><?php tf_t('tf6078594dd'); ?></a><a href="#descubre" data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a><a href="mailto:hola@transfronteriza.net" data-tf="ta0aa22019a"><?php tf_t('ta0aa22019a'); ?></a></nav></div>
   <div class="leg"><span>© 2026 Asociación Juvenil Transfronteriza</span><span class="legn"><button type="button" data-legal="aviso" data-tf="t2a27eb438d"><?php tf_t('t2a27eb438d'); ?></button><button type="button" data-legal="privacidad" data-tf="tcd9bcb9fd2"><?php tf_t('tcd9bcb9fd2'); ?></button><button type="button" data-legal="cookies" data-tf="t53614378a5"><?php tf_t('t53614378a5'); ?></button></span></div>
 </div></footer>
 
@@ -451,7 +453,7 @@ body.admin-bar .top{top:32px}@media (max-width:782px){body.admin-bar .top{top:46
 </dialog>
 <dialog id="spot"><button class="x" type="button" id="spotX" aria-label="Cerrar">×</button><video id="spotV" controls playsinline preload="none" poster="<?php echo TF_U; ?>/media/poster.jpg"><source src="<?php tf_img('i05d4cf0dd1', TF_U . '/media/spot.mp4'); ?>" data-tf-vid="i05d4cf0dd1" type="video/mp4"></video></dialog>
 
-<dialog class="entrar" id="entrar" aria-labelledby="entT"><div class="marco"><button class="x" type="button" data-cierra aria-label="Cerrar">×</button><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle class="punto" cx="41" cy="9" r="4.2" fill="#F2B233"/></svg><div id="entA"><h3 id="entT">Entra en La Frontera</h3><p data-tf="t9834a96e12"><?php tf_t('t9834a96e12'); ?></p><form id="entF" novalidate><input type="email" id="ent-correo" placeholder="Tu correo" autocomplete="email" aria-label="Tu correo"><label class="ok"><input type="checkbox" id="ent-ok"><span>He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>. Guardamos tu correo solo para avisarte cuando abra La Frontera.</span></label><p class="err" id="entE" role="alert"></p><button class="btn p" type="submit" data-tf="t17c8912d40"><?php tf_t('t17c8912d40'); ?></button></form><p class="nueva">¿Aún no eres parte? <a href="<?php echo esc_url(home_url('/')); ?>#descubre" data-cierra-entrar data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a></p></div><div id="entB" hidden><h3 data-tf="tb94238ba26"><?php tf_t('tb94238ba26'); ?></h3><p id="entBp"></p></div></div></dialog>
+<dialog class="entrar" id="entrar" aria-labelledby="entT"><div class="marco"><button class="x" type="button" data-cierra aria-label="Cerrar">×</button><svg class="xf" viewBox="0 0 48 48" aria-hidden="true"><path d="M9 8.5h16.5a6 6 0 0 1 6 6v7.5a6 6 0 0 1-6 6H17l-6.5 5.5V28H9a6 6 0 0 1-6-6v-7.5a6 6 0 0 1 6-6z" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linejoin="round"/><path d="M23 19h16a6 6 0 0 1 6 6v7a6 6 0 0 1-6 6h-1.5v5.5L31 38h-8a6 6 0 0 1-6-6v-7a6 6 0 0 1 6-6z" fill="#E2592A"/><circle class="punto" cx="41" cy="9" r="4.2" fill="#F2B233"/></svg><div id="entA"><h3 id="entT">Entra en La Frontera</h3><p data-tf="t9834a96e12"><?php tf_t('t9834a96e12'); ?></p><form id="entF" novalidate><input type="email" id="ent-correo" placeholder="Tu correo" autocomplete="email" aria-label="Tu correo"><label class="ok"><input type="checkbox" id="ent-ok"><span>He leído la <button type="button" data-legal="privacidad" data-tf="t3ef10fc331"><?php tf_t('t3ef10fc331'); ?></button>. Guardamos tu correo solo para avisarte cuando abra La Frontera.</span></label><p class="err" id="entE" role="alert"></p><button class="btn p" type="submit" data-tf="t17c8912d40"><?php tf_t('t17c8912d40'); ?></button></form><p class="nueva">¿Aún no eres parte? <a href="<?php echo esc_url(tf_enlace('home')); ?>#descubre" data-cierra-entrar data-tf="t3158ca410d"><?php tf_t('t3158ca410d'); ?></a></p></div><div id="entB" hidden><h3 data-tf="tb94238ba26"><?php tf_t('tb94238ba26'); ?></h3><p id="entBp"></p></div></div></dialog>
 <?php tf_script_base(tf_datos_home()); ?>
 <script>
 (() => {

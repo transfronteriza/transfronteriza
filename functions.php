@@ -23,6 +23,65 @@ remove_action('wp_head', 'print_emoji_detection_script', 7);
 remove_action('wp_print_styles', 'print_emoji_styles');
 add_filter('show_admin_bar', function ($s) { return $s && current_user_can('edit_posts'); });
 
+/* ---------- idioma: la web en castellano y en inglés ----------
+   Las páginas en inglés son plantillas aparte (page-en-*.php, traducidas por build.py) que se sirven en /en/, /en/community/
+   y /en/futures/. Lo que viene de las fichas se traduce con en.php (castellano -> inglés). Lo que se edite en inglés desde
+   la web se guarda aparte (tf_textos_en, tf_fichas_en). */
+function tf_lang() { return get_query_var('tf_en') ? 'en' : 'es'; }
+function tf_opt($nombre) { return tf_lang() === 'en' ? $nombre . '_en' : $nombre; }
+function tf_en_dic() { static $d = null; if ($d === null) { $f = __DIR__ . '/en.php'; $d = is_file($f) ? (array) include $f : []; } return $d; }
+/* traduce una cadena exacta (sin etiquetas) al inglés; si no está en el diccionario, se queda como está */
+function tf_en($s) { if (!is_string($s) || $s === '') return $s; $k = preg_replace('/\s+/', ' ', trim($s)); return tf_en_dic()[$k] ?? $s; }
+/* traduce los datos que viajan al JavaScript (tarjetas, ciudades, historias, papers…) */
+function tf_traduce_datos($d) {
+	if (is_array($d)) { foreach ($d as $k => $v) $d[$k] = tf_traduce_datos($v); return $d; }
+	if (is_object($d)) { foreach ($d as $k => $v) $d->$k = tf_traduce_datos($v); return $d; }
+	return is_string($d) && strpos($d, '<') === false ? tf_en($d) : $d;
+}
+/* traduce el texto de un trozo de HTML (nodos de texto y alt/title/aria-label), respetando lo cambiado en inglés en cada ficha */
+function tf_traduce_html($h) {
+	$f = (array) get_option('tf_fichas_en', []);
+	$h = preg_replace_callback('/data-tf-c="([^"]+)"([^>]*)>([^<]*)</', function ($m) use ($f) { return isset($f[$m[1]]) ? 'data-tf-c="' . $m[1] . '"' . $m[2] . '>' . esc_html($f[$m[1]]) . '<' : $m[0]; }, $h);
+	$h = preg_replace_callback('/>([^<>]*[A-Za-zÁÉÍÓÚÑáéíóúñ¿¡][^<>]*)</u', function ($m) { $t = html_entity_decode($m[1], ENT_QUOTES, 'UTF-8'); $e = tf_en($t); return $e === $t ? $m[0] : '>' . esc_html($e) . '<'; }, $h);
+	return preg_replace_callback('/\s(alt|title|aria-label)="([^"]*)"/u', function ($m) { $t = html_entity_decode($m[2], ENT_QUOTES, 'UTF-8'); $e = tf_en($t); return $e === $t ? $m[0] : ' ' . $m[1] . '="' . esc_attr($e) . '"'; }, $h);
+}
+/* un bloque que pinta el PHP (cifras, logos, encuentro, mecenas…), traducido */
+function tf_en_bloque($fn) { ob_start(); $fn(); echo tf_traduce_html(ob_get_clean()); }
+add_action('init', function () {
+	add_rewrite_rule('^en/?$', 'index.php?tf_en=home', 'top');
+	add_rewrite_rule('^en/community/?$', 'index.php?tf_en=comunidad', 'top');
+	add_rewrite_rule('^en/futures/?$', 'index.php?tf_en=futuros', 'top');
+	if (get_option('tf_rutas_v') !== '1') { flush_rewrite_rules(false); update_option('tf_rutas_v', '1'); }
+});
+add_filter('query_vars', function ($v) { $v[] = 'tf_en'; return $v; });
+add_filter('pre_handle_404', function ($pre) { return get_query_var('tf_en') ? true : $pre; });
+add_filter('template_include', function ($t) {
+	$p = get_query_var('tf_en'); if (!$p) return $t;
+	$f = __DIR__ . '/page-en-' . sanitize_key($p) . '.php'; if (!is_file($f)) return $t;
+	global $wp_query; $wp_query->is_404 = false; status_header(200); return $f;
+});
+add_filter('document_title_parts', function ($t) {
+	if (tf_lang() !== 'en') return $t;
+	$p = get_query_var('tf_en'); $t['title'] = ['home' => 'Transfronteriza – The community that crosses borders', 'comunidad' => 'Community – Transfronteriza', 'futuros' => 'Futures – Transfronteriza'][$p] ?? 'Transfronteriza';
+	if ($p === 'home') unset($t['tagline'], $t['site']);
+	return $t;
+});
+/* la misma página en cada idioma */
+function tf_enlace($pagina, $lang = null) {
+	$lang = $lang ?: tf_lang();
+	if ($lang === 'en') return home_url(['home' => '/en/', 'comunidad' => '/en/community/', 'futuros' => '/en/futures/'][$pagina] ?? '/en/');
+	return $pagina === 'home' ? home_url('/') : tf_pagina($pagina);
+}
+function tf_pagina_base() { return preg_replace('/^en-/', '', tf_pagina_actual()); }
+function tf_idioma_enlace() {
+	$otro = tf_lang() === 'en' ? 'es' : 'en';
+	echo 'href="' . esc_url(tf_enlace(tf_pagina_base(), $otro)) . '" hreflang="' . $otro . '" lang="' . $otro . '" title="' . ($otro === 'en' ? 'English' : 'Español') . '"';
+}
+add_action('wp_head', function () {
+	$p = tf_pagina_base(); if (!in_array($p, ['home', 'comunidad', 'futuros'], true)) return;
+	echo '<link rel="alternate" hreflang="es" href="' . esc_url(tf_enlace($p, 'es')) . '">' . "\n" . '<link rel="alternate" hreflang="en" href="' . esc_url(tf_enlace($p, 'en')) . '">' . "\n" . '<link rel="alternate" hreflang="x-default" href="' . esc_url(tf_enlace($p, 'es')) . '">' . "\n";
+}, 3);
+
 /* ---------- ayudas ---------- */
 /* Secciones que todavía no tienen contenido real: se enseñan «en construcción».
    Cuando haya contenido de verdad, se pone en false y se publica el tema. */
@@ -246,21 +305,29 @@ function tf_clave_js($k, $pref) { return (bool) preg_match('/^' . $pref . '[a-z0
 function tf_base_php() { return ['p-leer-informe' => 'Leer el informe', 'p-descargar-pdf' => 'Descargar PDF', 'p-quiero-ir' => 'Quiero ir', 'p-avisame' => 'Avísame']; }
 function tf_base() { static $b = null; if ($b === null) { $f = __DIR__ . '/textos-base.php'; $b = (is_file($f) ? (array) include $f : []) + tf_base_php(); } return $b; }
 /* un texto fijo del PHP: se pinta dentro de un <span data-tf> para poder cambiarlo desde la web */
+function tf_mapa() { static $m = null; if ($m === null) { $f = __DIR__ . '/textos-mapa.php'; $m = is_file($f) ? (array) include $f : []; } return $m; }
 function tf_tp($k, $def, $eco = true) {
-	$GLOBALS['tf_usados'][$k] = 1; $o = (array) get_option('tf_textos', []);
+	$GLOBALS['tf_usados'][$k] = 1; $o = (array) get_option(tf_opt('tf_textos'), []);
+	if (tf_lang() === 'en' && !array_key_exists($k, $o)) { $es = (array) get_option('tf_textos', []); $def = tf_en(array_key_exists($k, $es) ? wp_strip_all_tags((string) $es[$k]) : $def); }
 	$h = '<span data-tf="' . esc_attr($k) . '">' . (array_key_exists($k, $o) ? wp_kses((string) $o[$k], tf_permitido()) : esc_html($def)) . '</span>';
 	if ($eco) echo $h; return $h;
 }
 function tf_t($k) {
 	$GLOBALS['tf_usados'][$k] = 1;
-	$o = (array) get_option('tf_textos', []);
-	echo array_key_exists($k, $o) ? wp_kses((string) $o[$k], tf_permitido()) : (tf_base()[$k] ?? '');
+	$o = (array) get_option(tf_opt('tf_textos'), []);
+	if (array_key_exists($k, $o)) { echo wp_kses((string) $o[$k], tf_permitido()); return; }
+	if (tf_lang() === 'en' && ($es = tf_mapa()[$k] ?? null) !== null) {
+		/* si ese texto se cambió en castellano y el cambio tiene traducción, se hereda */
+		$oes = (array) get_option('tf_textos', []);
+		if (array_key_exists($es, $oes)) { $tr = tf_traduce_html('>' . $oes[$es] . '<'); if ($tr !== '>' . $oes[$es] . '<') { echo wp_kses(substr($tr, 1, -1), tf_permitido()); return; } }
+	}
+	echo tf_base()[$k] ?? '';
 }
 function tf_img($k, $def) { $GLOBALS['tf_imgs'][$k] = $def; $o = (array) get_option('tf_imgs', []); echo esc_url($o[$k] ?? $def); }
-function tf_pagina_actual() { return is_front_page() ? 'home' : (get_post_field('post_name', get_queried_object_id()) ?: 'pagina'); }
+function tf_pagina_actual() { if ($e = get_query_var('tf_en')) return 'en-' . sanitize_key($e); return is_front_page() ? 'home' : (get_post_field('post_name', get_queried_object_id()) ?: 'pagina'); }
 /* secciones ocultas: el público no las ve; quien edita las ve atenuadas al editar */
 add_action('wp_head', function () {
-	$p = tf_pagina_actual(); $sel = [];
+	$p = tf_pagina_base(); $sel = [];
 	foreach ((array) get_option('tf_ocultas', []) as $x) if (strpos($x, $p . ':') === 0) $sel[] = '[data-tf-sec="' . esc_attr(substr($x, strlen($p) + 1)) . '"]';
 	if ($sel) echo '<style>body:not(.tf-editando) ' . implode(',body:not(.tf-editando) ', $sel) . '{display:none!important}</style>' . "\n";
 }, 20);
@@ -273,27 +340,28 @@ add_action('wp_enqueue_scripts', function () {
 	wp_enqueue_script('tf-editor', TF_U . '/editor.js', ['tf-textos'], (string) filemtime(__DIR__ . '/editor.js'), true);
 }, 10000);
 add_action('wp_footer', function () {
-	$t = []; $i = [];
-	foreach ((array) get_option('tf_textos', []) as $k => $v) if (tf_clave_js($k, 'tj')) $t[$k] = wp_kses((string) $v, tf_permitido());
+	$t = []; $i = []; $f = [];
+	foreach ((array) get_option(tf_opt('tf_textos'), []) as $k => $v) if (tf_clave_js($k, 'tj')) $t[$k] = wp_kses((string) $v, tf_permitido());
 	foreach ((array) get_option('tf_imgs', []) as $k => $v) if (tf_clave_js($k, 'ij')) $i[$k] = esc_url($v);
-	echo '<script>window.TF_TX=' . wp_json_encode(['textos' => $t, 'imgs' => $i], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . ';</script>' . "\n";
+	if (tf_lang() === 'en') foreach ((array) get_option('tf_fichas_en', []) as $k => $v) $f[$k] = (string) $v;
+	echo '<script>window.TF_TX=' . wp_json_encode(['textos' => $t, 'imgs' => $i, 'fichas' => $f, 'lang' => tf_lang()], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . ';</script>' . "\n";
 }, 4);
 add_action('wp_footer', function () {
 	if (!current_user_can('edit_posts')) return;
 	$usados = array_keys((array) ($GLOBALS['tf_usados'] ?? [])); $imgs = (array) ($GLOBALS['tf_imgs'] ?? []);
-	$p = tf_pagina_actual(); $oc = [];
+	$p = tf_pagina_base(); $oc = [];
 	foreach ((array) get_option('tf_ocultas', []) as $x) if (strpos($x, $p . ':') === 0) $oc[] = substr($x, strlen($p) + 1);
 	echo '<script>window.TF_ED=' . wp_json_encode([
-		'api' => esc_url_raw(rest_url('tf/v1/editar')), 'nonce' => wp_create_nonce('wp_rest'), 'admin' => admin_url(), 'pagina' => $p,
+		'api' => esc_url_raw(rest_url('tf/v1/editar')), 'nonce' => wp_create_nonce('wp_rest'), 'admin' => admin_url(), 'pagina' => $p, 'lang' => tf_lang(),
 		'ficha' => admin_url('post.php?action=edit&post='), 'nueva' => admin_url('post-new.php?post_type='),
-		'base' => array_intersect_key(tf_base(), array_flip($usados)) + array_filter((array) get_option('tf_textos_orig', []), function ($k) { return tf_clave_js($k, 'tj'); }, ARRAY_FILTER_USE_KEY),
-		'cambiados' => array_values(array_filter(array_keys((array) get_option('tf_textos', [])), function ($k) use ($usados) { return in_array($k, $usados, true) || tf_clave_js($k, 'tj'); })),
+		'base' => array_intersect_key(tf_base(), array_flip($usados)) + array_filter((array) get_option(tf_opt('tf_textos_orig'), []), function ($k) { return tf_clave_js($k, 'tj'); }, ARRAY_FILTER_USE_KEY),
+		'cambiados' => array_values(array_filter(array_keys((array) get_option(tf_opt('tf_textos'), [])), function ($k) use ($usados) { return in_array($k, $usados, true) || tf_clave_js($k, 'tj'); })),
 		'imgs' => $imgs, 'imgsCambiadas' => array_values(array_filter(array_keys((array) get_option('tf_imgs', [])), function ($k) use ($imgs) { return isset($imgs[$k]) || tf_clave_js($k, 'ij'); })),
 		'ocultas' => $oc,
 	], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) . ';</script>' . "\n";
 }, 5);
 add_action('admin_bar_menu', function ($bar) {
-	if (is_admin() || !current_user_can('edit_posts') || !(is_front_page() || is_page(['comunidad', 'futuros']))) return;
+	if (is_admin() || !current_user_can('edit_posts') || !(is_front_page() || is_page(['comunidad', 'futuros']) || get_query_var('tf_en'))) return;
 	$bar->add_node(['id' => 'tf_editar', 'title' => '✎ Editar esta página', 'href' => add_query_arg('tf_editar', '1'), 'meta' => ['class' => 'tf-editar-barra']]);
 }, 80);
 /* ¿qué campo es y dónde se guarda? «p123.frase», «p123.titulo», «p123.claves.0.numero», «o.enc_titulo», «o.mec_porque.1.texto» */
@@ -325,12 +393,13 @@ function tf_valor_ref($c) {
 }
 add_action('rest_api_init', function () {
 	register_rest_route('tf/v1', '/editar', ['methods' => 'POST', 'permission_callback' => function () { return current_user_can('edit_posts'); }, 'callback' => function (WP_REST_Request $r) {
-		$t = (array) get_option('tf_textos', []); $i = (array) get_option('tf_imgs', []); $oc = (array) get_option('tf_ocultas', []);
+		$en = $r->get_param('lang') === 'en'; $OT = $en ? 'tf_textos_en' : 'tf_textos'; $OO = $en ? 'tf_textos_orig_en' : 'tf_textos_orig';
+		$t = (array) get_option($OT, []); $i = (array) get_option('tf_imgs', []); $oc = (array) get_option('tf_ocultas', []);
 		/* copia de cómo estaba, por si hay que volver atrás (se guardan las 30 últimas) */
 		$h = (array) get_option('tf_editar_historial', []);
-		array_unshift($h, ['fecha' => current_time('mysql'), 'quien' => wp_get_current_user()->display_name, 'textos' => $t, 'imgs' => $i, 'ocultas' => $oc]);
+		array_unshift($h, ['fecha' => current_time('mysql'), 'quien' => wp_get_current_user()->display_name, 'lang' => $en ? 'en' : 'es', 'textos' => $t, 'imgs' => $i, 'ocultas' => $oc, 'fichas_en' => $en ? (array) get_option('tf_fichas_en', []) : null]);
 		update_option('tf_editar_historial', array_slice($h, 0, 30), false);
-		$base = tf_base(); $orig = (array) get_option('tf_textos_orig', []); $originales = (array) $r->get_param('originales');
+		$base = tf_base(); $orig = (array) get_option($OO, []); $originales = (array) $r->get_param('originales');
 		foreach ((array) $r->get_param('textos') as $k => $v) {
 			$k = sanitize_key($k);
 			if (!isset($base[$k])) {
@@ -343,7 +412,7 @@ add_action('rest_api_init', function () {
 			$v = trim(wp_kses((string) $v, tf_permitido()));
 			if ($v === trim(wp_kses($base[$k], tf_permitido()))) unset($t[$k]); else $t[$k] = $v;
 		}
-		update_option('tf_textos_orig', $orig, false);
+		update_option($OO, $orig, false);
 		foreach ((array) $r->get_param('imgs') as $k => $v) {
 			$k = sanitize_key($k); $v = $v === null ? '' : esc_url_raw((string) $v);
 			if ($v === '') unset($i[$k]); elseif (strpos($v, home_url('/')) === 0) $i[$k] = $v;
@@ -353,17 +422,20 @@ add_action('rest_api_init', function () {
 			$oc = array_values(array_filter($oc, function ($x) use ($p) { return strpos($x, $p . ':') !== 0; }));
 			foreach ($r->get_param('ocultas') as $s) if ($s = sanitize_key((string) $s)) $oc[] = $p . ':' . $s;
 		}
-		update_option('tf_textos', $t, false); update_option('tf_imgs', $i, false); update_option('tf_ocultas', array_values(array_unique($oc)), false);
+		update_option($OT, $t, false); update_option('tf_imgs', $i, false); update_option('tf_ocultas', array_values(array_unique($oc)), false);
 		/* lo que viene de las fichas (tarjetas, historias, papers…) y de los ajustes de encuentro y mecenas */
-		$antes = [];
+		$antes = []; $fen = (array) get_option('tf_fichas_en', []);
 		foreach ((array) $r->get_param('contenido') as $ref => $v) {
 			$c = tf_campo_ref((string) $ref); if (!$c) continue;
+			/* en inglés, las fichas no se tocan: la traducción se guarda aparte */
+			if ($en) { $v = sanitize_textarea_field((string) $v); if ($v === '') unset($fen[$ref]); else $fen[$ref] = $v; continue; }
 			$antes[$ref] = tf_valor_ref($c);
 			if (!empty($c['titulo'])) { wp_update_post(['ID' => $c['donde'], 'post_title' => sanitize_text_field((string) $v)]); continue; }
 			$v = tf_limpia_valor($v, $c['tipo']); if ($v === null) continue;
 			if (isset($c['fila'])) { $filas = array_values((array) (get_field($c['campo'], $c['donde']) ?: [])); if (!isset($filas[$c['fila']])) continue; $filas[$c['fila']][$c['sub']] = $v; update_field($c['campo'], $filas, $c['donde']); }
 			else update_field($c['campo'], $v, $c['donde']);
 		}
+		if ($en) update_option('tf_fichas_en', $fen, false);
 		foreach ((array) $r->get_param('fotos') as $ref => $att) {
 			$att = (int) $att; if (!$att || !wp_attachment_is_image($att)) continue;
 			if (preg_match('/^p(\d+)$/', (string) $ref, $m)) { $id = (int) $m[1]; if (strpos((string) get_post_type($id), 'tf_') === 0 && current_user_can('edit_post', $id)) { $antes[$ref . '.foto'] = get_post_thumbnail_id($id); set_post_thumbnail($id, $att); } }

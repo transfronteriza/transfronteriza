@@ -162,7 +162,7 @@
   barra.querySelector('.tfe-guarda').addEventListener('click', async ev => {
     const b = ev.currentTarget; b.disabled = true; b.textContent = 'Guardando…';
     try {
-      const r = await fetch(E.api, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': E.nonce }, body: JSON.stringify({ pagina: E.pagina, textos: cambios.textos, imgs: cambios.imgs, originales: Object.fromEntries(Object.keys(cambios.textos).filter(k => k.startsWith('tj') && TX.orig[k] != null).map(k => [k, TX.orig[k]])), contenido: cambios.contenido, fotos: cambios.fotos, quitar: [...quitar], ocultas: secCambio ? [...ocultas] : undefined }) });
+      const r = await fetch(E.api, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'X-WP-Nonce': E.nonce }, body: JSON.stringify({ pagina: E.pagina, lang: E.lang || 'es', textos: cambios.textos, imgs: cambios.imgs, originales: Object.fromEntries(Object.keys(cambios.textos).filter(k => k.startsWith('tj') && TX.orig[k] != null).map(k => [k, TX.orig[k]])), contenido: cambios.contenido, fotos: cambios.fotos, quitar: [...quitar], ocultas: secCambio ? [...ocultas] : undefined }) });
       if (!r.ok) throw new Error(r.status);
       Object.entries(cambios.textos).forEach(([k, v]) => { const i = E.cambiados.indexOf(k); if (v === null) { if (i > -1) E.cambiados.splice(i, 1); } else if (i < 0) E.cambiados.push(k); });
       Object.entries(cambios.imgs).forEach(([k, v]) => { const i = E.imgsCambiadas.indexOf(k); if (v === null) { if (i > -1) E.imgsCambiadas.splice(i, 1); } else if (i < 0) E.imgsCambiadas.push(k); });

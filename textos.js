@@ -33,8 +33,13 @@
     im.setAttribute('data-tf-img', k); TX.imgsOrig[k] = im.src;
     if (k in TX.imgs) { im.removeAttribute('srcset'); im.removeAttribute('sizes'); im.src = TX.imgs[k]; }
   };
+  /* en inglés, los campos de las fichas (frases, nombres, textos de ciudad) cambiados desde la web en inglés */
+  const F = TX.fichas || {};
+  const marcaFicha = el => { const r = el.getAttribute('data-tf-c'); if (r in F && el.textContent !== F[r]) el.textContent = F[r]; };
   const marca = raiz => {
     if (raiz.nodeType !== 1) return;
+    if (raiz.hasAttribute('data-tf-c')) marcaFicha(raiz);
+    raiz.querySelectorAll('[data-tf-c]').forEach(marcaFicha);
     if (raiz.matches(TAGS)) marcaTexto(raiz);
     raiz.querySelectorAll(TAGS).forEach(marcaTexto);
     if (raiz.tagName === 'IMG') marcaImg(raiz);
